@@ -15,19 +15,52 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Repository disponible [[https://github.com/MatthieuNICOLAS/PLM-reporting][ici]].
 - Automatisation des tests unitaires de WebPLM
   - Création d'une tâche *Grunt* permettant de lancer les tests unitaires JavaScript...
-  - ... mais conflit avec /activator test/ qui tente d'accéder aux fichiers de *Grunt* et qui rencontre alors une erreur de droit d'accès...
+  - ... mais conflit avec /activator test/ qui tente d'accéder aux
+    fichiers de *Grunt* et qui rencontre alors une erreur de droit
+    d'accès...
   - Conflit évité en utilisant /activator "test-only \*Spec"/ à la place...
-  - ... mais /activator "test-only \*Spec"/ ne déclenche pas l'évènement /test/ nécessaire au [[https://github.com/rossbayer/grunt-sbt][plugin Grunt pour sbt]] pour lancer la tâche *Grunt*.
+  - ... mais /activator "test-only \*Spec"/ ne déclenche pas
+    l'évènement /test/ nécessaire au [[https://github.com/rossbayer/grunt-sbt][plugin Grunt pour sbt]] pour lancer
+    la tâche *Grunt*.
+  - Finalement j'ai configuré *Travis* pour [[https://github.com/MatthieuNICOLAS/webPLM/blob/master/.travis.yml#L9-L10][lancer les deux scripts de
+    tests]] manuellement et ne pas utiliser de plugin pour lier *Grunt*
+    et *SBT*.
+- Insérer des lignes /read-only/ dans *CodeMirror*
+  - La méthode de *CodeMirror* /markText/ permet de rendre certaines lignes non-modifiables.
+  - Mais /markText/ est incompatible avec /setValue/ => ne peut plus
+    laisser *AngularJS* gérer tout seul le contenu de l'éditeur à
+    l'aide de /ng-model/.
+  - Prototype fonctionnel disponible [[https://github.com/MatthieuNICOLAS/webPLM/tree/read-only-lines][dans cette branche]].
+  - Fonctionne actuellement en repérant un token dans le texte
+  - Rien n'empêche un utilisateur d'ajouter le token dans une de ses
+    lignes, ce qui la rendra après rafraichissement de la page
+    non-modifiable...
 *** Questions
+- Lignes en mode /read-only/
+  - Comment spécifier les lignes non-modifiables? A l'aide d'un token
+    ou une autre solution est envisageable?
+  - Si un token est utilisé, comment empêcher un utilisateur de
+    potentiellement se saboter en l'ajoutant à une de ses propres
+    lignes?
+  - Si l'on supprime le token après avoir pris connaissance des lignes
+    à mettre en /read-only/, comment le réinsérer de nouveau avant
+    d'envoyer le code au serveur sachant que le texte a été modifié
+    par l'utilisateur?
 *** Planned
-**** TODO Création d'un repository dédié au reporting
-**** TODO Refactorer la conversion des objets Java en JSON
+**** TODO Ajouter des opérations correspondant aux exceptions levées
+- BuggleInOuterSpaceException
+- "Sorry Dave, I cannot let you use..."
+**** DONE Création d'un repository dédié au reporting
+**** DONE Refactorer la conversion des objets Java en JSON
 - Mettre en place une (des?) classe(s) utilitaires chargée(s) de convertir les objets en JSON.
 - Retirer le code existant des classes principales.
-**** TODO Automatisation des tests unitaires de WebPLM
+**** DONE Automatisation des tests unitaires de WebPLM
 - Voir pour activer *Travis* pour ce projet.
 - Voir pour utiliser [[https://github.com/joescii/sbt-jasmine-plugin][le plugin sbt pour jasmine]] avec ce [[http://perevillega.com/executing-jasmine-tests-in-play-2-dot-0-4/][tutoriel]].
 - Ou [[http://www.position-absolute.com/articles/gluing-together-jasmine-grunt-travis-ci-github-testing-front-end-code-has-never-been-easier/][créer une tâche Grunt pour les tests]] et [[https://github.com/guardian/sbt-grunt-plugin][lancer la tâche Grunt via sbt]].
+
+**** DONE Voir comment spécifier certaines lignes en tant que read-only dans CodeMirror
+  - [[http://codemirror.net/doc/manual.html#markText][A creuser]]
 ** Semaine du <2015-02-09 lun.> au <2015-02-13 ven.>
 *** Done
 **** DONE Etablir le plan de la présentation
@@ -71,15 +104,15 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   fichiers: *PLMActor* et *ExecutionSpy*
 - Comment mieux gérer cette partie du code? Mise en place d'un utilitaire?
 *** Planned
-**** TODO Préparer la présentation pour le séminaire IJD
+**** DONE Préparer la présentation pour le séminaire IJD
 - Travailler le plan de la présentation
 - Voir pour essayer [[https://github.com/hakimel/reveal.js][reveal.js]].
-**** TODO Ajouter des opérations correspondant aux exceptions levées
+**** DONE Ajouter des opérations correspondant aux exceptions levées
 - BuggleDontHaveBaggleException
 - CellAlreadyHaveBaggle
 - BuggleInOuterSpaceException
 - "Sorry Dave, I cannot let you use..."
-**** TODO Poursuivre le développement de tests unitaires
+**** DONE Poursuivre le développement de tests unitaires
 - Ajouter des tests unitaires pour le code JS permettrait de s'assurer de la robustesse du code.
 - Voir comment utiliser [[http://jasmine.github.io/][jasmine]].
 - Voir comment utiliser [[http://sinonjs.org/][sinon]].
@@ -157,14 +190,17 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   ne correspondent pas au pas attendu (le buggle avance alors qu'il
   est écrit qu'il est en train de peindre la case par exemple).
 *** Planned
-**** TODO Fixer la duplication des baggles
+**** DONE Fixer la duplication des baggles
 - Un buggle a pu ramassé un baggle et le reposer ailleurs, sans que le baggle original ne soit retiré de la vue du monde.
-**** TODO Fixer le baggle invisible
+- N'a pas réussi à reproduire ce bug depuis que les opérations sont gérées par les entités et non plus par le monde.
+**** DONE Fixer le baggle invisible
 - Lors de la séance de test réalisée avec Gérald sur son Mac, un baggle présent dans l'exercice n'était pas dessiné.
-**** TODO Refactorer le code concernant le passage au prochain exercice
+- N'a pas réussi à reproduire ce bug depuis que les opérations sont gérées par les entités et non plus par le monde.
+**** DONE Refactorer le code concernant le passage au prochain exercice
 - Nettoyer le code
 - Voir pour l'extraire de ExerciseController et en faire un service
-**** TODO Poursuivre le développement de tests unitaires
+- Code refactoré mais service pas encore implémenté.
+**** DONE Poursuivre le développement de tests unitaires
 ** Semaine du <2015-01-27 mar.> au <2015-01-30 ven.>
 *** Done
 **** DONE Rédiger le README du projet

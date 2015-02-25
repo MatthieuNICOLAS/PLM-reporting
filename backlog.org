@@ -1,3 +1,8 @@
+* TODO Créer un service récupérant la liste des exercices d'une leçon
+  - Méthode *setLesson* déclenchant une requête au serveur pour récupérer la liste des exercices de la leçon
+    - Où appeler cette méthode? Dans le *HomeController*?
+  - Fonction *getExercises* retournant la liste des exercices actuellement en mémoire
+    - Fonction utilisée par *ExerciseController*
 * TODO Mettre en place un outil de concaténation et de minification du JS
 - Plutôt que de charger plusieurs fichiers JS, il serait préférable
   que le client ne charge qu'un seul fichier contenant tout le code JS
@@ -8,10 +13,6 @@
 - Minifier le code de ce fichier permettrait d'améliorer encore plus
   la vitesse de chargement de la page.
 - Voir du côté de [[http://gruntjs.com/][Grunt]]. 
-* TODO Automatiser les tests du JS
-- Il faudrait que les tests JS s'exécutent de façon automatique.
-- Les tests pourraient se lancer à la suite de la tâche de concaténation et de minification du code JS.
-- Voir si un plug-in *Grunt* existe pour *jasmine*.
 * TODO Interrompre l'exécution du programme si une exception est levée
 - Le programme devrait s'interrompre lorsqu'une exception est levée,
   par exemple lorsqu'on essaie de poser un baggle sans en avoir un.
