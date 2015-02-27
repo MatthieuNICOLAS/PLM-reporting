@@ -35,6 +35,13 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Rien n'empêche un utilisateur d'ajouter le token dans une de ses
     lignes, ce qui la rendra après rafraichissement de la page
     non-modifiable...
+- Service pour la liste des exercices d'une leçon:
+  - Création du service interrogeant le serveur pour récupérer la
+    liste des exercices et la refactorant pour créer un arbre.
+  - /exerciseController/ a été refactoré pour utiliser ce service pour générer son outil de sélection d'un exercice
+  - Mais seulement un objet semble pouvoir écouter les messages reçus par le serveur à moment donné...
+  - ... donc conflit entre /exercisesList/ et /exerciseController/ qui veulent tous les deux écouter le serveur, mais pour des messages différents
+  - A dû refactorer les services /connection/ et /listenersHandler/ pour corriger ce défaut
 *** Questions
 - Lignes en mode /read-only/
   - Comment spécifier les lignes non-modifiables? A l'aide d'un token
@@ -50,6 +57,11 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 **** TODO Ajouter des opérations correspondant aux exceptions levées
 - BuggleInOuterSpaceException
 - "Sorry Dave, I cannot let you use..."
+**** DONE Créer un service récupérant la liste des exercices d'une leçon
+- Méthode *setLesson* déclenchant une requête au serveur pour récupérer la liste des exercices de la leçon
+  - Où appeler cette méthode? Dans le *HomeController*?
+- Fonction *getExercises* retournant la liste des exercices actuellement en mémoire
+  - Fonction utilisée par *ExerciseController*
 **** DONE Création d'un repository dédié au reporting
 **** DONE Refactorer la conversion des objets Java en JSON
 - Mettre en place une (des?) classe(s) utilitaires chargée(s) de convertir les objets en JSON.
