@@ -6,6 +6,26 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - https://github.com/MatthieuNICOLAS/webPLM
   Le lien vers le repo de la version web de PLM
 * Journal de bord
+** Semaine du <2015-03-02 lun.> au <2015-03-06 ven.>
+*** Done
+- Internationalisation
+  - Plusieurs solutions possibles
+  - Soit gérer la localisation côté serveur avec [[https://www.playframework.com/documentation/2.0/ScalaI18N][i18n]]
+    - Dans ce cas, doit déplacer les fichiers HTML et JS dans *app/views* et ajouter *.scala* dans l'extension.
+    - Refactorer tous les fichiers pour remplacer les chaînes de caractères par /@Messages("key")/
+    - Comment gérer les chaînes des fichiers JS utilisant une ou plusieurs variables?
+  - Soit gérer la localisation côté client avec [[https://github.com/julienrf/play-jsmessages][ce plugin]]
+    - Création d'un service interrogeant le serveur pour récupérer la localisation et la mettant à disposition des différents composants
+    - Doit refaire une passe à chaque fois que la vue/le DOM change
+    - Doit ajouter un attribut à l'HTML pour repérer l'ensemble des chaînes à traduire
+*** Questions
+*** Planned
+**** TODO Ajouter des opérations correspondant aux exceptions levées
+- BuggleInOuterSpaceException
+- "Sorry Dave, I cannot let you use..."
+**** TODO Supporter l'internationalisation
+- Voir cette [[https://github.com/MatthieuNICOLAS/webPLM/issues/1][issue]].
+- [[https://github.com/julienrf/play-jsmessages][Plugin intéressant]]?
 ** Semaine du <2015-02-23 lun.> au <2015-02-27 ven.>
 *** Done
 - Refactorer la conversion des objets Java en JSON:
@@ -54,9 +74,6 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
     d'envoyer le code au serveur sachant que le texte a été modifié
     par l'utilisateur?
 *** Planned
-**** TODO Ajouter des opérations correspondant aux exceptions levées
-- BuggleInOuterSpaceException
-- "Sorry Dave, I cannot let you use..."
 **** DONE Créer un service récupérant la liste des exercices d'une leçon
 - Méthode *setLesson* déclenchant une requête au serveur pour récupérer la liste des exercices de la leçon
   - Où appeler cette méthode? Dans le *HomeController*?
