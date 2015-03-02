@@ -19,6 +19,7 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
     - Doit refaire une passe à chaque fois que la vue/le DOM change
     - Doit ajouter un attribut à l'HTML pour repérer l'ensemble des chaînes à traduire
     - Mais *délai* au chargement de la page où la traduction n'est pas encore effectuée...
+    - Délai réduit en insérant la traduction directement dans l'HTML et en initialisant le module à partir de là.
   - Utiliser les deux?
     - Côté serveur pour tout le texte statique
     - Côté client pour toutes les chaînes intégrant des variables JS

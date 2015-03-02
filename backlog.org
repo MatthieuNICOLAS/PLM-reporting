@@ -59,4 +59,7 @@
 * TODO Se renseigner sur Docker
    - A première vue, ça pourrait être utile pour exécuter le code des
      clients une fois passé en mode serveur centralisé.
-
+* TODO Utiliser sekuli pour tester l'interface graphique
+- Semblerait que sekuli permet d'enregistrer des scénarios d'utilisation manuellement
+- Le scénario est ensuite reproduit automatiquement et sekuli compare un screenshot avec ce qui était attendu
+- Besoin de fixer l'interface graphique avant
