@@ -20,10 +20,16 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
     - Doit ajouter un attribut à l'HTML pour repérer l'ensemble des chaînes à traduire
     - Mais *délai* au chargement de la page où la traduction n'est pas encore effectuée...
     - Délai réduit en insérant la traduction directement dans l'HTML et en initialisant le module à partir de là.
+    - Doit ajouter la méthode traduisant le DOM dans chaque directive afin de s'assurer que le DOM soit bien chargé à ce moment là.
   - Utiliser les deux?
     - Côté serveur pour tout le texte statique
     - Côté client pour toutes les chaînes intégrant des variables JS
     - Mais plus complexe et moins maintenable.
+  - Quel outil utilisé pour rédiger la traduction?
+    - Le format attendu des traductions est [[https://www.playframework.com/documentation/1.2/guide12#aApplicationmodellocalisationa][le suivant]].
+    - [[http://basmussen.github.io/i18n-maven-plugin/index.html][Ce plugin]] semble simple d'utilisation, mais à voir comment le configurer.
+    - Voir [[http://www.cantamen.com/i18nedit.php][cet outil]] sinon => outil buggé et inutilisable, ne peut même pas ouvrir un fichier de propriétés...
+    - [[http://attesoro.org/][Attesoro]] est aussi facile d'utilisation, mais les fichiers générés ne sont pas ceux attendus par Play => Voir pour renommer les fichiers/modifier la config de Play
 *** Questions
 *** Planned
 **** TODO Ajouter des opérations correspondant aux exceptions levées
