@@ -38,13 +38,13 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Ajout d'un bouton déclenchant l'envoi d'un message pour réinitialiser l'exercice dans l'UI.
   - Configuration du serveur pour déclencher la réinitialisation de l'exercice à la réception de ce message et renvoyer le nouvel état de l'exercice au client.
 *** Questions
-*** Planned
-**** TODO Pouvoir redémarrer un exercice
-- Appeler la méthode /revert/ de PLM
+*** Planned 
 **** TODO Ajouter des opérations correspondant aux exceptions levées
 - BuggleInOuterSpaceException
 - "Sorry Dave, I cannot let you use..."
-**** TODO Supporter l'internationalisation
+**** DONE Pouvoir redémarrer un exercice
+- Appeler la méthode /revert/ de PLM
+**** DONE Supporter l'internationalisation
 - Voir cette [[https://github.com/MatthieuNICOLAS/webPLM/issues/1][issue]].
 - [[https://github.com/julienrf/play-jsmessages][Plugin intéressant]]?
 ** Semaine du <2015-02-23 lun.> au <2015-02-27 ven.>
