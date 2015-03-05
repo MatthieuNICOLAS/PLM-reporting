@@ -30,8 +30,17 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
     - [[http://basmussen.github.io/i18n-maven-plugin/index.html][Ce plugin]] semble simple d'utilisation, mais à voir comment le configurer.
     - Voir [[http://www.cantamen.com/i18nedit.php][cet outil]] sinon => outil buggé et inutilisable, ne peut même pas ouvrir un fichier de propriétés...
     - [[http://attesoro.org/][Attesoro]] est aussi facile d'utilisation, mais les fichiers générés ne sont pas ceux attendus par Play => Voir pour renommer les fichiers/modifier la config de Play
+  - *po4a*
+    - Utilisation de *po4a* pour générer les fichiers HTML traduits
+    - Les fichiers HTML traduits sont placés dans le répertoire /public/lang/filepath
+    - Le routing côté serveur a été configuré pour récupérer les fichiers HTML traduits si besoin et possible
+- Revert
+  - Ajout d'un bouton déclenchant l'envoi d'un message pour réinitialiser l'exercice dans l'UI.
+  - Configuration du serveur pour déclencher la réinitialisation de l'exercice à la réception de ce message et renvoyer le nouvel état de l'exercice au client.
 *** Questions
 *** Planned
+**** TODO Pouvoir redémarrer un exercice
+- Appeler la méthode /revert/ de PLM
 **** TODO Ajouter des opérations correspondant aux exceptions levées
 - BuggleInOuterSpaceException
 - "Sorry Dave, I cannot let you use..."
