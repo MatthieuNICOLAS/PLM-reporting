@@ -27,21 +27,33 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
     - Mais plus complexe et moins maintenable.
   - Quel outil utilisé pour rédiger la traduction?
     - Le format attendu des traductions est [[https://www.playframework.com/documentation/1.2/guide12#aApplicationmodellocalisationa][le suivant]].
-    - [[http://basmussen.github.io/i18n-maven-plugin/index.html][Ce plugin]] semble simple d'utilisation, mais à voir comment le configurer.
+    - [[http://basmussen.github.io/i18n-maven-plugin/index.html][Ce plugin]] semble simple d'utilisation, mais à voir comment le configurer pour l'adapter à nos besoins.
     - Voir [[http://www.cantamen.com/i18nedit.php][cet outil]] sinon => outil buggé et inutilisable, ne peut même pas ouvrir un fichier de propriétés...
     - [[http://attesoro.org/][Attesoro]] est aussi facile d'utilisation, mais les fichiers générés ne sont pas ceux attendus par Play => Voir pour renommer les fichiers/modifier la config de Play
   - *po4a*
     - Utilisation de *po4a* pour générer les fichiers HTML traduits
     - Les fichiers HTML traduits sont placés dans le répertoire /public/lang/filepath
     - Le routing côté serveur a été configuré pour récupérer les fichiers HTML traduits si besoin et possible
+    - *po4a xhtml* ne donne pas le résultat souhaité: les balises et leurs attributs apparaissent dans les msgIds, ce qui complique le travail des traducteurs.
+    - Utilisation de *po4a xml* qui, avec sa configuration par défaut, permet de récupérer uniquement les chaînes de caractères à traduire.
 - Revert
   - Ajout d'un bouton déclenchant l'envoi d'un message pour réinitialiser l'exercice dans l'UI.
   - Configuration du serveur pour déclencher la réinitialisation de l'exercice à la réception de ce message et renvoyer le nouvel état de l'exercice au client.
+- Messages correspondant aux opérations
+  - Au lieu de les définir dans le JS (ce qui complique la traduction), ceux-ci sont maintenant définis dans leur classe Java respective.
+  - Modification de la fonction de conversion des opérations Java -> JSON pour aussi envoyer les messages
+  - Reste à traduire ces messages dans PLM
+- "Sorry Dave"
+  - Deux méthodes de SimpleBuggle "empêchaient" le programme de l'utilisateur de terminer avec une exception s'il utilisait /Left/ ou /Right/
+  - Supprimer ces deux méthodes a permis de correctement stopper l'exécution et d'afficher le message d'erreur "Sorry Dave..." dès que l'utilisateur tente d'accèder à une méthode "interdite"
 *** Questions
-*** Planned 
+*** Planned
 **** TODO Ajouter des opérations correspondant aux exceptions levées
 - BuggleInOuterSpaceException
 - "Sorry Dave, I cannot let you use..."
+**** DONE Refactorer les opérations pour gérer le message côté serveur
+- Actuellement, le message correspondant à une opération affiché dans les "Program Steps" est défini côté client, en JS.
+- Pour faciliter sa traduction, il faudrait plutôt le définir dans PLM directement.
 **** DONE Pouvoir redémarrer un exercice
 - Appeler la méthode /revert/ de PLM
 **** DONE Supporter l'internationalisation
