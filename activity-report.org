@@ -47,10 +47,12 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Deux méthodes de SimpleBuggle "empêchaient" le programme de l'utilisateur de terminer avec une exception s'il utilisait /Left/ ou /Right/
   - Supprimer ces deux méthodes a permis de correctement stopper l'exécution et d'afficher le message d'erreur "Sorry Dave..." dès que l'utilisateur tente d'accèder à une méthode "interdite"
 *** Questions
+- Comment disposer les différents composants de l'interface?
+  - Lesquels sont indispensables? Ceux qu'il faut mettre le plus en avant?
+  - Lesquels l'utilisateur doit-il pouvoir masquer?
 *** Planned
 **** TODO Ajouter des opérations correspondant aux exceptions levées
 - BuggleInOuterSpaceException
-- "Sorry Dave, I cannot let you use..."
 **** DONE Refactorer les opérations pour gérer le message côté serveur
 - Actuellement, le message correspondant à une opération affiché dans les "Program Steps" est défini côté client, en JS.
 - Pour faciliter sa traduction, il faudrait plutôt le définir dans PLM directement.
