@@ -6,6 +6,26 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - https://github.com/MatthieuNICOLAS/webPLM
   Le lien vers le repo de la version web de PLM
 * Journal de bord
+** Semaine du <2015-03-09 lun.> au <2015-03-13 ven.>
+*** Done
+- Améliorer l'interface graphique
+  - Redisposition des éléments
+  - Meilleure gestion de la taille de l'éditeur de code et de la représentation du monde
+  - Ajout d'un bouton permettant d'étendre/réduire à sa taille par défaut le bloc contenant les instructions pour une meilleure lecture
+  - Ces modifications ont été mergées dans la branche master
+*** Questions
+*** Planned
+**** TODO Refactorer la méthode de dessin
+- Les mondes dessinés présentent des problèmes de proportions si le nombre de lignes est différent du nombre de colonnes (voir par exemple la Moria)
+- Voir pour améliorer ça
+**** TODO Corriger bug setLocale
+- Lorsqu'on sélectionne certains exercices (tel que celui de la Moria) puis qu'on recharge la page, le serveur plante.
+- L'exception levée provient à priori d'un appel à setLocale qui débouche sur une NullPointerException
+- Voir pour corriger ce bug/refactorer setLocale
+**** TODO Ajouter des opérations correspondant aux exceptions levées
+- BuggleInOuterSpaceException
+**** DONE Améliorer l'interface graphique
+- Redisposer les éléments de l'UI pour que l'éditeur de code soit côte à côte avec la vue du monde
 ** Semaine du <2015-03-02 lun.> au <2015-03-06 ven.>
 *** Done
 - Internationalisation
@@ -51,8 +71,6 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Lesquels sont indispensables? Ceux qu'il faut mettre le plus en avant?
   - Lesquels l'utilisateur doit-il pouvoir masquer?
 *** Planned
-**** TODO Ajouter des opérations correspondant aux exceptions levées
-- BuggleInOuterSpaceException
 **** DONE Refactorer les opérations pour gérer le message côté serveur
 - Actuellement, le message correspondant à une opération affiché dans les "Program Steps" est défini côté client, en JS.
 - Pour faciliter sa traduction, il faudrait plutôt le définir dans PLM directement.
