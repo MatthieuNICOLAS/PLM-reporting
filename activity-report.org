@@ -18,6 +18,9 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - J'ai donc modifié setLocale pour que cette méthode ne se contente que de définir la langue à utiliser.
   - Puisque à terme, une instance de Game correspondra à une session d'utilisation, j'ai modifié PLMActor pour qu'il définisse la langue à utiliser à son instanciation.
   - Voir la partie *Questions*
+- Empêcher l'utilisateur de modifier le cookie indiquant sa langue
+  - Puisque la langue de l'utilisateur n'est pas une donnée sensible, crypter la valeur actuelle du cookie paraît démesuré.
+  - On se contente donc de supprimer le cookie si la langue indiquée n'est pas supportée.
 *** Questions
 - Aller plus loin dans le refactoring de setLocale?
   - Quand l'utilisateur change la langue de l'application, je ne vois pas comment mettre à jour la page (notamment l'HTML des directives AngularJS) sans forcer l'utilisateur a rechargé la page
@@ -27,18 +30,25 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Faut-il refactorer setLocale pour qu'il mette dynamiquement à jour tout son contenu lors d'un changement de langue, évitant ainsi à l'utilisateur de redémarrer le serveur, sachant que cela sera inutile dès lors que Game ne sera plus un singleton?
   - Ou se contenter pour le moment d'afficher un message invitant l'utilisateur à redémarrer le serveur pour que les changements soient pris en compte?
 *** Planned
-**** TODO Empêcher l'utilisateur de modifier le cookie indiquant sa langue
+**** TODO Déployer une version de démonstration
+- Si PLM doit être présentée, une version de démonstration accessible facilement semble utile
+**** TODO Refactorer la méthode de dessin
+- Les mondes dessinés présentent des problèmes de proportions si le nombre de lignes est différent du nombre de colonnes (voir par exemple la Moria)
+- Voir pour améliorer ça
+**** TODO Ajouter des opérations correspondant aux exceptions levées
+- BuggleInOuterSpaceException
+**** TODO Ajouter à l'UI un composant permettant de choisir la langue du programme
+- Ajouter un service AngularJS :
+  - Disposant de la liste des langues supportées par l'application
+  - Pouvant accéder et manipuler les cookies de l'utilisateur
+- Ajouter la directive AngularJS servant d'interface entre l'utilisateur et le service précédemment décrit
+**** DONE Empêcher l'utilisateur de modifier le cookie indiquant sa langue
 - Lorsque l'utilisateur souhaite changer la langue de l'application, je stocke le code de la nouvelle langue choisie dans un cookie
 - Mais un cookie est modifiable en JS
 - L'utilisateur peut donc modifier sa valeur actuelle pour une valeur random, ce qui empêche l'application de fonctionner correctement (le client n'arrive plus à charger les fichiers HTML)
 - Il faut donc mettre en place un mécanisme empêchant la modification du cookie par l'utilisateur:
   - Cryptage du cookie?
   - Destruction du cookie si valeur inconnue?
-**** TODO Refactorer la méthode de dessin
-- Les mondes dessinés présentent des problèmes de proportions si le nombre de lignes est différent du nombre de colonnes (voir par exemple la Moria)
-- Voir pour améliorer ça
-**** TODO Ajouter des opérations correspondant aux exceptions levées
-- BuggleInOuterSpaceException
 **** DONE Corriger bug setLocale
 - Lorsqu'on sélectionne certains exercices (tel que celui de la Moria) puis qu'on recharge la page, le serveur plante.
 - L'exception levée provient à priori d'un appel à setLocale qui débouche sur une NullPointerException
