@@ -16,16 +16,24 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Refactorer setLocale
   - setLocale, pour mettre à jour la description d'une leçon/la consigne d'un exercice, re-set la leçon et l'exercice courant.
   - J'ai donc modifié setLocale pour que cette méthode ne se contente que de définir la langue à utiliser.
-  - Puisque à terme, un instance de Game correspondra à une session d'utilisation, j'ai modifié PLMActor pour qu'il définisse la langue à utiliser à son instanciation.
+  - Puisque à terme, une instance de Game correspondra à une session d'utilisation, j'ai modifié PLMActor pour qu'il définisse la langue à utiliser à son instanciation.
   - Voir la partie *Questions*
 *** Questions
 - Aller plus loin dans le refactoring de setLocale?
-  - Quand l'utilisateur change la langue de l'application, je ne vois pas comment mettre à jour la page (notamment les directives AngularJS) sans forcer l'utilisateur a rechargé la page
+  - Quand l'utilisateur change la langue de l'application, je ne vois pas comment mettre à jour la page (notamment l'HTML des directives AngularJS) sans forcer l'utilisateur a rechargé la page
   - A terme, recharger la page implique la destruction du couple "Acteur - PLM" courant et l'instanciation d'un nouveau
   - J'ai donc modifié PLM pour que la langue doive être définie à son instanciation
   - Ca implique que pour que le changement de langue soit pris en compte, l'utilisateur doit redémarrer le serveur actuellement (car PLM est instanciée au lancement du serveur et que le singleton persiste jusqu'à son interruption)
   - Faut-il refactorer setLocale pour qu'il mette dynamiquement à jour tout son contenu lors d'un changement de langue, évitant ainsi à l'utilisateur de redémarrer le serveur, sachant que cela sera inutile dès lors que Game ne sera plus un singleton?
+  - Ou se contenter pour le moment d'afficher un message invitant l'utilisateur à redémarrer le serveur pour que les changements soient pris en compte?
 *** Planned
+**** TODO Empêcher l'utilisateur de modifier le cookie indiquant sa langue
+- Lorsque l'utilisateur souhaite changer la langue de l'application, je stocke le code de la nouvelle langue choisie dans un cookie
+- Mais un cookie est modifiable en JS
+- L'utilisateur peut donc modifier sa valeur actuelle pour une valeur random, ce qui empêche l'application de fonctionner correctement (le client n'arrive plus à charger les fichiers HTML)
+- Il faut donc mettre en place un mécanisme empêchant la modification du cookie par l'utilisateur:
+  - Cryptage du cookie?
+  - Destruction du cookie si valeur inconnue?
 **** TODO Refactorer la méthode de dessin
 - Les mondes dessinés présentent des problèmes de proportions si le nombre de lignes est différent du nombre de colonnes (voir par exemple la Moria)
 - Voir pour améliorer ça
