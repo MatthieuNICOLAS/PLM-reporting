@@ -21,6 +21,13 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Empêcher l'utilisateur de modifier le cookie indiquant sa langue
   - Puisque la langue de l'utilisateur n'est pas une donnée sensible, crypter la valeur actuelle du cookie paraît démesuré.
   - On se contente donc de supprimer le cookie si la langue indiquée n'est pas supportée.
+- Ajout du service *langs* :
+  - Interroge le serveur pour récupérer la liste des langues supportées par l'application
+  - Stocke la langue actuelle dans un cookie 
+- Ajout de la directive *selectLang*
+  - Interagit avec *langs* pour afficher la langue actuelle et la liste des langues supportées
+  - Indique à l'utilisateur que l'application a besoin de redémarrer pour prendre en compte le changement de langue
+  - Permet à l'utilisateur de changer la langue sélectionnée
 *** Questions
 - Aller plus loin dans le refactoring de setLocale?
   - Quand l'utilisateur change la langue de l'application, je ne vois pas comment mettre à jour la page (notamment l'HTML des directives AngularJS) sans forcer l'utilisateur a rechargé la page
@@ -37,7 +44,7 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Voir pour améliorer ça
 **** TODO Ajouter des opérations correspondant aux exceptions levées
 - BuggleInOuterSpaceException
-**** TODO Ajouter à l'UI un composant permettant de choisir la langue du programme
+**** DONE Ajouter à l'UI un composant permettant de choisir la langue du programme
 - Ajouter un service AngularJS :
   - Disposant de la liste des langues supportées par l'application
   - Pouvant accéder et manipuler les cookies de l'utilisateur
