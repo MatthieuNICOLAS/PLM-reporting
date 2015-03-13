@@ -1,3 +1,26 @@
+* TODO Améliorer l'interaction directives/controllers
+- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
+- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
+- Voir pour prévenir ce genre de bugs
+* TODO Améliorer la gestion du monde objectif
+- Lorsqu'on passe sur la vue objectif d'un monde, celui-ci est encore dans son état initial.
+- Il faut lancer la démo pour que l'objectif apparaisse.
+- Voir pour :
+  - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
+  - Récupérer à l'initialisation l'état objectif
+* TODO Corriger bug des baggles invisibles
+- Les baggles n'apparaissent pas sur certains navigateurs:
+  - Chrome Canary sous Mac OS
+  - Firefox sous Linux
+- Mais les démonstrations que l'on peut trouver sur Internet de canvas sont compatibles avec ces navigateurs
+- Revoir la méthode /drawBaggle/ pour trouver la raison de ce bug.
+* TODO Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
+- Lorsqu'on change de langage de programmation, il faut recharger le texte de la consigne afin que les exemples de code correspondent au nouveau langage selectionné.
+* TODO Empêcher plusieurs utilisateurs de tester la version de démo en concurrence
+- Protéger par un mot de passe l'accès à l'application? Si oui, comment faire?
+* TODO Refactorer la méthode de dessin
+- Les mondes dessinés présentent des problèmes de proportions si le nombre de lignes est différent du nombre de colonnes (voir par exemple la Moria)
+- Voir pour améliorer ça
 * TODO Remplacer l'utilisation de CDN
   - Actuellement, on récupère les librairies telles que jQuery ou AngularJS sur des sites distants (des CDN)
   - Cela allège le serveur en laissant les CDN se charger des requêtes HTTP concernant ces librairies
@@ -16,9 +39,6 @@
 - Minifier le code de ce fichier permettrait d'améliorer encore plus
   la vitesse de chargement de la page.
 - Voir du côté de [[http://gruntjs.com/][Grunt]]. 
-* TODO Interrompre l'exécution du programme si une exception est levée
-- Le programme devrait s'interrompre lorsqu'une exception est levée,
-  par exemple lorsqu'on essaie de poser un baggle sans en avoir un.
 * TODO Créer un mode d'auto-complétion pour BuggleWorld
 * TODO Fixer le bug du baggle ne s'affichant pas
    - Lorsque webPLM a été testé sur le Mac de Gérald, le baggle
