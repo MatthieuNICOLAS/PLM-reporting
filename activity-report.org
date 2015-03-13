@@ -28,6 +28,10 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Interagit avec *langs* pour afficher la langue actuelle et la liste des langues supportées
   - Indique à l'utilisateur que l'application a besoin de redémarrer pour prendre en compte le changement de langue
   - Permet à l'utilisateur de changer la langue sélectionnée
+- Déployer une version de démonstration
+  - A partir de [[https://github.com/opensas/play2-openshift-quickstart][cet exemple]], j'ai pu mettre en ligne *webPLM* sur *Openshift*
+  - L'application est donc testable [[webplm-editorcrdt.rhcloud.com][ici]]
+  - Reste à voir pour contrôler l'accès pour prévenir les bugs liés au singleton Game.
 *** Questions
 - Aller plus loin dans le refactoring de setLocale?
   - Quand l'utilisateur change la langue de l'application, je ne vois pas comment mettre à jour la page (notamment l'HTML des directives AngularJS) sans forcer l'utilisateur a rechargé la page
@@ -37,14 +41,38 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Faut-il refactorer setLocale pour qu'il mette dynamiquement à jour tout son contenu lors d'un changement de langue, évitant ainsi à l'utilisateur de redémarrer le serveur, sachant que cela sera inutile dès lors que Game ne sera plus un singleton?
   - Ou se contenter pour le moment d'afficher un message invitant l'utilisateur à redémarrer le serveur pour que les changements soient pris en compte?
 *** Planned
-**** TODO Déployer une version de démonstration
-- Si PLM doit être présentée, une version de démonstration accessible facilement pourrait se révéler utile.
+**** TODO Améliorer l'interaction directives/controllers
+- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
+- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
+- Voir pour prévenir ce genre de bugs
+**** TODO Améliorer la gestion du monde objectif
+- Lorsqu'on passe sur la vue objectif d'un monde, celui-ci est encore dans son état initial.
+- Il faut lancer la démo pour que l'objectif apparaisse.
+- Voir pour :
+  - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
+  - Récupérer à l'initialisation l'état objectif
+**** TODO Corriger bug des baggles invisibles
+- Les baggles n'apparaissent pas sur certains navigateurs:
+  - Chrome Canary sous Mac OS
+  - Firefox sous Linux
+- Mais les démonstrations que l'on peut trouver sur Internet de canvas sont compatibles avec ces navigateurs
+- Revoir la méthode /drawBaggle/ pour trouver la raison de ce bug.
+**** TODO Améliorer l'outil de sélection d'un exercice
+- Plus le mettre en valeur (revoir le label du bouton?)
+- Empêcher l'utilisateur de cliquer sur "Switch to" lorsqu'aucun exercice n'est actuellement choisi
+- Lorsque l'utilisateur sélectionne un exercice principal de la liste de gauche, il faudrait que celui-ci soit aussi sélectionné dans la liste de droite
+**** TODO Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
+- Lorsqu'on change de langage de programmation, il faut recharger le texte de la consigne afin que les exemples de code correspondent au nouveau langage selectionné.
+**** TODO Empêcher plusieurs utilisateurs de tester la version de démo en concurrence
+- Protéger par un mot de passe l'accès à l'application? Si oui, comment faire?
 **** TODO Refactorer la méthode de dessin
 - Les mondes dessinés présentent des problèmes de proportions si le nombre de lignes est différent du nombre de colonnes (voir par exemple la Moria)
 - Voir pour améliorer ça
 **** TODO Déclencher une BuggleInOuterSpaceException lorsque les coordonnées sont négatives
 - L'utilisateur peut actuellement affecter des valeurs négatives aux coordonnées du Buggle via setX/setY/setPos.
 - Il faudrait l'en empêcher en levant une exception s'il essaie.
+**** DONE Déployer une version de démonstration
+- Si PLM doit être présentée, une version de démonstration accessible facilement pourrait se révéler utile.
 **** DONE Ajouter des opérations correspondant aux exceptions levées
 - BuggleInOuterSpaceException
 **** DONE Ajouter à l'UI un composant permettant de choisir la langue du programme
