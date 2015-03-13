@@ -38,11 +38,14 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Ou se contenter pour le moment d'afficher un message invitant l'utilisateur à redémarrer le serveur pour que les changements soient pris en compte?
 *** Planned
 **** TODO Déployer une version de démonstration
-- Si PLM doit être présentée, une version de démonstration accessible facilement semble utile
+- Si PLM doit être présentée, une version de démonstration accessible facilement pourrait se révéler utile.
 **** TODO Refactorer la méthode de dessin
 - Les mondes dessinés présentent des problèmes de proportions si le nombre de lignes est différent du nombre de colonnes (voir par exemple la Moria)
 - Voir pour améliorer ça
-**** TODO Ajouter des opérations correspondant aux exceptions levées
+**** TODO Déclencher une BuggleInOuterSpaceException lorsque les coordonnées sont négatives
+- L'utilisateur peut actuellement affecter des valeurs négatives aux coordonnées du Buggle via setX/setY/setPos.
+- Il faudrait l'en empêcher en levant une exception s'il essaie.
+**** DONE Ajouter des opérations correspondant aux exceptions levées
 - BuggleInOuterSpaceException
 **** DONE Ajouter à l'UI un composant permettant de choisir la langue du programme
 - Ajouter un service AngularJS :
