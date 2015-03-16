@@ -11,8 +11,16 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Corriger bug des baggles invisibles:
   - Remplacer /DefaultColors.BAGGLE/ par une couleur par défaut tel que /orange/ permet de corriger le bug, le problème semble donc venir de /DefaultColors.BAGGLE/.
   - Après quelques tests, j'ai remarqué qu'il suffisait de retirer le ';' à la fin de la chaîne 'rgb(209, 105, 31);'
+- Corriger les solutions Scala des exercices 2 et 3 de la leçon welcome
+  - Après de nouveaux tests, il s'avère que seulement l'entité /welcome.instructions.ScalaInstructionsEntity/ bug.
+  - Le bug semble provenir du package incorrect de cette classe.
+  - Pourquoi le test d'intégration recherchant les leçons cassées ne l'a pas détecté?
+  - L'exception déclenchée lorsqu'une entité solution n'est pas trouvée est catchée dans /run()/ de *DemoRunner*.
 *** Questions
 *** Planned
+**** TODO Corriger les tests unitaires de Git
+- Certains tests unitaires de Git (ceux qui accèdent à un repo distant) échouent si la propriété autorisant le traçage des utilisateurs est à *false*.
+- Modifier les tests pour ne pas tenir compte de cette propriété.
 **** TODO Corriger les solutions Scala des exercices 2 et 3 de la leçon welcome
 - Un problème semble survenir à l'exécution des solutions de ces exercices
 - Ceci empêche l'utilisateur de consulter le monde objectif/d'observer la démo
