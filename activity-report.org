@@ -16,15 +16,13 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Le bug semble provenir du package incorrect de cette classe.
   - Pourquoi le test d'intégration recherchant les leçons cassées ne l'a pas détecté?
   - L'exception déclenchée lorsqu'une entité solution n'est pas trouvée est catchée dans /run()/ de *DemoRunner*.
+  - Ajout d'un test lançant la solution à l'aide de *DemoRunner* et détectant si une exception est lancée:
+  - A permis de corriger /welcome.instructions.ScalaInstructionsEntity/ mais aussi /welcome.loopdowhile.ScalaPoucet1Entity/
+- Corriger les tests unitaires de Git
+  - Récupération de la valeur de la propriété autorisant le traçage des utilisateurs au lancement des tests.
+  - Autorise le traçage des utilisateurs pendant la durée du test, puis remet l'ancienne valeur.
 *** Questions
 *** Planned
-**** TODO Corriger les tests unitaires de Git
-- Certains tests unitaires de Git (ceux qui accèdent à un repo distant) échouent si la propriété autorisant le traçage des utilisateurs est à *false*.
-- Modifier les tests pour ne pas tenir compte de cette propriété.
-**** TODO Corriger les solutions Scala des exercices 2 et 3 de la leçon welcome
-- Un problème semble survenir à l'exécution des solutions de ces exercices
-- Ceci empêche l'utilisateur de consulter le monde objectif/d'observer la démo
-- Il suffit alors de cliquer sur /Run/ sans rien faire pour valider l'exercice...
 **** TODO Améliorer l'interaction directives/controllers
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
@@ -37,6 +35,13 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Récupérer à l'initialisation l'état objectif
 **** TODO Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
 - Lorsqu'on change de langage de programmation, il faut recharger le texte de la consigne afin que les exemples de code correspondent au nouveau langage selectionné.
+**** DONE Corriger les tests unitaires de Git
+- Certains tests unitaires de Git (ceux qui accèdent à un repo distant) échouent si la propriété autorisant le traçage des utilisateurs est à *false*.
+- Modifier les tests pour ne pas tenir compte de cette propriété.
+**** DONE Corriger les solutions Scala des exercices 2 et 3 de la leçon welcome
+- Un problème semble survenir à l'exécution des solutions de ces exercices
+- Ceci empêche l'utilisateur de consulter le monde objectif/d'observer la démo
+- Il suffit alors de cliquer sur /Run/ sans rien faire pour valider l'exercice.
 **** DONE Corriger bug des baggles invisibles
 - Les baggles n'apparaissent pas sur certains navigateurs:
   - Chrome Canary sous Mac OS
