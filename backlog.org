@@ -1,3 +1,7 @@
+* TODO Corriger les solutions Scala des exercices 2 et 3 de la leçon welcome
+- Un problème semble survenir à l'exécution des solutions de ces exercices
+- Ceci empêche l'utilisateur de consulter le monde objectif/d'observer la démo
+- Il suffit alors de cliquer sur /Run/ sans rien faire pour valider l'exercice...
 * TODO Améliorer l'interaction directives/controllers
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page

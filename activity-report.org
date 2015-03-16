@@ -6,6 +6,35 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - https://github.com/MatthieuNICOLAS/webPLM
   Le lien vers le repo de la version web de PLM
 * Journal de bord
+** Semaine du <2015-03-16 lun.> au <2015-03-20 ven.>
+*** Done
+- Corriger bug des baggles invisibles:
+  - Remplacer /DefaultColors.BAGGLE/ par une couleur par défaut tel que /orange/ permet de corriger le bug, le problème semble donc venir de /DefaultColors.BAGGLE/.
+  - Après quelques tests, j'ai remarqué qu'il suffisait de retirer le ';' à la fin de la chaîne 'rgb(209, 105, 31);'
+*** Questions
+*** Planned
+**** TODO Corriger les solutions Scala des exercices 2 et 3 de la leçon welcome
+- Un problème semble survenir à l'exécution des solutions de ces exercices
+- Ceci empêche l'utilisateur de consulter le monde objectif/d'observer la démo
+- Il suffit alors de cliquer sur /Run/ sans rien faire pour valider l'exercice...
+**** TODO Améliorer l'interaction directives/controllers
+- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
+- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
+- Voir pour prévenir ce genre de bugs
+**** TODO Améliorer la gestion du monde objectif
+- Lorsqu'on passe sur la vue objectif d'un monde, celui-ci est encore dans son état initial.
+- Il faut lancer la démo pour que l'objectif apparaisse.
+- Voir pour :
+  - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
+  - Récupérer à l'initialisation l'état objectif
+**** TODO Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
+- Lorsqu'on change de langage de programmation, il faut recharger le texte de la consigne afin que les exemples de code correspondent au nouveau langage selectionné.
+**** DONE Corriger bug des baggles invisibles
+- Les baggles n'apparaissent pas sur certains navigateurs:
+  - Chrome Canary sous Mac OS
+  - Firefox sous Linux
+- Mais les démonstrations que l'on peut trouver sur Internet de canvas sont compatibles avec ces navigateurs
+- Revoir la méthode /drawBaggle/ pour trouver la raison de ce bug.
 ** Semaine du <2015-03-09 lun.> au <2015-03-13 ven.>
 *** Done
 - Améliorer l'interface graphique
