@@ -8,19 +8,22 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 * Journal de bord
 ** Semaine du <2015-03-16 lun.> au <2015-03-20 ven.>
 *** Done
-- Corriger bug des baggles invisibles:
+- Correction du bug des baggles invisibles:
   - Remplacer /DefaultColors.BAGGLE/ par une couleur par défaut tel que /orange/ permet de corriger le bug, le problème semble donc venir de /DefaultColors.BAGGLE/.
   - Après quelques tests, j'ai remarqué qu'il suffisait de retirer le ';' à la fin de la chaîne 'rgb(209, 105, 31);'
-- Corriger les solutions Scala des exercices 2 et 3 de la leçon welcome
+- Correction des solutions Scala des exercices 2 et 3 de la leçon welcome
   - Après de nouveaux tests, il s'avère que seulement l'entité /welcome.instructions.ScalaInstructionsEntity/ bug.
   - Le bug semble provenir du package incorrect de cette classe.
   - Pourquoi le test d'intégration recherchant les leçons cassées ne l'a pas détecté?
   - L'exception déclenchée lorsqu'une entité solution n'est pas trouvée est catchée dans /run()/ de *DemoRunner*.
   - Ajout d'un test lançant la solution à l'aide de *DemoRunner* et détectant si une exception est lancée:
   - A permis de corriger /welcome.instructions.ScalaInstructionsEntity/ mais aussi /welcome.loopdowhile.ScalaPoucet1Entity/
-- Corriger les tests unitaires de Git
+- Correction des tests unitaires de Git
   - Récupération de la valeur de la propriété autorisant le traçage des utilisateurs au lancement des tests.
   - Autorise le traçage des utilisateurs pendant la durée du test, puis remet l'ancienne valeur.
+- Correction des [[https://github.com/MatthieuNICOLAS/webPLM/issues][issues ouvertes sur GitHub]]
+  - Ajout d'un effet de surbrillance lorsqu'on passe la souris sur un bouton de la barre de menu en haut ([[https://github.com/MatthieuNICOLAS/webPLM/issues/10][fix #10]]).
+  - Ajout d'un bouton "Not yet" à la pop-up invitant l'utilisateur à passer à l'exercice suivant lorsqu'il réussit un exercice ([[https://github.com/MatthieuNICOLAS/webPLM/issues/11][fix #11]]).
 *** Questions
 *** Planned
 **** TODO Améliorer l'interaction directives/controllers
