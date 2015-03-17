@@ -26,6 +26,10 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Ajout d'un bouton "Not yet" à la pop-up invitant l'utilisateur à passer à l'exercice suivant lorsqu'il réussit un exercice ([[https://github.com/MatthieuNICOLAS/webPLM/issues/11][fix #11]]).
 *** Questions
 *** Planned
+**** TODO Tester ngTranslate
+- Voir [[http://angular-translate.github.io/][ce module]] ou [[https://github.com/StephanHoyer/ng-translate][celui-ci]].
+- Permettrait de modifier dynamiquement les chaînes de caractères de l'interface sans devoir recharger la page
+- Modifier la mise à jour du contenu de PLM lors d'un changement de langue
 **** TODO Améliorer l'interaction directives/controllers
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
