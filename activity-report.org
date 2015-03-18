@@ -24,8 +24,16 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Correction des [[https://github.com/MatthieuNICOLAS/webPLM/issues][issues ouvertes sur GitHub]]
   - Ajout d'un effet de surbrillance lorsqu'on passe la souris sur un bouton de la barre de menu en haut ([[https://github.com/MatthieuNICOLAS/webPLM/issues/10][fix #10]]).
   - Ajout d'un bouton "Not yet" à la pop-up invitant l'utilisateur à passer à l'exercice suivant lorsqu'il réussit un exercice ([[https://github.com/MatthieuNICOLAS/webPLM/issues/11][fix #11]]).
+- Ne pas crasher lorsqu'on accède à un exercice non-supporté ([[https://github.com/MatthieuNICOLAS/webPLM/issues/3][fix #3]])
+  - Ajout de l'exception /NonImplementedWorldException/
+  - Ajout du champ /exception/ dans le JSON transmis au client spécifiant l'exception rencontrée, s'il y en a une.
+  - Ajout d'un message d'avertissement indiquant à l'utilisateur que la représentation du monde n'est pas disponible.
 *** Questions
 *** Planned
+**** TODO Améliorer le fonctionnement du canvas
+- Actuellement, à chaque application d'une opération (inverse ou non) sur le modèle du monde, le canvas est redessiné.
+- Lorsque le code de l'utilisateur génère plusieurs milliers d'opération et que celles-ci sont appliquées au modèle, cela entraîne un freeze de l'onglet.
+- Modifier la méthode de mise à jour du canvas pour qu'elle ne soit appelée qu'un nombre de fois limitée par seconde (30 ou 60 fps).
 **** TODO Tester ngTranslate
 - Voir [[http://angular-translate.github.io/][ce module]] ou [[https://github.com/StephanHoyer/ng-translate][celui-ci]].
 - Permettrait de modifier dynamiquement les chaînes de caractères de l'interface sans devoir recharger la page
@@ -42,6 +50,10 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Récupérer à l'initialisation l'état objectif
 **** TODO Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
 - Lorsqu'on change de langage de programmation, il faut recharger le texte de la consigne afin que les exemples de code correspondent au nouveau langage selectionné.
+**** DONE Ne pas crasher lorsqu'on accède à un exercice non-supporté ([[https://github.com/MatthieuNICOLAS/webPLM/issues/3][fix #3]])
+- Déclencher une exception lorsque le monde qu'on essaie de convertir un monde non-supporté en JSON.
+- Catcher l'exception et insérer dans le JSON un champ pour prévenir le client que le monde n'est pas supporté.
+- Vérifier côté client la valeur de ce champ et afficher un message d'avertissement s'il est présent.
 **** DONE Corriger les tests unitaires de Git
 - Certains tests unitaires de Git (ceux qui accèdent à un repo distant) échouent si la propriété autorisant le traçage des utilisateurs est à *false*.
 - Modifier les tests pour ne pas tenir compte de cette propriété.
