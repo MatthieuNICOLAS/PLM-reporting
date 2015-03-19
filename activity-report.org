@@ -28,16 +28,31 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Ajout de l'exception /NonImplementedWorldException/
   - Ajout du champ /exception/ dans le JSON transmis au client spécifiant l'exception rencontrée, s'il y en a une.
   - Ajout d'un message d'avertissement indiquant à l'utilisateur que la représentation du monde n'est pas disponible.
+- Améliorer le fonctionnement du canvas
+  - Update du canvas à raison de 10 fois par seconde.
+  - L'utilisateur peut uniquement contrôler le nombre d'opérations appliquées durant ce temps au modèle.
+  - La vitesse d'application des opérations variant de toutes les 40ms à toutes les 3s.
+  - J'ai remarqué que si l'utilisateur naviguer manuellement à travers les états du modèle alors que l'exécution n'est pas terminée (donc que le nombre d'états n'est pas encore fixé), les performances chutent énormement.
+  - Tant que l'exécution du programme n'est pas terminée, les boutons de navigation sont donc inactifs.
+- Tester ngTranslate
+  - Finalement j'ai décidé d'utiliser [[https://angular-gettext.rocketeer.be/][angular-gettext]] pour son efficacité, sa simplicité d'utilisation et sa doc complète.
+  - Mis en place *angular-gettext* et traduit l'application.
+  - Il reste cependant quelques conflits avec les composants de *Foundation* (les tooltips et les alerts ne sont pas correctement mis à jour après un changement de langue).
+- Refactorer setLocale de PLM
+  - Se contente de mettre à jour *i18n* et d'avertir les *HumanLangListeners* du changement de langue
+  - *Lesson* et *Lecture* sont maintenant des *HumanLangListeners*
+  - Ils mettent donc à jour l'énoncé/la description de la leçon dès que la langue est changée
+  - Le serveur avertit le client lorsque le changement de langue a été effectué de son côté
+  - Le client redemande alors le contenu de PLM qui l'intéresse
+    - La description des leçons si on est sur la page /Home/
+    - L'énoncé de l'exercice si on est sur la page /Exercise/
 *** Questions
 *** Planned
-**** TODO Améliorer le fonctionnement du canvas
-- Actuellement, à chaque application d'une opération (inverse ou non) sur le modèle du monde, le canvas est redessiné.
-- Lorsque le code de l'utilisateur génère plusieurs milliers d'opération et que celles-ci sont appliquées au modèle, cela entraîne un freeze de l'onglet.
-- Modifier la méthode de mise à jour du canvas pour qu'elle ne soit appelée qu'un nombre de fois limitée par seconde (30 ou 60 fps).
-**** TODO Tester ngTranslate
-- Voir [[http://angular-translate.github.io/][ce module]] ou [[https://github.com/StephanHoyer/ng-translate][celui-ci]].
-- Permettrait de modifier dynamiquement les chaînes de caractères de l'interface sans devoir recharger la page
-- Modifier la mise à jour du contenu de PLM lors d'un changement de langue
+**** TODO Traduire l'API d'un monde lors d'un changement de langue
+- Pour récupérer l'API d'un monde, il faut interroger une instance de ce monde.
+- Il faudrait faire de *World* un *HumanLangListener*
+- Mais afin d'éviter les fuites mémoires, il faut faire attention à gérer correctement les add/removeHumanLangListener
+- Voir si on peut pas simplifier la chose en retirant l'API d'un monde de ses instances
 **** TODO Améliorer l'interaction directives/controllers
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
@@ -50,6 +65,14 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Récupérer à l'initialisation l'état objectif
 **** TODO Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
 - Lorsqu'on change de langage de programmation, il faut recharger le texte de la consigne afin que les exemples de code correspondent au nouveau langage selectionné.
+**** DONE Refactorer setLocale de PLM
+- setLocale de PLM devrait juste mettre à jour la langue de *i18n*
+- Le contenu de PLM chargé devrait être re-traduit.
+- Le client doit interroger le serveur pour mettre à jour son interface.
+**** DONE Tester ngTranslate
+- Voir [[http://angular-translate.github.io/][ce module]] ou [[https://github.com/StephanHoyer/ng-translate][celui-ci]].
+- Permettrait de modifier dynamiquement les chaînes de caractères de l'interface sans devoir recharger la page
+- Modifier la mise à jour du contenu de PLM lors d'un changement de langue
 **** DONE Ne pas crasher lorsqu'on accède à un exercice non-supporté ([[https://github.com/MatthieuNICOLAS/webPLM/issues/3][fix #3]])
 - Déclencher une exception lorsque le monde qu'on essaie de convertir un monde non-supporté en JSON.
 - Catcher l'exception et insérer dans le JSON un champ pour prévenir le client que le monde n'est pas supporté.
