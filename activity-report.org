@@ -63,6 +63,11 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Voir pour :
   - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
   - Récupérer à l'initialisation l'état objectif
+**** DONE Ne pas redimensionner l'éditeur de code en fonction du canvas dans un exercice non-supporté
+- L'éditeur de code est actuellement redimensionné pour avoir les mêmes proportions que la représentation du monde
+- Si l'exercice n'est pas supporté, le canvas n'est pas affiché.
+- Si l'utilisateur redimensionne la fenêtre ensuite, la taille de l'éditeur de code est mise à jour et il devient à son tour invisible.
+- Revoir comment l'éditeur de code est redimensionné
 **** DONE Traduire l'API d'un monde lors d'un changement de langue
 - Pour récupérer l'API d'un monde, il faut interroger une instance de ce monde.
 - Il faudrait faire de *World* un *HumanLangListener*
