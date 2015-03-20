@@ -46,13 +46,13 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Le client redemande alors le contenu de PLM qui l'intéresse
     - La description des leçons si on est sur la page /Home/
     - L'énoncé de l'exercice si on est sur la page /Exercise/
+- Traduire l'API d'un monde lors d'un changement de langue
+  - Il a suffit de mettre à jour l'API du 1er monde initial dans *Exercise* quand /currentHumanLanguageHasChanged/ est appelée
+  - Le client demande donc aussi l'API lorsque la langue est modifiée alors qu'il est sur la page /Exercise/
+- Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
+  - On se contente d'envoyer le nouveau texte de la consigne lors d'un changement de langage de programmation et de mettre à jour l'UI.
 *** Questions
 *** Planned
-**** TODO Traduire l'API d'un monde lors d'un changement de langue
-- Pour récupérer l'API d'un monde, il faut interroger une instance de ce monde.
-- Il faudrait faire de *World* un *HumanLangListener*
-- Mais afin d'éviter les fuites mémoires, il faut faire attention à gérer correctement les add/removeHumanLangListener
-- Voir si on peut pas simplifier la chose en retirant l'API d'un monde de ses instances
 **** TODO Améliorer l'interaction directives/controllers
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
@@ -63,7 +63,12 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Voir pour :
   - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
   - Récupérer à l'initialisation l'état objectif
-**** TODO Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
+**** DONE Traduire l'API d'un monde lors d'un changement de langue
+- Pour récupérer l'API d'un monde, il faut interroger une instance de ce monde.
+- Il faudrait faire de *World* un *HumanLangListener*
+- Mais afin d'éviter les fuites mémoires, il faut faire attention à gérer correctement les add/removeHumanLangListener
+- Voir si on peut pas simplifier la chose en retirant l'API d'un monde de ses instances
+**** DONE Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
 - Lorsqu'on change de langage de programmation, il faut recharger le texte de la consigne afin que les exemples de code correspondent au nouveau langage selectionné.
 **** DONE Refactorer setLocale de PLM
 - setLocale de PLM devrait juste mettre à jour la langue de *i18n*
