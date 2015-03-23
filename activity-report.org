@@ -6,6 +6,37 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - https://github.com/MatthieuNICOLAS/webPLM
   Le lien vers le repo de la version web de PLM
 * Journal de bord
+** Semaine du <2015-03-23 lun.> au <2015-03-27 ven.>
+*** Done
+- Adapter BatWorld
+  - Transmet l'état initial du BatWorld au client
+  - A la fin de l'exécution du programme client, envoie le nouvel état
+  - On se contente de transmettre le résultat et de le stocker côté client (pas d'opérations faisant évoluer le modèle "pas-à-pas")
+  - Ajout d'un modèle pour BatWorld côté client.
+- Retravailler ExerciseController
+  - Tous les mondes n'ont pas besoin d'un canvas pour être dessiné
+  - Il fallait donc refactorer ExerciseController pour qu'il soit capable de gérer plusieurs services de dessin (un pour canvas, un pour le DOM...)
+*** Questions
+*** Planned
+**** TODO Empêcher LightBot de faire crasher le serveur
+- Identifier la source du plantage
+**** TODO Adapter BatWorld pour webPLM
+- Création de BatWorld côté client
+  - Besoin de créer un modèle de données côté client?
+  - Ou on se contente d'envoyer le résultat (chaîne de caractère + error ou pass) ?
+- Modification de l'interface client
+  - Pas vraiment besoin d'un canvas pour ce monde
+  - Une directive AngularJS semble suffire
+**** TODO Améliorer l'interaction directives/controllers
+- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
+- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
+- Voir pour prévenir ce genre de bugs
+**** TODO Améliorer la gestion du monde objectif
+- Lorsqu'on passe sur la vue objectif d'un monde, celui-ci est encore dans son état initial.
+- Il faut lancer la démo pour que l'objectif apparaisse.
+- Voir pour :
+  - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
+  - Récupérer à l'initialisation l'état objectif
 ** Semaine du <2015-03-16 lun.> au <2015-03-20 ven.>
 *** Done
 - Correction du bug des baggles invisibles:
@@ -53,16 +84,6 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - On se contente d'envoyer le nouveau texte de la consigne lors d'un changement de langage de programmation et de mettre à jour l'UI.
 *** Questions
 *** Planned
-**** TODO Améliorer l'interaction directives/controllers
-- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
-- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
-- Voir pour prévenir ce genre de bugs
-**** TODO Améliorer la gestion du monde objectif
-- Lorsqu'on passe sur la vue objectif d'un monde, celui-ci est encore dans son état initial.
-- Il faut lancer la démo pour que l'objectif apparaisse.
-- Voir pour :
-  - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
-  - Récupérer à l'initialisation l'état objectif
 **** DONE Ne pas redimensionner l'éditeur de code en fonction du canvas dans un exercice non-supporté
 - L'éditeur de code est actuellement redimensionné pour avoir les mêmes proportions que la représentation du monde
 - Si l'exercice n'est pas supporté, le canvas n'est pas affiché.
