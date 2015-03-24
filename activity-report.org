@@ -16,17 +16,21 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Retravailler ExerciseController
   - Tous les mondes n'ont pas besoin d'un canvas pour être dessiné
   - Il fallait donc refactorer ExerciseController pour qu'il soit capable de gérer plusieurs services de dessin (un pour canvas, un pour le DOM...)
+  - Tous les mondes n'ont pas non plus d'un monde objectif, d'une démo, d'un historique...
+  - Ajout de variables permettant de retirer dynamiquement les composants de l'interface inutiles pour un exercice
+- Ajout du service *drawWithDOM*
+  - Possèdera à terme plusieurs méthodes de dessin (une pour chaque monde supporté)
+  - Lorsqu'un monde est choisi, il sélectionne la méthode de dessin appropriée
+- Représenter *BatWorld* avec *drawWithDOM*
+  - Se contente d'injecter une directive AngularJS dans le DOM
+  - Celle-ci affiche les tests visibles en ajoutant du style selon les paramètres supplémentaires
 *** Questions
 *** Planned
+**** TODO Refactorer le service canvas
+- Voir pour sortir la méthode de dessin du monde des Buggles du modèle
+- La boucle d'animation devrait elle aussi se trouver dans le service et non pas dans le controller.
 **** TODO Empêcher LightBot de faire crasher le serveur
 - Identifier la source du plantage
-**** TODO Adapter BatWorld pour webPLM
-- Création de BatWorld côté client
-  - Besoin de créer un modèle de données côté client?
-  - Ou on se contente d'envoyer le résultat (chaîne de caractère + error ou pass) ?
-- Modification de l'interface client
-  - Pas vraiment besoin d'un canvas pour ce monde
-  - Une directive AngularJS semble suffire
 **** TODO Améliorer l'interaction directives/controllers
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
@@ -37,6 +41,13 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Voir pour :
   - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
   - Récupérer à l'initialisation l'état objectif
+**** DONE Adapter BatWorld pour webPLM
+- Création de BatWorld côté client
+  - Besoin de créer un modèle de données côté client?
+  - Ou on se contente d'envoyer le résultat (chaîne de caractère + error ou pass) ?
+- Modification de l'interface client
+  - Pas vraiment besoin d'un canvas pour ce monde
+  - Une directive AngularJS semble suffire
 ** Semaine du <2015-03-16 lun.> au <2015-03-20 ven.>
 *** Done
 - Correction du bug des baggles invisibles:
