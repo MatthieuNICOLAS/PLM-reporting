@@ -16,7 +16,7 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Retravailler ExerciseController
   - Tous les mondes n'ont pas besoin d'un canvas pour être dessiné
   - Il fallait donc refactorer ExerciseController pour qu'il soit capable de gérer plusieurs services de dessin (un pour canvas, un pour le DOM...)
-  - Tous les mondes n'ont pas non plus d'un monde objectif, d'une démo, d'un historique...
+  - Tous les mondes n'ont pas non plus besoin d'un monde objectif, d'une démo, d'un historique...
   - Ajout de variables permettant de retirer dynamiquement les composants de l'interface inutiles pour un exercice
 - Ajout du service *drawWithDOM*
   - Possèdera à terme plusieurs méthodes de dessin (une pour chaque monde supporté)
@@ -24,11 +24,23 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Représenter *BatWorld* avec *drawWithDOM*
   - Se contente d'injecter une directive AngularJS dans le DOM
   - Celle-ci affiche les tests visibles en ajoutant du style selon les paramètres supplémentaires
+- Refactoring de la gestion des méthodes de dessin
+  - Les méthodes de dessin sont contenues dans des objets spécifiques, les vues
+  - Lorsque le controller instancie un modèle, il fournit aussi au service de dessin la méthode de la vue qui correspond
+  - Ajout de *BatWorldView* selon cette architecture
+- Refactorer le service canvas
+  - Ajout de *BuggleWorldView* regroupant les méthodes de dessin jusque là contenues dans *BuggleWorld*, *BuggleWorldCell*...
+  - Modification de canvas pour la méthode dessin utilisée lui soit fournie par le controller.
+  - Adaptation des tests unitaires pour canvas à ce nouveau fonctionnement.
+- Sortir la boucle de dessin du controller
+  - Tout d'abord, gérer la boucle de dessin dans le service de dessin paraît peu adapté car redondant 
+  - Ensuite, sortir la boucle de dessin du controller peut être nécessaire si on considère que certains mondes n'en ont pas la nécessité (BatWorld par exemple)
+  - Mais si l'on considère que tous les mondes possèdent une ou plusieurs étapes, alors son fonctionnement ne dépend pas du monde.
+  - Il ne reste plus que la création d'un service dédié.
+  - L'intérêt me paraît faible pour le moment.
 *** Questions
 *** Planned
-**** TODO Refactorer le service canvas
-- Voir pour sortir la méthode de dessin du monde des Buggles du modèle
-- La boucle d'animation devrait elle aussi se trouver dans le service et non pas dans le controller.
+**** TODO Adapter TurtleWorld pour webPLM
 **** TODO Empêcher LightBot de faire crasher le serveur
 - Identifier la source du plantage
 **** TODO Améliorer l'interaction directives/controllers
@@ -41,6 +53,11 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Voir pour :
   - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
   - Récupérer à l'initialisation l'état objectif
+**** CANCELLED Sortir la boucle de dessin du controller
+- La boucle d'animation devrait se trouver dans le service de dessin ou dans la vue d'un monde et non pas dans le controller.
+**** DONE Refactorer le service canvas
+- Voir pour sortir la méthode de dessin du monde des Buggles du modèle
+- La méthode de dessin devrait se trouver dans un objet prévu pour.
 **** DONE Adapter BatWorld pour webPLM
 - Création de BatWorld côté client
   - Besoin de créer un modèle de données côté client?
