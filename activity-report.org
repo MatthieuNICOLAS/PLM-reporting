@@ -40,6 +40,18 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - L'intérêt me paraît faible pour le moment.
 *** Questions
 *** Planned
+**** TODO Voir pour améliorer la gestion de la boucle dessin
+- Remplacer setTimeout/Interval par $timeout/interval
+- /$scope.$apply()/ nécessaire?
+**** TODO Corriger bug d'AngularJS avec ng-bind-html
+- Lorsqu'on affiche de l'HTML provenant de PLM dans l'interface, nous utilisons l'attribut /ng-bind-html/ pour l'insérer dans un élément du DOM
+- Cependant, lorsqu'on modifie l'HTML affiché (la consigne est traduite dans une autre langue par exemple), une erreur est levé par *AngularJS*
+- Cas bizarre:
+  - Sur la page de sélection d'une leçon, aucune erreur n'est généré lorsqu'on passe d'une description d'une leçon à une autre...
+  - ... sauf si l'on a démarré l'application sur une autre page (l'exerciseur par exemple) et qu'on s'est ensuite redirigé vers l'accueil...
+**** TODO Corriger les erreurs liées aux Program Steps
+- Lorsqu'on exécute son programme, puis qu'on bascule sur la vue objectif d'un monde, une erreur d'AngularJS est générée pour chaque *Program Steps*
+- Voir pour identifier l'origine de cette erreur
 **** TODO Adapter TurtleWorld pour webPLM
 **** TODO Empêcher LightBot de faire crasher le serveur
 - Identifier la source du plantage
