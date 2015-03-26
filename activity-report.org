@@ -38,11 +38,20 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Mais si l'on considère que tous les mondes possèdent une ou plusieurs étapes, alors son fonctionnement ne dépend pas du monde.
   - Il ne reste plus que la création d'un service dédié.
   - L'intérêt me paraît faible pour le moment.
+- Voir pour améliorer la gestion de la boucle dessin
+  - Il est conseillé d'utiliser $timeout et $interval au lieu de setTimeout et setInterval lorsqu'on utilise AngularJS
+  - Ceci a permis de se passer de l'instruction  /$scope.$apply()/
+- Mise à jour des librairies utilisées
+  - Passage d'AngularJS 1.3.6 à AngularJS 1.3.15
+  - Apparition d'un bug avec le routing côté client:
+    - /$location.redirect/ n'était plus accepté par *angular-ui-router*
+    - Refactoring de *HomeController* pour utiliser plutôt les méthodes mises à disposition par *angular-ui-router*
+- Téléchargement des librairies en local
+  - Ne passe plus par un CDN pour récupérer les librairies *JS* et *CSS*
+  - Ca augmentera la charge serveur (le client interrogera désormais le serveur pour récupérer les librairies au lieu de se tourner vers le CDN)
+  - Mais ça permet à l'utilisateur de travailler sans connexion internet si le serveur est lancé en local
 *** Questions
 *** Planned
-**** TODO Voir pour améliorer la gestion de la boucle dessin
-- Remplacer setTimeout/Interval par $timeout/interval
-- /$scope.$apply()/ nécessaire?
 **** TODO Corriger bug d'AngularJS avec ng-bind-html
 - Lorsqu'on affiche de l'HTML provenant de PLM dans l'interface, nous utilisons l'attribut /ng-bind-html/ pour l'insérer dans un élément du DOM
 - Cependant, lorsqu'on modifie l'HTML affiché (la consigne est traduite dans une autre langue par exemple), une erreur est levé par *AngularJS*
@@ -65,6 +74,11 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Voir pour :
   - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
   - Récupérer à l'initialisation l'état objectif
+**** DONE Mettre à jour les librairies utilisées
+- Voir si ça corrige pas le bug d'AngularJS avec ng-bind-html ou celui avec les Program Steps
+**** DONE Voir pour améliorer la gestion de la boucle dessin
+- Remplacer setTimeout/Interval par $timeout/interval
+- /$scope.$apply()/ nécessaire?
 **** CANCELLED Sortir la boucle de dessin du controller
 - La boucle d'animation devrait se trouver dans le service de dessin ou dans la vue d'un monde et non pas dans le controller.
 **** DONE Refactorer le service canvas

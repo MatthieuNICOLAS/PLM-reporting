@@ -1,7 +1,3 @@
-* TODO Corriger les solutions Scala des exercices 2 et 3 de la leçon welcome
-- Un problème semble survenir à l'exécution des solutions de ces exercices
-- Ceci empêche l'utilisateur de consulter le monde objectif/d'observer la démo
-- Il suffit alors de cliquer sur /Run/ sans rien faire pour valider l'exercice...
 * TODO Améliorer l'interaction directives/controllers
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
@@ -12,25 +8,11 @@
 - Voir pour :
   - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
   - Récupérer à l'initialisation l'état objectif
-* TODO Corriger bug des baggles invisibles
-- Les baggles n'apparaissent pas sur certains navigateurs:
-  - Chrome Canary sous Mac OS
-  - Firefox sous Linux
-- Mais les démonstrations que l'on peut trouver sur Internet de canvas sont compatibles avec ces navigateurs
-- Revoir la méthode /drawBaggle/ pour trouver la raison de ce bug.
-* TODO Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
-- Lorsqu'on change de langage de programmation, il faut recharger le texte de la consigne afin que les exemples de code correspondent au nouveau langage selectionné.
 * TODO Empêcher plusieurs utilisateurs de tester la version de démo en concurrence
 - Protéger par un mot de passe l'accès à l'application? Si oui, comment faire?
 * TODO Refactorer la méthode de dessin
 - Les mondes dessinés présentent des problèmes de proportions si le nombre de lignes est différent du nombre de colonnes (voir par exemple la Moria)
 - Voir pour améliorer ça
-* TODO Remplacer l'utilisation de CDN
-  - Actuellement, on récupère les librairies telles que jQuery ou AngularJS sur des sites distants (des CDN)
-  - Cela allège le serveur en laissant les CDN se charger des requêtes HTTP concernant ces librairies
-  - Mais empêche l'utilisateur de travailler si le CDN est inaccessible (CDN down ou utilisateur sans connexion internet)
-  - Représente aussi une faille de sécurité puisqu'on doit faire confiance à la version de la librairie hébergée par le CDN
-  - Devrait plutôt fournir les librairies directement par le serveur
 * TODO Corriger bug de "Program steps" avec "baisseBrosse"
   - baisseBrosse n'est pas considéré comme un pas, ce qui décale l'ensemble des "Program steps" avec les pas du programme
 * TODO Mettre en place un outil de concaténation et de minification du JS
@@ -44,10 +26,6 @@
   la vitesse de chargement de la page.
 - Voir du côté de [[http://gruntjs.com/][Grunt]]. 
 * TODO Créer un mode d'auto-complétion pour BuggleWorld
-* TODO Fixer le bug du baggle ne s'affichant pas
-   - Lorsque webPLM a été testé sur le Mac de Gérald, le baggle
-     présent normalement dans l'exercice n'était pas affiché.
-   - Reste à voir si ce bug est reproductible.
 * TODO Lancer la démo lorsqu'on bascule sur le monde objectif pour la 1ère fois
 * TODO Limiter la vitesse d'exécution du programme du client
    - Si l'utilisateur boucle indéfinitivement sur une ou des méthodes
