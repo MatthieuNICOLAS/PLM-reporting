@@ -50,18 +50,37 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Ne passe plus par un CDN pour récupérer les librairies *JS* et *CSS*
   - Ca augmentera la charge serveur (le client interrogera désormais le serveur pour récupérer les librairies au lieu de se tourner vers le CDN)
   - Mais ça permet à l'utilisateur de travailler sans connexion internet si le serveur est lancé en local
+- Corriger bug AngularJS avec ng-bind-html/Program Steps
+  - L'erreur provient d'une mauvaise utilisation de jQuery par AngularJS [[https://github.com/jquery/sizzle/issues/309][(voir ici)]].
+  - Télécharger jQuery et déclarer /element.getAttribute/ si la méthode n'existe pas suffit à résoudre le problème.
+  - Voir pour une meilleure solution?
+- Adapter TurtleWorld pour webPLM
+  - Ajout des objets et des méthodes Scala pour convertir le monde initial en JSON
+  - Ajout des modèles du monde et des opérations côté client
 *** Questions
+- Refactorer les Program Steps
+  - A chaque étape du programme, AngularJS est configuré pour ajouter un noeud HTML contenant une phrase décrivant l'action.
+  - Lorsque le programme compte plusieurs centaines d'étapes (Moria par exemple en possède plus de 500), la manipulation du DOM ralentit l'application.
+  - Comment résoudre ce problème?
+    - Au lieu de créer un noeud par étape, créer un noeud qui va contenir les descriptions (du simple texte) de tous les noeuds?
+      - Mais dans ce cas, on perd la possibilité d'associer une étape à une ligne.
+    - Limiter le nombre d'étapes affichées?
+      - Ne charger que les étapes voisines de l'étape actuelle
+	- Voir les performances de cette solution
+      - N'afficher que des intervalles d'étapes et permettre à l'utilisateur d'explorer les intervalles qui l'intéressent
 *** Planned
-**** TODO Corriger bug d'AngularJS avec ng-bind-html
-- Lorsqu'on affiche de l'HTML provenant de PLM dans l'interface, nous utilisons l'attribut /ng-bind-html/ pour l'insérer dans un élément du DOM
-- Cependant, lorsqu'on modifie l'HTML affiché (la consigne est traduite dans une autre langue par exemple), une erreur est levé par *AngularJS*
-- Cas bizarre:
-  - Sur la page de sélection d'une leçon, aucune erreur n'est généré lorsqu'on passe d'une description d'une leçon à une autre...
-  - ... sauf si l'on a démarré l'application sur une autre page (l'exerciseur par exemple) et qu'on s'est ensuite redirigé vers l'accueil...
-**** TODO Corriger les erreurs liées aux Program Steps
-- Lorsqu'on exécute son programme, puis qu'on bascule sur la vue objectif d'un monde, une erreur d'AngularJS est générée pour chaque *Program Steps*
-- Voir pour identifier l'origine de cette erreur
+**** TODO Améliorer la gestion de la machine TELECOM Nancy
+- Utiliser des git hooks pour:
+  - Stopper la JVM lorsqu'un push est reçu (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/stop][ce script]])
+  - Relancer le serveur d'appli après la mise à jour des fichiers (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/start][celui-ci]])
+**** TODO Refactorer les Program Steps
+- Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
+- Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
 **** TODO Adapter TurtleWorld pour webPLM
+- Ajouter la conversion du monde en JSON
+- Générer les opérations représentant les actions du programme de l'utilisateur
+- Ajouter le modèle côté client
+- Implémenter la vue du monde
 **** TODO Empêcher LightBot de faire crasher le serveur
 - Identifier la source du plantage
 **** TODO Améliorer l'interaction directives/controllers
@@ -74,6 +93,16 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Voir pour :
   - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
   - Récupérer à l'initialisation l'état objectif
+**** DONE Corriger bug d'AngularJS avec ng-bind-html
+- Lorsqu'on affiche de l'HTML provenant de PLM dans l'interface, nous utilisons l'attribut /ng-bind-html/ pour l'insérer dans un élément du DOM
+- Cependant, lorsqu'on modifie l'HTML affiché (la consigne est traduite dans une autre langue par exemple), une erreur est levé par *AngularJS*
+- Cas bizarre:
+  - Sur la page de sélection d'une leçon, aucune erreur n'est généré lorsqu'on passe d'une description d'une leçon à une autre...
+  - ... sauf si l'on a démarré l'application sur une autre page (l'exerciseur par exemple) et qu'on s'est ensuite redirigé vers l'accueil...
+**** DONE Corriger les erreurs liées aux Program Steps
+- Lorsqu'on exécute son programme, puis qu'on bascule sur la vue objectif d'un monde, une erreur d'AngularJS est générée pour chaque *Program Steps*
+- Voir pour identifier l'origine de cette erreur
+- Cette erreur n'apparaît pas non plus si on accède à l'appli depuis l'accueil
 **** DONE Mettre à jour les librairies utilisées
 - Voir si ça corrige pas le bug d'AngularJS avec ng-bind-html ou celui avec les Program Steps
 **** DONE Voir pour améliorer la gestion de la boucle dessin
