@@ -12,7 +12,35 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Refactorer Game
   - Remplacement des /Game.getInstance()/ par le passage en paramètre du constructeur d'une instance de Game
 *** Questions
+- Gestion des comptes utilisateurs
+  - Comment gérer les comptes utilisateurs?
+  - Proposition 1: avant la connexion à webPLM, demander à l'utilisateur de lui fournir un UUID ou lui proposer d'en générer un?
+    - Constructeur de Game prend en paramètre l'UUID pour retrouver la bonne session
+    - Si UUID passé est inconnu, le refuser ou le créer?
+  - Proposition 2: gestion des comptes classiques
+    - On demande à l'utilisateur de s'inscrire à l'aide d'un pseudo, d'une @mail et d'un mot de passe
+    - On lui associe un UUID et on stocke le couple dans une BDD
+  - Question annexe: Pouvoir utiliser la PLM sans session?
+    - Game instancié sans identifiant de session
+    - Pas de conservation des traces utilisateurs 
+- Gestion des différents langages de programmation
+  - Actuellement, les objets utilisés pour compiler et exécuter le code de l'élève dans chaque langage de programmation sont des singletons.
+  - Faut-il mieux garder ces objets de cette manière?
+  - Ou les refactorer pour que chaque utilisateur instancie son compilateur et son exécuteur pour chaque langage de programmation.
 *** Planned
+**** TODO Corriger bug batWorld
+- Dans [[https://github.com/MatthieuNICOLAS/webPLM/tree/79062db63585156e786cad9e5ae6f6414688cf71][cette version]] de webPLM, une NullPointerException est levée dans stepUI() lorsque l'utilisateur exécute son programme sur un BatExercise.
+- Comme une exception a été levé, l'exercice n'est pas validé.
+- Voir d'où provient cette exception.
+- Bug non présent dans [[https://github.com/MatthieuNICOLAS/webPLM/tree/b13c0c3720dad5a4917cb98dee41eae68a913e59][cette version précédente]].
+**** TODO Corriger bug boucle infinie récursive
+- Si l'utilisateur déclenche une boucle infinie d'appel récursif dans les exercices Bat
+  - L'exécution de son programme est correctement stoppée par le système...
+  - Mais le programme indique que l'utilisateur a réussi l'exercice...
+- Dans un autre type d'exercice (j'ai testé avec celui de la Moria)
+  - L'exécution du programme est aussi stoppée par le système...
+  - Mais le programme compare le résultat avec le monde solution et détecte l'erreur de l'utilisateur
+- Trouver
 **** TODO Refactorer Game
 - Modifier Game pour qu'il ne soit plus un singleton
 - Séparer Game en 3 objets
