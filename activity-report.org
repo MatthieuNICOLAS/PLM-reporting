@@ -6,6 +6,43 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - https://github.com/MatthieuNICOLAS/webPLM
   Le lien vers le repo de la version web de PLM
 * Journal de bord
+** Semaine du <2015-03-30 lun.> au <2015-04-03 ven.>
+*** Done
+- Suppression des composants de l'ancienne UI.
+- Refactorer Game
+  - Remplacement des /Game.getInstance()/ par le passage en paramètre du constructeur d'une instance de Game
+*** Questions
+*** Planned
+**** TODO Refactorer Game
+- Modifier Game pour qu'il ne soit plus un singleton
+- Séparer Game en 3 objets
+  - Le contenu commun à tous les utilisateurs (leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...)
+  - La session courante de l'utilisateur (leçon sélectionnée, exercice en cours, monde de travail...)
+  - Les préférences de l'utilisateur (langue par défaut, langage de programmation...)
+**** TODO Améliorer la gestion de la machine TELECOM Nancy
+- Utiliser des git hooks pour:
+  - Stopper la JVM lorsqu'un push est reçu (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/stop][ce script]])
+  - Relancer le serveur d'appli après la mise à jour des fichiers (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/start][celui-ci]])
+**** TODO Refactorer les Program Steps
+- Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
+- Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
+**** TODO Adapter TurtleWorld pour webPLM
+- Ajouter la conversion du monde en JSON
+- Générer les opérations représentant les actions du programme de l'utilisateur
+- Ajouter le modèle côté client
+- Implémenter la vue du monde
+**** TODO Empêcher LightBot de faire crasher le serveur
+- Identifier la source du plantage
+**** TODO Améliorer l'interaction directives/controllers
+- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
+- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
+- Voir pour prévenir ce genre de bugs
+**** TODO Améliorer la gestion du monde objectif
+- Lorsqu'on passe sur la vue objectif d'un monde, celui-ci est encore dans son état initial.
+- Il faut lancer la démo pour que l'objectif apparaisse.
+- Voir pour :
+  - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
+  - Récupérer à l'initialisation l'état objectif 
 ** Semaine du <2015-03-23 lun.> au <2015-03-27 ven.>
 *** Done
 - Adapter BatWorld
@@ -57,6 +94,8 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Adapter TurtleWorld pour webPLM
   - Ajout des objets et des méthodes Scala pour convertir le monde initial en JSON
   - Ajout des modèles du monde et des opérations côté client
+- Refactorer Game
+  - J'ai commencé à modifier Game pour qu'il ne soit plus un singleton
 *** Questions
 - Refactorer les Program Steps
   - A chaque étape du programme, AngularJS est configuré pour ajouter un noeud HTML contenant une phrase décrivant l'action.
@@ -69,30 +108,6 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 	- Voir les performances de cette solution
       - N'afficher que des intervalles d'étapes et permettre à l'utilisateur d'explorer les intervalles qui l'intéressent
 *** Planned
-**** TODO Améliorer la gestion de la machine TELECOM Nancy
-- Utiliser des git hooks pour:
-  - Stopper la JVM lorsqu'un push est reçu (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/stop][ce script]])
-  - Relancer le serveur d'appli après la mise à jour des fichiers (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/start][celui-ci]])
-**** TODO Refactorer les Program Steps
-- Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
-- Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
-**** TODO Adapter TurtleWorld pour webPLM
-- Ajouter la conversion du monde en JSON
-- Générer les opérations représentant les actions du programme de l'utilisateur
-- Ajouter le modèle côté client
-- Implémenter la vue du monde
-**** TODO Empêcher LightBot de faire crasher le serveur
-- Identifier la source du plantage
-**** TODO Améliorer l'interaction directives/controllers
-- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
-- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
-- Voir pour prévenir ce genre de bugs
-**** TODO Améliorer la gestion du monde objectif
-- Lorsqu'on passe sur la vue objectif d'un monde, celui-ci est encore dans son état initial.
-- Il faut lancer la démo pour que l'objectif apparaisse.
-- Voir pour :
-  - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
-  - Récupérer à l'initialisation l'état objectif
 **** DONE Corriger bug d'AngularJS avec ng-bind-html
 - Lorsqu'on affiche de l'HTML provenant de PLM dans l'interface, nous utilisons l'attribut /ng-bind-html/ pour l'insérer dans un élément du DOM
 - Cependant, lorsqu'on modifie l'HTML affiché (la consigne est traduite dans une autre langue par exemple), une erreur est levé par *AngularJS*
