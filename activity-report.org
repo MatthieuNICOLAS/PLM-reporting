@@ -11,6 +11,18 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Suppression des composants de l'ancienne UI.
 - Refactorer Game
   - Remplacement des /Game.getInstance()/ par le passage en paramètre du constructeur d'une instance de Game
+- Corriger bug BatWorld
+  - On appelle stepUI() dans *BatEntity* uniquement pour indiquer aux espions que le monde a évolué
+  - stepUI() avertit le spy ajouté par le serveur qu'il peut envoyer la liste d'opérations au client
+  - L'erreur survient ensuite, dans le code ajoutant du délai dans l'exécution pour limiter la vitesse de l'animation dans Swing
+  - Ce code n'étant plus nécessaire, on peut se contenter de le supprimer
+  - Sinon, pour référence, la *NullPointerException* provenait de l'instruction /game.stepModeEnabled()/ de stepUI()
+    - Depuis le refactoring de *Game* en tant que classe et non singleton, les entités ont besoin d'avoir une instance de *Game* en tant que paramètre.
+    - J'ai juste oublié de passer l'instance de *Game* au constructeur de *BatEntity*
+- Corriger bug boucle infinie récursive
+  - Dans les *BatExercises*, on exécute la solution une première fois pour calculer la valeur de *expected* à partir de la valeur de *result* obtenue
+  - Si on déclenche une boucle infinie, le thread est tué avant d'avoir modifié *result*, qui conserve alors sa dernière valeur...
+  - Mettre *result* à *null* après avoir obtenu *expected* a suffit à résoudre le problème.
 *** Questions
 - Gestion des comptes utilisateurs
   - Comment gérer les comptes utilisateurs?
@@ -28,25 +40,23 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Faut-il mieux garder ces objets de cette manière?
   - Ou les refactorer pour que chaque utilisateur instancie son compilateur et son exécuteur pour chaque langage de programmation.
 *** Planned
-**** TODO Corriger bug batWorld
-- Dans [[https://github.com/MatthieuNICOLAS/webPLM/tree/79062db63585156e786cad9e5ae6f6414688cf71][cette version]] de webPLM, une NullPointerException est levée dans stepUI() lorsque l'utilisateur exécute son programme sur un BatExercise.
-- Comme une exception a été levé, l'exercice n'est pas validé.
-- Voir d'où provient cette exception.
-- Bug non présent dans [[https://github.com/MatthieuNICOLAS/webPLM/tree/b13c0c3720dad5a4917cb98dee41eae68a913e59][cette version précédente]].
-**** TODO Corriger bug boucle infinie récursive
-- Si l'utilisateur déclenche une boucle infinie d'appel récursif dans les exercices Bat
-  - L'exécution de son programme est correctement stoppée par le système...
-  - Mais le programme indique que l'utilisateur a réussi l'exercice...
-- Dans un autre type d'exercice (j'ai testé avec celui de la Moria)
-  - L'exécution du programme est aussi stoppée par le système...
-  - Mais le programme compare le résultat avec le monde solution et détecte l'erreur de l'utilisateur
-- Trouver
-**** TODO Refactorer Game
-- Modifier Game pour qu'il ne soit plus un singleton
-- Séparer Game en 3 objets
-  - Le contenu commun à tous les utilisateurs (leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...)
-  - La session courante de l'utilisateur (leçon sélectionnée, exercice en cours, monde de travail...)
-  - Les préférences de l'utilisateur (langue par défaut, langage de programmation...)
+**** TODO Mettre en place un Logger dans PLM
+- Actuellement dans PLM, on remplace *System.out* et *System.err* pour capturer les messages
+- Mettre en place un *Logger* paraît plus propre
+- Le *Logger* posséderait l'outil de traduction des messages
+- Un paramètre permettrait de spécifier si le message est loggé côté serveur ou côté client.
+**** TODO Extraire le contenu commun de Game
+- Plusieurs éléments sont communs à tous les utilisateurs
+- Les leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...
+- Extraire ces objets de la classe *Game*
+**** TODO Extraire le gestionnaire de session de Game
+- Le système gérant la session courante fait parti de *Game*
+- La session courante de l'utilisateur comprend la leçon sélectionnée, l'exercice en cours, les mondes de travail...
+- En faire un composant séparé
+**** TODO Extraire les préférences de l'utilisateur de Game
+- C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
+- Les préférences de l'utilisateur comporte la langue, le langage de programmation...
+- Gérer ça dans un composant séparé
 **** TODO Améliorer la gestion de la machine TELECOM Nancy
 - Utiliser des git hooks pour:
   - Stopper la JVM lorsqu'un push est reçu (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/stop][ce script]])
@@ -71,6 +81,21 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Voir pour :
   - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
   - Récupérer à l'initialisation l'état objectif 
+**** DONE Refactorer Game
+- Modifier Game pour qu'il ne soit plus un singleton
+**** DONE Corriger bug boucle infinie récursive
+- Si l'utilisateur déclenche une boucle infinie d'appel récursif dans les exercices Bat
+  - L'exécution de son programme est correctement stoppée par le système...
+  - Mais le programme indique que l'utilisateur a réussi l'exercice...
+- Dans un autre type d'exercice (j'ai testé avec celui de la Moria)
+  - L'exécution du programme est aussi stoppée par le système...
+  - Mais le programme compare le résultat avec le monde solution et détecte l'erreur de l'utilisateur
+- Trouver l'origine de ce bug
+**** DONE Corriger bug BatWorld
+- Dans [[https://github.com/MatthieuNICOLAS/webPLM/tree/79062db63585156e786cad9e5ae6f6414688cf71][cette version]] de webPLM, une NullPointerException est levée dans stepUI() lorsque l'utilisateur exécute son programme sur un BatExercise.
+- Comme une exception a été levé, l'exercice n'est pas validé.
+- Voir d'où provient cette exception.
+- Bug non présent dans [[https://github.com/MatthieuNICOLAS/webPLM/tree/b13c0c3720dad5a4917cb98dee41eae68a913e59][cette version précédente]].
 ** Semaine du <2015-03-23 lun.> au <2015-03-27 ven.>
 *** Done
 - Adapter BatWorld
