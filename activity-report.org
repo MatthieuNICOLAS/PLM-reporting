@@ -9,8 +9,12 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 ** Semaine du <2015-03-30 lun.> au <2015-04-03 ven.>
 *** Done
 - Suppression des composants de l'ancienne UI.
+  - Il reste toutefois des boîtes de dialogues (*JOptionPane*) par endroits
 - Refactorer Game
   - Remplacement des /Game.getInstance()/ par le passage en paramètre du constructeur d'une instance de Game
+  - Suppression de la fonction /Game.getInstance()/
+  - Refactoring des classes nécessitant faisant appel à /Game.getInstance()/ pour récupérer un attribut (i18n et programmingLanguage majoritairement)
+    - Le refactoring a consisté principalement à ajouter un attribut *game* à ces classes et à modifier leur(s) constructeur(s) en conséquence.
 - Corriger bug BatWorld
   - On appelle stepUI() dans *BatEntity* uniquement pour indiquer aux espions que le monde a évolué
   - stepUI() avertit le spy ajouté par le serveur qu'il peut envoyer la liste d'opérations au client
@@ -23,6 +27,18 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Dans les *BatExercises*, on exécute la solution une première fois pour calculer la valeur de *expected* à partir de la valeur de *result* obtenue
   - Si on déclenche une boucle infinie, le thread est tué avant d'avoir modifié *result*, qui conserve alors sa dernière valeur...
   - Mettre *result* à *null* après avoir obtenu *expected* a suffit à résoudre le problème.
+- Fixer les tests des entités solutions
+  - L'origine de ce bug semble provenir du constructeur par défaut manquant, maintenant que j'ai ajouté *game* en paramètre
+  - Ajouter un constructeur sans paramètre corrige ce bug.
+  - Cependant des erreurs sont toujours présentes dans ces mondes
+- Améliorer la gestion de la machine TELECOM Nancy
+  - Création d'un hook *pre-receive*
+  - Création d'un hook *post-receive*
+  - Déclaration des variables d'environnement sur le serveur
+  - Mais bugs:
+    - Les variables d'environnement non pas l'air d'être prises en compte (déclarées dans .bash_profile, est-ce qu'elles sont pas chargées avant un git push?)
+    - Message d'erreur "On ne peut pas mettre à jour la branche courante"
+    - A tenté de checkout une autre branche le temps depuis le script *pre-receive* mais message d'erreur "n'est pas un repo Git" (à revérifier)
 *** Questions
 - Gestion des comptes utilisateurs
   - Comment gérer les comptes utilisateurs?
@@ -40,6 +56,16 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Faut-il mieux garder ces objets de cette manière?
   - Ou les refactorer pour que chaque utilisateur instancie son compilateur et son exécuteur pour chaque langage de programmation.
 *** Planned
+**** TODO Fixer les tests des entités solutions
+- Une erreur est déclenchée lorsqu'on reset certains mondes (Pancakes, Dutchflag, Hanoi)
+- La copie des entités de ces mondes lors d'un reset échoue, déclenchant l'erreur
+**** TODO Fixer tâche Ant de tests
+- Si une erreur survient lors des tests, le build n'est pas marqué comme *failed*
+- Des bugs ont donc pu passer inaperçus
+- Corriger ce bug
+**** TODO Fixer SimpleExerciseTest
+- Ces tests échouent puisque l'on passe à une leçon sans l'avoir chargé.
+- Revoir le constructeur de SimpleExerciseTest
 **** TODO Mettre en place un Logger dans PLM
 - Actuellement dans PLM, on remplace *System.out* et *System.err* pour capturer les messages
 - Mettre en place un *Logger* paraît plus propre
@@ -50,7 +76,7 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Les leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...
 - Extraire ces objets de la classe *Game*
 **** TODO Extraire le gestionnaire de session de Game
-- Le système gérant la session courante fait parti de *Game*
+- Les données de la session courante font parties de *Game*
 - La session courante de l'utilisateur comprend la leçon sélectionnée, l'exercice en cours, les mondes de travail...
 - En faire un composant séparé
 **** TODO Extraire les préférences de l'utilisateur de Game
@@ -65,9 +91,6 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
 - Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
 **** TODO Adapter TurtleWorld pour webPLM
-- Ajouter la conversion du monde en JSON
-- Générer les opérations représentant les actions du programme de l'utilisateur
-- Ajouter le modèle côté client
 - Implémenter la vue du monde
 **** TODO Empêcher LightBot de faire crasher le serveur
 - Identifier la source du plantage
