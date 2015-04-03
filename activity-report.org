@@ -38,7 +38,17 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Mais bugs:
     - Les variables d'environnement non pas l'air d'être prises en compte (déclarées dans .bash_profile, est-ce qu'elles sont pas chargées avant un git push?)
     - Message d'erreur "On ne peut pas mettre à jour la branche courante"
-    - A tenté de checkout une autre branche le temps depuis le script *pre-receive* mais message d'erreur "n'est pas un repo Git" (à revérifier)
+    - A tenté de checkout une autre branche le temps de l'update depuis le script *pre-receive* mais message d'erreur "n'est pas un repo Git" (à revérifier)
+- Empêcher LightBot de faire crasher le serveur
+  - LightBotWorld héritant de *GridWorld*, il n'était pas considéré comme non-supporté
+  - Lève désormais une *NonImplementedWorldException* dans *GridWorldToJson* aussi
+  - Mais bug si on démarre un exo LightBot et qu'on change avant d'avoir exécuter son programme (lastResult != null alors qu'il ne devrait pas à mon sens)
+    - GitSpy essaie alors d'enregistrer les fichiers correspondant au code de l'utilisateur
+    - Mais lastResult.language == JAVA alors que l'exercice n'est disponible qu'en LightBot
+    - Le SourceFile à mettre à jour est alors introuvable
+  - Pour le moment, je réinitialise le lastResult lorsqu'on change de langage de programmation pour éviter ce bug.
+- Ajout de ProgLangListener
+  - Permet de mieux gérer le changement du langage de programmation
 *** Questions
 - Gestion des comptes utilisateurs
   - Comment gérer les comptes utilisateurs?
@@ -92,8 +102,6 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
 **** TODO Adapter TurtleWorld pour webPLM
 - Implémenter la vue du monde
-**** TODO Empêcher LightBot de faire crasher le serveur
-- Identifier la source du plantage
 **** TODO Améliorer l'interaction directives/controllers
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
@@ -104,6 +112,8 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Voir pour :
   - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
   - Récupérer à l'initialisation l'état objectif 
+**** DONE Empêcher LightBot de faire crasher le serveur
+- Identifier la source du plantage
 **** DONE Refactorer Game
 - Modifier Game pour qu'il ne soit plus un singleton
 **** DONE Corriger bug boucle infinie récursive
