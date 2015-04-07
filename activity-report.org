@@ -6,6 +6,65 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - https://github.com/MatthieuNICOLAS/webPLM
   Le lien vers le repo de la version web de PLM
 * Journal de bord
+** Semaine du <2015-04-07 mar.> au <2015-04-10 ven.>
+*** Done
+- Fixer tâche Ant de tests
+  - Ajout de haltonfailure="true" haltonerror="true" dans la configuration des tâches de tests de Ant.
+- Fixer les tests des entités solutions
+  - Suppression du constructeur des entités prenant en paramètre un Game
+  - A la place, les entités récupèrent le game du monde qu'il leur est fourni.
+  - Mais le bug suivant reste à résoudre:
+    - Pour certaines entités, la classe compilée est incorrecte (il manque le *Entity*)
+    - En effet, la classe compilée s'appelle par exemple *DutchFlagAlgo* au lieu de *DutchFlagAlgoEntity*
+    - L'instanciation de cette entité échoue donc.
+*** Questions
+*** Planned
+**** TODO Fixer les tests des entités solutions
+- Une erreur est déclenchée lorsqu'on reset certains mondes (Pancakes, Dutchflag, Hanoi)
+- La copie des entités de ces mondes lors d'un reset échoue, déclenchant l'erreur
+**** TODO Fixer SimpleExerciseTest
+- Ces tests échouent puisque l'on passe à une leçon sans l'avoir chargé.
+- Revoir le constructeur de SimpleExerciseTest
+**** TODO Mettre en place un Logger dans PLM
+- Actuellement dans PLM, on remplace *System.out* et *System.err* pour capturer les messages
+- Mettre en place un *Logger* paraît plus propre
+- Le *Logger* posséderait l'outil de traduction des messages
+- Un paramètre permettrait de spécifier si le message est loggé côté serveur ou côté client.
+**** TODO Extraire le contenu commun de Game
+- Plusieurs éléments sont communs à tous les utilisateurs
+- Les leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...
+- Extraire ces objets de la classe *Game*
+**** TODO Extraire le gestionnaire de session de Game
+- Les données de la session courante font parties de *Game*
+- La session courante de l'utilisateur comprend la leçon sélectionnée, l'exercice en cours, les mondes de travail...
+- En faire un composant séparé
+**** TODO Extraire les préférences de l'utilisateur de Game
+- C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
+- Les préférences de l'utilisateur comporte la langue, le langage de programmation...
+- Gérer ça dans un composant séparé
+**** TODO Améliorer la gestion de la machine TELECOM Nancy
+- Utiliser des git hooks pour:
+  - Stopper la JVM lorsqu'un push est reçu (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/stop][ce script]])
+  - Relancer le serveur d'appli après la mise à jour des fichiers (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/start][celui-ci]])
+**** TODO Refactorer les Program Steps
+- Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
+- Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
+**** TODO Adapter TurtleWorld pour webPLM
+- Implémenter la vue du monde
+**** TODO Améliorer l'interaction directives/controllers
+- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
+- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
+- Voir pour prévenir ce genre de bugs
+**** TODO Améliorer la gestion du monde objectif
+- Lorsqu'on passe sur la vue objectif d'un monde, celui-ci est encore dans son état initial.
+- Il faut lancer la démo pour que l'objectif apparaisse.
+- Voir pour :
+  - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
+  - Récupérer à l'initialisation l'état objectif 
+**** DONE Fixer tâche Ant de tests
+- Si une erreur survient lors des tests, le build n'est pas marqué comme *failed*
+- Des bugs ont donc pu passer inaperçus
+- Corriger ce bug
 ** Semaine du <2015-03-30 lun.> au <2015-04-03 ven.>
 *** Done
 - Suppression des composants de l'ancienne UI.
@@ -49,6 +108,8 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Pour le moment, je réinitialise le lastResult lorsqu'on change de langage de programmation pour éviter ce bug.
 - Ajout de ProgLangListener
   - Permet de mieux gérer le changement du langage de programmation
+- Ajout de HumanLangListener
+  - Permet de mieux gérer le changement de langue
 *** Questions
 - Gestion des comptes utilisateurs
   - Comment gérer les comptes utilisateurs?
@@ -66,52 +127,6 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Faut-il mieux garder ces objets de cette manière?
   - Ou les refactorer pour que chaque utilisateur instancie son compilateur et son exécuteur pour chaque langage de programmation.
 *** Planned
-**** TODO Fixer les tests des entités solutions
-- Une erreur est déclenchée lorsqu'on reset certains mondes (Pancakes, Dutchflag, Hanoi)
-- La copie des entités de ces mondes lors d'un reset échoue, déclenchant l'erreur
-**** TODO Fixer tâche Ant de tests
-- Si une erreur survient lors des tests, le build n'est pas marqué comme *failed*
-- Des bugs ont donc pu passer inaperçus
-- Corriger ce bug
-**** TODO Fixer SimpleExerciseTest
-- Ces tests échouent puisque l'on passe à une leçon sans l'avoir chargé.
-- Revoir le constructeur de SimpleExerciseTest
-**** TODO Mettre en place un Logger dans PLM
-- Actuellement dans PLM, on remplace *System.out* et *System.err* pour capturer les messages
-- Mettre en place un *Logger* paraît plus propre
-- Le *Logger* posséderait l'outil de traduction des messages
-- Un paramètre permettrait de spécifier si le message est loggé côté serveur ou côté client.
-**** TODO Extraire le contenu commun de Game
-- Plusieurs éléments sont communs à tous les utilisateurs
-- Les leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...
-- Extraire ces objets de la classe *Game*
-**** TODO Extraire le gestionnaire de session de Game
-- Les données de la session courante font parties de *Game*
-- La session courante de l'utilisateur comprend la leçon sélectionnée, l'exercice en cours, les mondes de travail...
-- En faire un composant séparé
-**** TODO Extraire les préférences de l'utilisateur de Game
-- C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
-- Les préférences de l'utilisateur comporte la langue, le langage de programmation...
-- Gérer ça dans un composant séparé
-**** TODO Améliorer la gestion de la machine TELECOM Nancy
-- Utiliser des git hooks pour:
-  - Stopper la JVM lorsqu'un push est reçu (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/stop][ce script]])
-  - Relancer le serveur d'appli après la mise à jour des fichiers (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/start][celui-ci]])
-**** TODO Refactorer les Program Steps
-- Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
-- Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
-**** TODO Adapter TurtleWorld pour webPLM
-- Implémenter la vue du monde
-**** TODO Améliorer l'interaction directives/controllers
-- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
-- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
-- Voir pour prévenir ce genre de bugs
-**** TODO Améliorer la gestion du monde objectif
-- Lorsqu'on passe sur la vue objectif d'un monde, celui-ci est encore dans son état initial.
-- Il faut lancer la démo pour que l'objectif apparaisse.
-- Voir pour :
-  - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
-  - Récupérer à l'initialisation l'état objectif 
 **** DONE Empêcher LightBot de faire crasher le serveur
 - Identifier la source du plantage
 **** DONE Refactorer Game
