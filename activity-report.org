@@ -23,6 +23,9 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
     - Il a donc suffit de retirer les constructeurs que j'avais ajouté lors du refactoring de Game pour corriger ces bugs.
 - Améliorer la gestion du monde objectif
   - Si on bascule sur le monde objectif et que la démo n'a pas encore été jouée, on l'exécute
+- Corriger BatWorld
+  - La NullPointerException provient de l'instruction /ProgrammingLanguage pl = game.getProgrammingLanguage();/
+  - Il s'agissait d'une erreur d'affectation de game dans le constructeur.
 *** Questions
 *** Planned
 **** TODO Corriger BatWorld
