@@ -17,14 +17,17 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
     - Pour certaines entités, la classe compilée est incorrecte (il manque le *Entity*)
     - En effet, la classe compilée s'appelle par exemple *DutchFlagAlgo* au lieu de *DutchFlagAlgoEntity*
     - L'instanciation de cette entité échoue donc.
+    - L'erreur apparaît dans tous les langages de programmation mais l'erreur n'est fatale qu'en Java.
+    - *tabName* sert comme nom de la classe compilée
+    - Si on a défini un constructeur, le nom de celui-ci doit correspondre au *tabName*
+    - Il a donc suffit de retirer les constructeurs que j'avais ajouté lors du refactoring de Game pour corriger ces bugs.
+- Améliorer la gestion du monde objectif
+  - Si on bascule sur le monde objectif et que la démo n'a pas encore été jouée, on l'exécute
 *** Questions
 *** Planned
-**** TODO Fixer les tests des entités solutions
-- Une erreur est déclenchée lorsqu'on reset certains mondes (Pancakes, Dutchflag, Hanoi)
-- La copie des entités de ces mondes lors d'un reset échoue, déclenchant l'erreur
-**** TODO Fixer SimpleExerciseTest
-- Ces tests échouent puisque l'on passe à une leçon sans l'avoir chargé.
-- Revoir le constructeur de SimpleExerciseTest
+**** TODO Corriger BatWorld
+- La conversion des entités BatTests en JSON rencontre une NullPointerException
+- Voir d'où vient cette erreur
 **** TODO Mettre en place un Logger dans PLM
 - Actuellement dans PLM, on remplace *System.out* et *System.err* pour capturer les messages
 - Mettre en place un *Logger* paraît plus propre
@@ -55,12 +58,18 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
 - Voir pour prévenir ce genre de bugs
-**** TODO Améliorer la gestion du monde objectif
+**** DONE Améliorer la gestion du monde objectif
 - Lorsqu'on passe sur la vue objectif d'un monde, celui-ci est encore dans son état initial.
 - Il faut lancer la démo pour que l'objectif apparaisse.
 - Voir pour :
   - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
   - Récupérer à l'initialisation l'état objectif 
+**** DONE Fixer les tests des entités solutions
+- Une erreur est déclenchée lorsqu'on reset certains mondes (Pancakes, Dutchflag, Hanoi)
+- La copie des entités de ces mondes lors d'un reset échoue, déclenchant l'erreur
+**** DONE Fixer SimpleExerciseTest
+- Ces tests échouent puisque l'on passe à une leçon sans l'avoir chargé.
+- Revoir le constructeur de SimpleExerciseTest
 **** DONE Fixer tâche Ant de tests
 - Si une erreur survient lors des tests, le build n'est pas marqué comme *failed*
 - Des bugs ont donc pu passer inaperçus
