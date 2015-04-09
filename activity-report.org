@@ -26,11 +26,17 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Corriger BatWorld
   - La NullPointerException provient de l'instruction /ProgrammingLanguage pl = game.getProgrammingLanguage();/
   - Il s'agissait d'une erreur d'affectation de game dans le constructeur.
+- Améliorer la gestion de la machine TELECOM Nancy
+  - Création d'un webhook dans GitHub
+  - Définition d'une signature secrète
+  - Création d'un serveur
+    - Code disponible [[https://github.com/MatthieuNICOLAS/webhook-handler][ici]] 
+    - Le serveur met à disposition un service pour lancer le script pour redémarrer webPLM
+    - Ce service est accessible par le biais d'une requête POST
+    - La signature de la requête doit correspondre à celle définie dans le webhook GitHub
+  - Refactoring des git hooks précédemment développé pour implémenter un nouveau script pour redémarrer webPLM.
 *** Questions
 *** Planned
-**** TODO Corriger BatWorld
-- La conversion des entités BatTests en JSON rencontre une NullPointerException
-- Voir d'où vient cette erreur
 **** TODO Mettre en place un Logger dans PLM
 - Actuellement dans PLM, on remplace *System.out* et *System.err* pour capturer les messages
 - Mettre en place un *Logger* paraît plus propre
@@ -61,6 +67,9 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
 - Voir pour prévenir ce genre de bugs
+**** DONE Corriger BatWorld
+- La conversion des entités BatTests en JSON rencontre une NullPointerException
+- Voir d'où vient cette erreur
 **** DONE Améliorer la gestion du monde objectif
 - Lorsqu'on passe sur la vue objectif d'un monde, celui-ci est encore dans son état initial.
 - Il faut lancer la démo pour que l'objectif apparaisse.
