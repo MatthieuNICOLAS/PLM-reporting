@@ -34,7 +34,12 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
     - Le serveur met à disposition un service pour lancer le script pour redémarrer webPLM
     - Ce service est accessible par le biais d'une requête POST
     - La signature de la requête doit correspondre à celle définie dans le webhook GitHub
-  - Refactoring des git hooks précédemment développé pour implémenter un nouveau script pour redémarrer webPLM.
+  - Le serveur NodeJS est maintenu en ligne grâce à [[https://github.com/foreverjs/forever][forever]].
+  - Refactoring des git hooks précédemment développé pour implémenter un nouveau script pour redémarrer webPLM
+    - Kill webPLM si le serveur est déjà en route
+    - Supprime le fichier RUNNING_PID
+    - Redémarre webPLM
+  - Il suffit maintenant de pusher sur la branche *prod* de *WebPLM* pour que le serveur se mette à jour automatiquement
 *** Questions
 *** Planned
 **** TODO Mettre en place un Logger dans PLM
@@ -54,10 +59,6 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
 - Les préférences de l'utilisateur comporte la langue, le langage de programmation...
 - Gérer ça dans un composant séparé
-**** TODO Améliorer la gestion de la machine TELECOM Nancy
-- Utiliser des git hooks pour:
-  - Stopper la JVM lorsqu'un push est reçu (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/stop][ce script]])
-  - Relancer le serveur d'appli après la mise à jour des fichiers (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/start][celui-ci]])
 **** TODO Refactorer les Program Steps
 - Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
 - Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
@@ -67,6 +68,10 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
 - Voir pour prévenir ce genre de bugs
+**** DONE Améliorer la gestion de la machine TELECOM Nancy
+- Utiliser des git hooks pour:
+  - Stopper la JVM lorsqu'un push est reçu (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/stop][ce script]])
+  - Relancer le serveur d'appli après la mise à jour des fichiers (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/start][celui-ci]])
 **** DONE Corriger BatWorld
 - La conversion des entités BatTests en JSON rencontre une NullPointerException
 - Voir d'où vient cette erreur
