@@ -6,6 +6,60 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - https://github.com/MatthieuNICOLAS/webPLM
   Le lien vers le repo de la version web de PLM
 * Journal de bord
+** Semaine du <2015-04-13 lun.> au <2015-04-17 ven.>
+*** Done
+- Refactorer le système de traduction
+  - Suppression de l'attribut *locale* de *FileUtils*
+    - *locale* est maintenant un paramètre passé lors de la lecture d'un fichier
+  - Ajout de l'attribut *locale* dans *Game*
+    - Le constructeur possède maintenant un argument supplémentaire
+    - Les getters/setters sont modifiés pour fonctionner avec l'attribut *locale* de *Game*, et non celui de *FileUtils*
+  - L'attribut *i18n* n'est plus /static/
+    - Les objets/méthodes en ayant besoin pour traduire des messages ont été refactorés
+*** Questions
+*** Planned
+**** TODO Extraire les préférences de l'utilisateur de Game
+- C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
+- Les préférences de l'utilisateur comporte la langue, le langage de programmation...
+- Elles sont stockées actuellement dans un fichier de propriétés Java
+- Mettre en place une BDD à la place
+- Gérer ça dans un composant séparé
+**** TODO Extraire le gestionnaire de session de Game
+- Les données de la session courante font parties de *Game*
+- La session courante de l'utilisateur comprend la leçon sélectionnée, l'exercice en cours, les mondes de travail...
+- En faire un composant séparé
+**** TODO Extraire le contenu commun de Game
+- Plusieurs éléments sont communs à tous les utilisateurs
+- Les leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...
+- Extraire ces objets de la classe *Game*
+**** TODO Finaliser le système de traduction
+- Au cours du refactoring, j'ai dû remplacer /Direction.toString/ par /Direction.direction2translated/
+  - Voir où était appelé /Direction.toString/ pour mettre à jour le code
+**** TODO Finaliser le script redémarrant webPLM
+- Voir pour killer /activator start/ qui reste actif et bouffe des ressources actuellement
+- Dans le fichier de log du script, le PID indiqué après le redémarrage du serveur n'est pas le bon.
+- Voir pour rediriger les logs de webPLM dans un fichier
+**** TODO Finaliser le système de log
+- Les diagnostics d'erreurs lors de la compilation/de l'exécution ne sont pas loggés correctement
+  - Par exemple /javax.tools.DiagnosticCollector@5e2be792/
+  - Corriger ça
+- Il reste des /System.out.println/ dans les classes des langages de programmation
+  - Comment les remplacer?
+- Voir quels sont les messages loggés actuellement qu'il faudrait plutôt faire parvenir au client
+**** TODO Refactorer les Program Steps
+- Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
+- Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
+**** TODO Adapter TurtleWorld pour webPLM
+- Implémenter la vue du monde
+**** TODO Améliorer l'interaction directives/controllers
+- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
+- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
+- Voir pour prévenir ce genre de bugs
+**** DONE Refactorer le système de traduction
+- Actuellement, *i18n* est un attribut static de *Game*
+- Devrait y avoir une instance par utilisateur pour que les actions d'un utilisateur ne perturbent pas avec les autres utilisateurs
+- Obliger de changer l'objet *Locale* de la JVM?
+- Ou l'on peut se contenter de conserver l'objet *Locale* désiré dans la session de l'utilisateur pour générer les traductions?
 ** Semaine du <2015-04-07 mar.> au <2015-04-10 ven.>
 *** Done
 - Fixer tâche Ant de tests
@@ -52,36 +106,6 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - J'ai remplacé la majorité des /System.out.println/ par des /logger.log/
 *** Questions
 *** Planned
-**** TODO Refactorer le système de traduction
-- Actuellement, *i18n* est un attribut static de *Game*
-- Devrait y avoir une instance par utilisateur pour que les actions d'un utilisateur ne perturbent pas avec les autres utilisateurs
-- Obliger de changer l'objet *Locale* de la JVM?
-- Ou l'on peut se contenter de conserver l'objet *Locale* désiré dans la session de l'utilisateur pour générer les traductions?
-**** TODO Finaliser le système de log
-- Il reste des /System.out.println/ dans les classes des langages de programmation
-- Comment les remplacer?
-- Voir quels sont les messages loggés actuellement qu'il faudrait plutôt faire parvenir au client
-**** TODO Extraire le contenu commun de Game
-- Plusieurs éléments sont communs à tous les utilisateurs
-- Les leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...
-- Extraire ces objets de la classe *Game*
-**** TODO Extraire le gestionnaire de session de Game
-- Les données de la session courante font parties de *Game*
-- La session courante de l'utilisateur comprend la leçon sélectionnée, l'exercice en cours, les mondes de travail...
-- En faire un composant séparé
-**** TODO Extraire les préférences de l'utilisateur de Game
-- C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
-- Les préférences de l'utilisateur comporte la langue, le langage de programmation...
-- Gérer ça dans un composant séparé
-**** TODO Refactorer les Program Steps
-- Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
-- Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
-**** TODO Adapter TurtleWorld pour webPLM
-- Implémenter la vue du monde
-**** TODO Améliorer l'interaction directives/controllers
-- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
-- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
-- Voir pour prévenir ce genre de bugs
 **** DONE Mettre en place un Logger dans PLM
 - Actuellement dans PLM, on remplace *System.out* et *System.err* pour capturer les messages
 - Mettre en place un *Logger* paraît plus propre
