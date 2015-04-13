@@ -40,13 +40,27 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
     - Supprime le fichier RUNNING_PID
     - Redémarre webPLM
   - Il suffit maintenant de pusher sur la branche *prod* de *WebPLM* pour que le serveur se mette à jour automatiquement
+- Mettre en place un Logger dans PLM
+  - PLM définit une interface de Logger
+    - Un Logger doit avoir une méthode log pour logger les messages sur le serveur
+    - Un Logger doit avoir une méthode send pour logger les messages sur l'interface cliente
+  - Le constructeur de Game prend maintenant en paramètre un Logger
+  - Dans webPLM, on définit une classe implémentant cette interface
+  - Finalement, ce n'est pas le logger qui se charge de traduire les messages
+    - On a pas forcément envie de traduire tous les messages (les logs serveurs par exemple)
+    - Tout le texte traduit n'est pas loggé non plus (consignes des exercices...)
+  - J'ai remplacé la majorité des /System.out.println/ par des /logger.log/
 *** Questions
 *** Planned
-**** TODO Mettre en place un Logger dans PLM
-- Actuellement dans PLM, on remplace *System.out* et *System.err* pour capturer les messages
-- Mettre en place un *Logger* paraît plus propre
-- Le *Logger* posséderait l'outil de traduction des messages
-- Un paramètre permettrait de spécifier si le message est loggé côté serveur ou côté client.
+**** TODO Refactorer le système de traduction
+- Actuellement, *i18n* est un attribut static de *Game*
+- Devrait y avoir une instance par utilisateur pour que les actions d'un utilisateur ne perturbent pas avec les autres utilisateurs
+- Obliger de changer l'objet *Locale* de la JVM?
+- Ou l'on peut se contenter de conserver l'objet *Locale* désiré dans la session de l'utilisateur pour générer les traductions?
+**** TODO Finaliser le système de log
+- Il reste des /System.out.println/ dans les classes des langages de programmation
+- Comment les remplacer?
+- Voir quels sont les messages loggés actuellement qu'il faudrait plutôt faire parvenir au client
 **** TODO Extraire le contenu commun de Game
 - Plusieurs éléments sont communs à tous les utilisateurs
 - Les leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...
@@ -68,6 +82,11 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
 - Voir pour prévenir ce genre de bugs
+**** DONE Mettre en place un Logger dans PLM
+- Actuellement dans PLM, on remplace *System.out* et *System.err* pour capturer les messages
+- Mettre en place un *Logger* paraît plus propre
+- Le *Logger* posséderait l'outil de traduction des messages
+- Un paramètre permettrait de spécifier si le message est loggé côté serveur ou côté client.
 **** DONE Améliorer la gestion de la machine TELECOM Nancy
 - Utiliser des git hooks pour:
   - Stopper la JVM lorsqu'un push est reçu (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/stop][ce script]])
