@@ -40,6 +40,9 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
     - Il existe un [[https://github.com/ReactiveMongo/Play-ReactiveMongo][plugin ReactiveMongo pour Play]].
     - J'ai pu réaliser rapidement un [[https://github.com/MatthieuNICOLAS/webPLM/tree/098a79d9790a2710cef711b611bca092bd6238f5][prototype fonctionnel]].
 *** Questions
+- Qui interagit avec la BDD pour récupérer le profil de l'utilisateur?
+  - L'acteur instancie un utilisateur à partir de la BDD?
+  - Le modèle utilisateur s'instancie à partir de la BDD?
 *** Planned
 **** TODO Mise en place d'une BDD
 - Voir les technos disponibles
