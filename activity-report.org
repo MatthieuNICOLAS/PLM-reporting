@@ -1,5 +1,5 @@
 * Informations
-Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activité sur PLM.
+  Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activité sur PLM.
 ** Bibliographie
 - https://github.com/oster/PLM
   Le lien vers le repo de la version originale de PLM
@@ -39,15 +39,35 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
   - Reactive Mongo
     - Il existe un [[https://github.com/ReactiveMongo/Play-ReactiveMongo][plugin ReactiveMongo pour Play]].
     - J'ai pu réaliser rapidement un [[https://github.com/MatthieuNICOLAS/webPLM/tree/098a79d9790a2710cef711b611bca092bd6238f5][prototype fonctionnel]].
+- Gestion des comptes utilisateurs
+  - OAuth permet de rediriger l'utilisateur vers un site externe (Google, GitHub)
+  - Une fois l'utilisateur loggé sur ce site, on lui demande le droit d'acceder à certaines fonctionnalités de ce site
+  - Dans notre cas, on veut juste (pour le moment) récupérer un identifiant unique
+  - [[https://developer.github.com/v3/oauth/][OAuth pour GitHub]]
+    - [[http://typesafe.com/activator/template/play-oauth2-scala][Voir cet exemple]]
+    - A voir pour trouver un identifiant unique dans la réponse de GitHub
+  - [[https://developers.google.com/identity/protocols/OpenIDConnect?csw=1#authenticatingtheuser][OAuth pour se log via Google]]
+    - En décodant l'ID token de la réponse grâce à ces [[https://developers.google.com/wallet/instant-buy/about-jwts#jwt_libraries][informations]], on peut récupérer l'attribut *sub*
+    - Il s'agit d'un ID unique de l'utilisateur chez Google
+  - Une fois qu'on a récupérer un ID unique via un service, on peut l'utiliser pour créer son compte/récupérer son compte
+  - Mettre en place [[https://github.com/mohiva/play-silhouette][Silhouette]]
+    - Module pour Play Framework supportant déjà l'authentification par le biais de différents services
+    - [[https://github.com/mohiva/play-silhouette-seed][Voir cet exemple]]
+    - Utilise [[https://github.com/sahat/satellizer][Satellizer]]
+  - Données stockées
+    - ID
+    - Git ID
+    - Provider? (Google, FB, GitHub...)
+    - Lang
+    - ProgLang
 *** Questions
 - Qui interagit avec la BDD pour récupérer le profil de l'utilisateur?
   - L'acteur instancie un utilisateur à partir de la BDD?
   - Le modèle utilisateur s'instancie à partir de la BDD?
 *** Planned
-**** TODO Mise en place d'une BDD
-- Voir les technos disponibles
-- Mettre en place la solution choisie
-- Interfacer WebPLM avec la BDD
+**** TODO Corriger changement de langue et selection d'exos
+- Si on change de langue et qu'on accède à la liste des exos, cette dernière n'est pas traduite
+- Mettre à jour la liste des exercices lors d'un changement de langue
 **** TODO Implémenter la gestion des comptes utilisateurs
 - Se renseigner sur OAuth
 - Définir les données stockées
@@ -90,6 +110,10 @@ Ce fichier contient le journal de bord de Matthieu Nicolas concernant son activi
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
 - Voir pour prévenir ce genre de bugs
+**** DONE Mise en place d'une BDD
+- Voir les technos disponibles
+- Mettre en place la solution choisie
+- Interfacer WebPLM avec la BDD
 **** DONE Mettre en place Trello
 - Pour que Olivier Kautz puisse suivre facilement l'évolution du projet et les tâches en cours
 **** DONE Refactorer le système de traduction
