@@ -6,6 +6,76 @@
 - https://github.com/MatthieuNICOLAS/webPLM
   Le lien vers le repo de la version web de PLM
 * Journal de bord
+** Semaine du <2015-04-20 lun.> au <2015-04-24 ven.>
+*** Done
+- Mettre en place Silhouette
+  - Tuto pour Play + AngularJS: https://github.com/mohiva/play-silhouette-angular-seed
+  - A mergé ce tuto dans WebPLM
+  - Refactoring du code:
+    - Suppression des fichiers inutiles
+    - Modification de l'architecture pour s'adapter à celle de WebPLM
+  - Ajout de la page d'authentification
+  - Ajout de "Sign in with *Google*"
+  - Ajout de "Sign in with *GitHub*"
+  - Fusion avec la branche /add-reactivemongo/
+- Difficultés rencontrées:
+  - Adapter l'exemple de *Silhouette* avec le code existant
+  - Dans l'exemple, on gère l'authentification avec des controllers
+  - Dans notre cas, on veut que ça soit l'acteur correspondant à la websocket du client qui gère ça
+    - Permet de mettre à jour l'instance de PLM avec les informations retrouvées dans la BDD après authentification
+  - Refactoring de l'acteur
+    - Quelles dépendances ajouter?
+      - Seulement l'environnement?
+      - Qui instancie ces dépendances? Controller? Actor lui-même? Injector?
+  - Refactoring de *Satellizer*
+    - Ne doit plus se baser sur une API Rest mais sur un protocole de communication avec la websocket
+*** Questions
+*** Planned
+**** TODO Corriger changement de langue et selection d'exos
+- Si on change de langue et qu'on accède à la liste des exos, cette dernière n'est pas traduite
+- Mettre à jour la liste des exercices lors d'un changement de langue
+**** TODO Implémenter la gestion des comptes utilisateurs
+- Se renseigner sur OAuth
+- Définir les données stockées
+- Créer le modèle correspondant
+- Ajouter le formulaire de création de compte
+**** TODO Extraire les préférences de l'utilisateur de Game
+- C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
+- Les préférences de l'utilisateur comporte la langue, le langage de programmation...
+- Elles sont stockées actuellement dans un fichier de propriétés Java
+- Mettre en place une BDD à la place
+- Gérer ça dans un composant séparé
+**** TODO Extraire le gestionnaire de session de Game
+- Les données de la session courante font partie de *Game*
+- La session courante de l'utilisateur comprend la leçon sélectionnée, l'exercice en cours, les mondes de travail...
+- En faire un composant séparé
+**** TODO Extraire le contenu commun de Game
+- Plusieurs éléments sont communs à tous les utilisateurs
+- Les leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...
+- Extraire ces objets de la classe *Game*
+**** TODO Finaliser le système de traduction
+- Au cours du refactoring, j'ai dû remplacer /Direction.toString/ par /Direction.direction2translated/
+  - Voir où était appelé /Direction.toString/ pour mettre à jour le code
+**** TODO Finaliser le script redémarrant webPLM
+- Voir pour killer /activator start/ qui reste actif et bouffe des ressources actuellement
+- Dans le fichier de log du script, le PID indiqué après le redémarrage du serveur n'est pas le bon.
+- Voir pour rediriger les logs de webPLM dans un fichier
+**** TODO Finaliser le système de log
+- Les diagnostics d'erreurs lors de la compilation/de l'exécution ne sont pas loggés correctement
+  - Par exemple /javax.tools.DiagnosticCollector@5e2be792/
+  - Corriger ça
+- Il reste des /System.out.println/ dans les classes des langages de programmation
+  - Comment les remplacer?
+- Voir quels sont les messages loggés actuellement qu'il faudrait plutôt faire parvenir au client
+**** TODO Refactorer les Program Steps
+- Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
+- Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
+**** TODO Adapter TurtleWorld pour webPLM
+- Implémenter la vue du monde
+**** TODO Améliorer l'interaction directives/controllers
+- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
+- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
+- Voir pour prévenir ce genre de bugs
 ** Semaine du <2015-04-13 lun.> au <2015-04-17 ven.>
 *** Done
 - Refactorer le système de traduction
@@ -65,51 +135,6 @@
   - L'acteur instancie un utilisateur à partir de la BDD?
   - Le modèle utilisateur s'instancie à partir de la BDD?
 *** Planned
-**** TODO Corriger changement de langue et selection d'exos
-- Si on change de langue et qu'on accède à la liste des exos, cette dernière n'est pas traduite
-- Mettre à jour la liste des exercices lors d'un changement de langue
-**** TODO Implémenter la gestion des comptes utilisateurs
-- Se renseigner sur OAuth
-- Définir les données stockées
-- Créer le modèle correspondant
-- Ajouter le formulaire de création de compte
-**** TODO Extraire les préférences de l'utilisateur de Game
-- C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
-- Les préférences de l'utilisateur comporte la langue, le langage de programmation...
-- Elles sont stockées actuellement dans un fichier de propriétés Java
-- Mettre en place une BDD à la place
-- Gérer ça dans un composant séparé
-**** TODO Extraire le gestionnaire de session de Game
-- Les données de la session courante font partie de *Game*
-- La session courante de l'utilisateur comprend la leçon sélectionnée, l'exercice en cours, les mondes de travail...
-- En faire un composant séparé
-**** TODO Extraire le contenu commun de Game
-- Plusieurs éléments sont communs à tous les utilisateurs
-- Les leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...
-- Extraire ces objets de la classe *Game*
-**** TODO Finaliser le système de traduction
-- Au cours du refactoring, j'ai dû remplacer /Direction.toString/ par /Direction.direction2translated/
-  - Voir où était appelé /Direction.toString/ pour mettre à jour le code
-**** TODO Finaliser le script redémarrant webPLM
-- Voir pour killer /activator start/ qui reste actif et bouffe des ressources actuellement
-- Dans le fichier de log du script, le PID indiqué après le redémarrage du serveur n'est pas le bon.
-- Voir pour rediriger les logs de webPLM dans un fichier
-**** TODO Finaliser le système de log
-- Les diagnostics d'erreurs lors de la compilation/de l'exécution ne sont pas loggés correctement
-  - Par exemple /javax.tools.DiagnosticCollector@5e2be792/
-  - Corriger ça
-- Il reste des /System.out.println/ dans les classes des langages de programmation
-  - Comment les remplacer?
-- Voir quels sont les messages loggés actuellement qu'il faudrait plutôt faire parvenir au client
-**** TODO Refactorer les Program Steps
-- Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
-- Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
-**** TODO Adapter TurtleWorld pour webPLM
-- Implémenter la vue du monde
-**** TODO Améliorer l'interaction directives/controllers
-- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
-- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
-- Voir pour prévenir ce genre de bugs
 **** DONE Mise en place d'une BDD
 - Voir les technos disponibles
 - Mettre en place la solution choisie
