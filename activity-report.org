@@ -29,6 +29,10 @@
       - Qui instancie ces dépendances? Controller? Actor lui-même? Injector?
   - Refactoring de *Satellizer*
     - Ne doit plus se baser sur une API Rest mais sur un protocole de communication avec la websocket
+- Couplage Controller/Acteur
+  - Finalement, plutôt que de refactorer le fonctionnement de *Silhouette*, il est plus simple d'indiquer à l'acteur que son utilisateur vient de se connecter
+  - Pour ça, ajout d'un UUID aux acteurs, qui sont transmis à leur utilisateur respectif
+  - Lors qu'un utilisateur s'identifie auprès d'un controller, celui retrouver l'acteur à l'aide de l'UUID et lui envoie un message
 *** Questions
 *** Planned
 **** TODO Corriger changement de langue et selection d'exos
