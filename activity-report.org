@@ -32,7 +32,11 @@
 - Couplage Controller/Acteur
   - Finalement, plutôt que de refactorer le fonctionnement de *Silhouette*, il est plus simple d'indiquer à l'acteur que son utilisateur vient de se connecter
   - Pour ça, ajout d'un UUID aux acteurs, qui sont transmis à leur utilisateur respectif
-  - Lors qu'un utilisateur s'identifie auprès d'un controller, celui retrouver l'acteur à l'aide de l'UUID et lui envoie un message
+  - Lors qu'un utilisateur s'identifie auprès d'un controller, celui retrouve l'acteur à l'aide de l'UUID et lui envoie un message
+- Implémentation de UserDAO pour Mongo
+  - Permet à l'utilisateur de s'enregistrer dans la BDD à sa 1ère connexion
+  - Son profil est récupéré lors de ses connexions suivantes
+  - Correction d'un bug dupliquant son profil à chacune de ses connexions
 *** Questions
 *** Planned
 **** TODO Corriger changement de langue et selection d'exos
