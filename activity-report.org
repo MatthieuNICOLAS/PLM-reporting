@@ -6,906 +6,6 @@
 - https://github.com/MatthieuNICOLAS/webPLM
   Le lien vers le repo de la version web de PLM
 * Journal de bord
-** Semaine du <2015-04-27 lun.> au <2015-04-30 jeu.>
-*** Done
-- Mettre en place la création de compte PLM
-  - Ajout du controller *SignUp* et des directives correspondantes
-  - L'utilisateur peut créer un compte, se déconnecter, se reconnecter...
-  - Mais si le serveur redémarre, les comptes précédemment créés deviennent inaccessibles...
-    - Ils existent toujours mais l'authentification échoue
-    - L'erreur générée est [[https://github.com/MatthieuNICOLAS/webPLM/blob/add-silhouette/app/controllers/CredentialsAuthController.scala#L77][celle-ci]]
-- Ajouter les identifiants Git dans les comptes utilisateurs
-  - L'identifiant Git est pour le moment connu uniquement dans le coeur de PLM
-  - Il faudrait que le service d'authentification soit en mesure de le récupérer pour l'associer au compte de l'utilisateur lors de sa création
-  - Refactorer le système d'utilisateurs dans PLM:
-    - Si les comptes utilisateurs sont gérés par webPLM, on n'a plus besoin de les gérer dans PLM
-*** Questions
-*** Planned
-**** TODO Mettre en place la création de compte PLM
-- *Silhouette* propose déjà un système de création de compte
-- Le mettre en place et l'adapter pour webPLM
-**** TODO Ajouter les identifiants Git dans les comptes utilisateurs
-- Lorsqu'un utilisateur se connecte au site, un identifiant Git doit être généré
-- Lorsque l'utilisateur s'identifie pour la 1ère fois  (via un compte PLM ou un site tiers), cet identifiant lui est associé
-- Lorsqu'il s'authentifie les prochaines fois, l'instance de PLM doit changer d'utilisateur pour passer sur son compte
-**** TODO Corriger changement de langue et selection d'exos
-- Si on change de langue et qu'on accède à la liste des exos, cette dernière n'est pas traduite
-- Mettre à jour la liste des exercices lors d'un changement de langue
-**** TODO Extraire les préférences de l'utilisateur de Game
-- C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
-- Les préférences de l'utilisateur comporte la langue, le langage de programmation...
-- Elles sont stockées actuellement dans un fichier de propriétés Java
-- Mettre en place une BDD à la place
-- Gérer ça dans un composant séparé
-**** TODO Extraire le gestionnaire de session de Game
-- Les données de la session courante font partie de *Game*
-- La session courante de l'utilisateur comprend la leçon sélectionnée, l'exercice en cours, les mondes de travail...
-- En faire un composant séparé
-**** TODO Extraire le contenu commun de Game
-- Plusieurs éléments sont communs à tous les utilisateurs
-- Les leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...
-- Extraire ces objets de la classe *Game*
-**** TODO Finaliser le système de traduction
-- Au cours du refactoring, j'ai dû remplacer /Direction.toString/ par /Direction.direction2translated/
-  - Voir où était appelé /Direction.toString/ pour mettre à jour le code
-**** TODO Finaliser le script redémarrant webPLM
-- Voir pour killer /activator start/ qui reste actif et bouffe des ressources actuellement
-- Dans le fichier de log du script, le PID indiqué après le redémarrage du serveur n'est pas le bon.
-- Voir pour rediriger les logs de webPLM dans un fichier
-**** TODO Finaliser le système de log
-- Les diagnostics d'erreurs lors de la compilation/de l'exécution ne sont pas loggés correctement
-  - Par exemple /javax.tools.DiagnosticCollector@5e2be792/
-  - Corriger ça
-- Il reste des /System.out.println/ dans les classes des langages de programmation
-  - Comment les remplacer?
-- Voir quels sont les messages loggés actuellement qu'il faudrait plutôt faire parvenir au client
-**** TODO Refactorer les Program Steps
-- Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
-- Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
-**** TODO Adapter TurtleWorld pour webPLM
-- Implémenter la vue du monde
-**** TODO Améliorer l'interaction directives/controllers
-- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
-- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
-- Voir pour prévenir ce genre de bugs
-** Semaine du <2015-04-20 lun.> au <2015-04-24 ven.>
-*** Done
-- Mettre en place Silhouette
-  - Tuto pour Play + AngularJS: https://github.com/mohiva/play-silhouette-angular-seed
-  - A mergé ce tuto dans WebPLM
-  - Refactoring du code:
-    - Suppression des fichiers inutiles
-    - Modification de l'architecture pour s'adapter à celle de WebPLM
-  - Ajout de la page d'authentification
-  - Ajout de "Sign in with *Google*"
-  - Ajout de "Sign in with *GitHub*"
-  - Fusion avec la branche /add-reactivemongo/
-- Difficultés rencontrées:
-  - Adapter l'exemple de *Silhouette* avec le code existant
-  - Dans l'exemple, on gère l'authentification avec des controllers
-  - Dans notre cas, on veut que ça soit l'acteur correspondant à la websocket du client qui gère ça
-    - Permet de mettre à jour l'instance de PLM avec les informations retrouvées dans la BDD après authentification
-  - Refactoring de l'acteur
-    - Quelles dépendances ajouter?
-      - Seulement l'environnement?
-      - Qui instancie ces dépendances? Controller? Actor lui-même? Injector?
-  - Refactoring de *Satellizer*
-    - Ne doit plus se baser sur une API Rest mais sur un protocole de communication avec la websocket
-- Couplage Controller/Acteur
-  - Finalement, plutôt que de refactorer le fonctionnement de *Silhouette*, il est plus simple d'indiquer à l'acteur que son utilisateur vient de se connecter
-  - Pour ça, ajout d'un UUID aux acteurs, qui sont transmis à leur utilisateur respectif
-  - Lors qu'un utilisateur s'identifie auprès d'un controller, celui retrouve l'acteur à l'aide de l'UUID et lui envoie un message
-- Implémentation de UserDAO pour Mongo
-  - Permet à l'utilisateur de s'enregistrer dans la BDD à sa 1ère connexion
-  - Son profil est récupéré lors de ses connexions suivantes
-  - Correction d'un bug dupliquant son profil à chacune de ses connexions
-*** Questions
-*** Planned
-**** DONE Implémenter la gestion des comptes utilisateurs
-- Se renseigner sur OAuth
-- Définir les données stockées
-- Créer le modèle correspondant
-- Ajouter le formulaire de création de compte
-  - *EDIT:* Séparé dans une autre tâche
-** Semaine du <2015-04-13 lun.> au <2015-04-17 ven.>
-*** Done
-- Refactorer le système de traduction
-  - Suppression de l'attribut *locale* de *FileUtils*
-    - *locale* est maintenant un paramètre passé lors de la lecture d'un fichier
-  - Ajout de l'attribut *locale* dans *Game*
-    - Le constructeur possède maintenant un argument supplémentaire
-    - Les getters/setters sont modifiés pour fonctionner avec l'attribut *locale* de *Game*, et non celui de *FileUtils*
-  - L'attribut *i18n* n'est plus /static/
-    - Les objets/méthodes en ayant besoin pour traduire des messages ont été refactorés
-- Mise en place du Trello
-  - Disponible à cette adresse: https://trello.com/b/zdQyQX6N/plm
-- Mise en place d'une BDD
-  - SQL
-    - *Play Framework* propose d'utiliser  *Java Persistence API*: https://www.playframework.com/documentation/2.3.x/JavaJPA
-    - [[http://slick.typesafe.com/][Slick]] peut être une alternative.
-    - Reste à voir quel SGBD utiliser ?
-      - H2
-      - MySQL
-  - NoSQL
-    - [[https://github.com/ReactiveMongo/Play-ReactiveMongo][ReactiveMongo]] permet d'utiliser *MongoDB* à la place
-    - Moins pratique à utiliser que JPA
-    - Voir pour mettre en place [[http://hibernate.org/ogm/][Hibernate OGM]] plutôt?
-  - Play + Hibernate OGM + MongoDB
-    - Après avoir tenté tant bien que mal à mettre en place le tout, je rencontre tjrs une erreur au lancement de l'appli
-    - Malgré plusieurs [[http://docs.jboss.org/hibernate/ogm/4.1/reference/en-US/pdf/hibernate_ogm_reference.pdf][refs]], j'ai pas réussi à débugger l'appli
-    - Je n'ai pas réussi non plus à trouver d'exemples complets avec cet ensemble de technos
-  - Kundera
-    - Semble être une alternative à Hibernate OGM mais compatible avec Play
-    - [[https://github.com/impetus-opensource/Kundera/wiki/Using-Kundera-with-Play!-Framework][Voir ce tuto]]
-  - Reactive Mongo
-    - Il existe un [[https://github.com/ReactiveMongo/Play-ReactiveMongo][plugin ReactiveMongo pour Play]].
-    - J'ai pu réaliser rapidement un [[https://github.com/MatthieuNICOLAS/webPLM/tree/098a79d9790a2710cef711b611bca092bd6238f5][prototype fonctionnel]].
-- Gestion des comptes utilisateurs
-  - OAuth permet de rediriger l'utilisateur vers un site externe (Google, GitHub)
-  - Une fois l'utilisateur loggé sur ce site, on lui demande le droit d'acceder à certaines fonctionnalités de ce site
-  - Dans notre cas, on veut juste (pour le moment) récupérer un identifiant unique
-  - [[https://developer.github.com/v3/oauth/][OAuth pour GitHub]]
-    - [[http://typesafe.com/activator/template/play-oauth2-scala][Voir cet exemple]]
-    - A voir pour trouver un identifiant unique dans la réponse de GitHub
-  - [[https://developers.google.com/identity/protocols/OpenIDConnect?csw=1#authenticatingtheuser][OAuth pour se log via Google]]
-    - En décodant l'ID token de la réponse grâce à ces [[https://developers.google.com/wallet/instant-buy/about-jwts#jwt_libraries][informations]], on peut récupérer l'attribut *sub*
-    - Il s'agit d'un ID unique de l'utilisateur chez Google
-  - Une fois qu'on a récupérer un ID unique via un service, on peut l'utiliser pour créer son compte/récupérer son compte
-  - Mettre en place [[https://github.com/mohiva/play-silhouette][Silhouette]]
-    - Module pour Play Framework supportant déjà l'authentification par le biais de différents services
-    - [[https://github.com/mohiva/play-silhouette-seed][Voir cet exemple]]
-    - Utilise [[https://github.com/sahat/satellizer][Satellizer]]
-  - Données stockées
-    - ID
-    - Git ID
-    - Provider? (Google, FB, GitHub...)
-    - Lang
-    - ProgLang
-*** Questions
-- Qui interagit avec la BDD pour récupérer le profil de l'utilisateur?
-  - L'acteur instancie un utilisateur à partir de la BDD?
-  - Le modèle utilisateur s'instancie à partir de la BDD?
-*** Planned
-**** DONE Mise en place d'une BDD
-- Voir les technos disponibles
-- Mettre en place la solution choisie
-- Interfacer WebPLM avec la BDD
-**** DONE Mettre en place Trello
-- Pour que Olivier Kautz puisse suivre facilement l'évolution du projet et les tâches en cours
-**** DONE Refactorer le système de traduction
-- Actuellement, *i18n* est un attribut static de *Game*
-- Devrait y avoir une instance par utilisateur pour que les actions d'un utilisateur ne perturbent pas avec les autres utilisateurs
-- Obliger de changer l'objet *Locale* de la JVM?
-- Ou l'on peut se contenter de conserver l'objet *Locale* désiré dans la session de l'utilisateur pour générer les traductions?
-** Semaine du <2015-04-07 mar.> au <2015-04-10 ven.>
-*** Done
-- Fixer tâche Ant de tests
-  - Ajout de haltonfailure="true" haltonerror="true" dans la configuration des tâches de tests de Ant.
-- Fixer les tests des entités solutions
-  - Suppression du constructeur des entités prenant en paramètre un Game
-  - A la place, les entités récupèrent le game du monde qu'il leur est fourni.
-  - Mais le bug suivant reste à résoudre:
-    - Pour certaines entités, la classe compilée est incorrecte (il manque le *Entity*)
-    - En effet, la classe compilée s'appelle par exemple *DutchFlagAlgo* au lieu de *DutchFlagAlgoEntity*
-    - L'instanciation de cette entité échoue donc.
-    - L'erreur apparaît dans tous les langages de programmation mais l'erreur n'est fatale qu'en Java.
-    - *tabName* sert comme nom de la classe compilée
-    - Si on a défini un constructeur, le nom de celui-ci doit correspondre au *tabName*
-    - Il a donc suffit de retirer les constructeurs que j'avais ajouté lors du refactoring de Game pour corriger ces bugs.
-- Améliorer la gestion du monde objectif
-  - Si on bascule sur le monde objectif et que la démo n'a pas encore été jouée, on l'exécute
-- Corriger BatWorld
-  - La NullPointerException provient de l'instruction /ProgrammingLanguage pl = game.getProgrammingLanguage();/
-  - Il s'agissait d'une erreur d'affectation de game dans le constructeur.
-- Améliorer la gestion de la machine TELECOM Nancy
-  - Création d'un webhook dans GitHub
-  - Définition d'une signature secrète
-  - Création d'un serveur
-    - Code disponible [[https://github.com/MatthieuNICOLAS/webhook-handler][ici]] 
-    - Le serveur met à disposition un service pour lancer le script pour redémarrer webPLM
-    - Ce service est accessible par le biais d'une requête POST
-    - La signature de la requête doit correspondre à celle définie dans le webhook GitHub
-  - Le serveur NodeJS est maintenu en ligne grâce à [[https://github.com/foreverjs/forever][forever]].
-  - Refactoring des git hooks précédemment développé pour implémenter un nouveau script pour redémarrer webPLM
-    - Kill webPLM si le serveur est déjà en route
-    - Supprime le fichier RUNNING_PID
-    - Redémarre webPLM
-  - Il suffit maintenant de pusher sur la branche *prod* de *WebPLM* pour que le serveur se mette à jour automatiquement
-- Mettre en place un Logger dans PLM
-  - PLM définit une interface de Logger
-    - Un Logger doit avoir une méthode log pour logger les messages sur le serveur
-    - Un Logger doit avoir une méthode send pour logger les messages sur l'interface cliente
-  - Le constructeur de Game prend maintenant en paramètre un Logger
-  - Dans webPLM, on définit une classe implémentant cette interface
-  - Finalement, ce n'est pas le logger qui se charge de traduire les messages
-    - On a pas forcément envie de traduire tous les messages (les logs serveurs par exemple)
-    - Tout le texte traduit n'est pas loggé non plus (consignes des exercices...)
-  - J'ai remplacé la majorité des /System.out.println/ par des /logger.log/
-*** Questions
-*** Planned
-**** DONE Mettre en place un Logger dans PLM
-- Actuellement dans PLM, on remplace *System.out* et *System.err* pour capturer les messages
-- Mettre en place un *Logger* paraît plus propre
-- Le *Logger* posséderait l'outil de traduction des messages
-- Un paramètre permettrait de spécifier si le message est loggé côté serveur ou côté client.
-**** DONE Améliorer la gestion de la machine TELECOM Nancy
-- Utiliser des git hooks pour:
-  - Stopper la JVM lorsqu'un push est reçu (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/stop][ce script]])
-  - Relancer le serveur d'appli après la mise à jour des fichiers (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/start][celui-ci]])
-**** DONE Corriger BatWorld
-- La conversion des entités BatTests en JSON rencontre une NullPointerException
-- Voir d'où vient cette erreur
-**** DONE Améliorer la gestion du monde objectif
-- Lorsqu'on passe sur la vue objectif d'un monde, celui-ci est encore dans son état initial.
-- Il faut lancer la démo pour que l'objectif apparaisse.
-- Voir pour :
-  - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
-  - Récupérer à l'initialisation l'état objectif 
-**** DONE Fixer les tests des entités solutions
-- Une erreur est déclenchée lorsqu'on reset certains mondes (Pancakes, Dutchflag, Hanoi)
-- La copie des entités de ces mondes lors d'un reset échoue, déclenchant l'erreur
-**** DONE Fixer SimpleExerciseTest
-- Ces tests échouent puisque l'on passe à une leçon sans l'avoir chargé.
-- Revoir le constructeur de SimpleExerciseTest
-**** DONE Fixer tâche Ant de tests
-- Si une erreur survient lors des tests, le build n'est pas marqué comme *failed*
-- Des bugs ont donc pu passer inaperçus
-- Corriger ce bug
-** Semaine du <2015-03-30 lun.> au <2015-04-03 ven.>
-*** Done
-- Suppression des composants de l'ancienne UI.
-  - Il reste toutefois des boîtes de dialogues (*JOptionPane*) par endroits
-- Refactorer Game
-  - Remplacement des /Game.getInstance()/ par le passage en paramètre du constructeur d'une instance de Game
-  - Suppression de la fonction /Game.getInstance()/
-  - Refactoring des classes nécessitant faisant appel à /Game.getInstance()/ pour récupérer un attribut (i18n et programmingLanguage majoritairement)
-    - Le refactoring a consisté principalement à ajouter un attribut *game* à ces classes et à modifier leur(s) constructeur(s) en conséquence.
-- Corriger bug BatWorld
-  - On appelle stepUI() dans *BatEntity* uniquement pour indiquer aux espions que le monde a évolué
-  - stepUI() avertit le spy ajouté par le serveur qu'il peut envoyer la liste d'opérations au client
-  - L'erreur survient ensuite, dans le code ajoutant du délai dans l'exécution pour limiter la vitesse de l'animation dans Swing
-  - Ce code n'étant plus nécessaire, on peut se contenter de le supprimer
-  - Sinon, pour référence, la *NullPointerException* provenait de l'instruction /game.stepModeEnabled()/ de stepUI()
-    - Depuis le refactoring de *Game* en tant que classe et non singleton, les entités ont besoin d'avoir une instance de *Game* en tant que paramètre.
-    - J'ai juste oublié de passer l'instance de *Game* au constructeur de *BatEntity*
-- Corriger bug boucle infinie récursive
-  - Dans les *BatExercises*, on exécute la solution une première fois pour calculer la valeur de *expected* à partir de la valeur de *result* obtenue
-  - Si on déclenche une boucle infinie, le thread est tué avant d'avoir modifié *result*, qui conserve alors sa dernière valeur...
-  - Mettre *result* à *null* après avoir obtenu *expected* a suffit à résoudre le problème.
-- Fixer les tests des entités solutions
-  - L'origine de ce bug semble provenir du constructeur par défaut manquant, maintenant que j'ai ajouté *game* en paramètre
-  - Ajouter un constructeur sans paramètre corrige ce bug.
-  - Cependant des erreurs sont toujours présentes dans ces mondes
-- Améliorer la gestion de la machine TELECOM Nancy
-  - Création d'un hook *pre-receive*
-  - Création d'un hook *post-receive*
-  - Déclaration des variables d'environnement sur le serveur
-  - Mais bugs:
-    - Les variables d'environnement non pas l'air d'être prises en compte (déclarées dans .bash_profile, est-ce qu'elles sont pas chargées avant un git push?)
-    - Message d'erreur "On ne peut pas mettre à jour la branche courante"
-    - A tenté de checkout une autre branche le temps de l'update depuis le script *pre-receive* mais message d'erreur "n'est pas un repo Git" (à revérifier)
-- Empêcher LightBot de faire crasher le serveur
-  - LightBotWorld héritant de *GridWorld*, il n'était pas considéré comme non-supporté
-  - Lève désormais une *NonImplementedWorldException* dans *GridWorldToJson* aussi
-  - Mais bug si on démarre un exo LightBot et qu'on change avant d'avoir exécuter son programme (lastResult != null alors qu'il ne devrait pas à mon sens)
-    - GitSpy essaie alors d'enregistrer les fichiers correspondant au code de l'utilisateur
-    - Mais lastResult.language == JAVA alors que l'exercice n'est disponible qu'en LightBot
-    - Le SourceFile à mettre à jour est alors introuvable
-  - Pour le moment, je réinitialise le lastResult lorsqu'on change de langage de programmation pour éviter ce bug.
-- Ajout de ProgLangListener
-  - Permet de mieux gérer le changement du langage de programmation
-- Ajout de HumanLangListener
-  - Permet de mieux gérer le changement de langue
-*** Questions
-- Gestion des comptes utilisateurs
-  - Comment gérer les comptes utilisateurs?
-  - Proposition 1: avant la connexion à webPLM, demander à l'utilisateur de lui fournir un UUID ou lui proposer d'en générer un?
-    - Constructeur de Game prend en paramètre l'UUID pour retrouver la bonne session
-    - Si UUID passé est inconnu, le refuser ou le créer?
-  - Proposition 2: gestion des comptes classiques
-    - On demande à l'utilisateur de s'inscrire à l'aide d'un pseudo, d'une @mail et d'un mot de passe
-    - On lui associe un UUID et on stocke le couple dans une BDD
-  - Question annexe: Pouvoir utiliser la PLM sans session?
-    - Game instancié sans identifiant de session
-    - Pas de conservation des traces utilisateurs 
-- Gestion des différents langages de programmation
-  - Actuellement, les objets utilisés pour compiler et exécuter le code de l'élève dans chaque langage de programmation sont des singletons.
-  - Faut-il mieux garder ces objets de cette manière?
-  - Ou les refactorer pour que chaque utilisateur instancie son compilateur et son exécuteur pour chaque langage de programmation.
-*** Planned
-**** DONE Empêcher LightBot de faire crasher le serveur
-- Identifier la source du plantage
-**** DONE Refactorer Game
-- Modifier Game pour qu'il ne soit plus un singleton
-**** DONE Corriger bug boucle infinie récursive
-- Si l'utilisateur déclenche une boucle infinie d'appel récursif dans les exercices Bat
-  - L'exécution de son programme est correctement stoppée par le système...
-  - Mais le programme indique que l'utilisateur a réussi l'exercice...
-- Dans un autre type d'exercice (j'ai testé avec celui de la Moria)
-  - L'exécution du programme est aussi stoppée par le système...
-  - Mais le programme compare le résultat avec le monde solution et détecte l'erreur de l'utilisateur
-- Trouver l'origine de ce bug
-**** DONE Corriger bug BatWorld
-- Dans [[https://github.com/MatthieuNICOLAS/webPLM/tree/79062db63585156e786cad9e5ae6f6414688cf71][cette version]] de webPLM, une NullPointerException est levée dans stepUI() lorsque l'utilisateur exécute son programme sur un BatExercise.
-- Comme une exception a été levé, l'exercice n'est pas validé.
-- Voir d'où provient cette exception.
-- Bug non présent dans [[https://github.com/MatthieuNICOLAS/webPLM/tree/b13c0c3720dad5a4917cb98dee41eae68a913e59][cette version précédente]].
-** Semaine du <2015-03-23 lun.> au <2015-03-27 ven.>
-*** Done
-- Adapter BatWorld
-  - Transmet l'état initial du BatWorld au client
-  - A la fin de l'exécution du programme client, envoie le nouvel état
-  - On se contente de transmettre le résultat et de le stocker côté client (pas d'opérations faisant évoluer le modèle "pas-à-pas")
-  - Ajout d'un modèle pour BatWorld côté client.
-- Retravailler ExerciseController
-  - Tous les mondes n'ont pas besoin d'un canvas pour être dessiné
-  - Il fallait donc refactorer ExerciseController pour qu'il soit capable de gérer plusieurs services de dessin (un pour canvas, un pour le DOM...)
-  - Tous les mondes n'ont pas non plus besoin d'un monde objectif, d'une démo, d'un historique...
-  - Ajout de variables permettant de retirer dynamiquement les composants de l'interface inutiles pour un exercice
-- Ajout du service *drawWithDOM*
-  - Possèdera à terme plusieurs méthodes de dessin (une pour chaque monde supporté)
-  - Lorsqu'un monde est choisi, il sélectionne la méthode de dessin appropriée
-- Représenter *BatWorld* avec *drawWithDOM*
-  - Se contente d'injecter une directive AngularJS dans le DOM
-  - Celle-ci affiche les tests visibles en ajoutant du style selon les paramètres supplémentaires
-- Refactoring de la gestion des méthodes de dessin
-  - Les méthodes de dessin sont contenues dans des objets spécifiques, les vues
-  - Lorsque le controller instancie un modèle, il fournit aussi au service de dessin la méthode de la vue qui correspond
-  - Ajout de *BatWorldView* selon cette architecture
-- Refactorer le service canvas
-  - Ajout de *BuggleWorldView* regroupant les méthodes de dessin jusque là contenues dans *BuggleWorld*, *BuggleWorldCell*...
-  - Modification de canvas pour la méthode dessin utilisée lui soit fournie par le controller.
-  - Adaptation des tests unitaires pour canvas à ce nouveau fonctionnement.
-- Sortir la boucle de dessin du controller
-  - Tout d'abord, gérer la boucle de dessin dans le service de dessin paraît peu adapté car redondant 
-  - Ensuite, sortir la boucle de dessin du controller peut être nécessaire si on considère que certains mondes n'en ont pas la nécessité (BatWorld par exemple)
-  - Mais si l'on considère que tous les mondes possèdent une ou plusieurs étapes, alors son fonctionnement ne dépend pas du monde.
-  - Il ne reste plus que la création d'un service dédié.
-  - L'intérêt me paraît faible pour le moment.
-- Voir pour améliorer la gestion de la boucle dessin
-  - Il est conseillé d'utiliser $timeout et $interval au lieu de setTimeout et setInterval lorsqu'on utilise AngularJS
-  - Ceci a permis de se passer de l'instruction  /$scope.$apply()/
-- Mise à jour des librairies utilisées
-  - Passage d'AngularJS 1.3.6 à AngularJS 1.3.15
-  - Apparition d'un bug avec le routing côté client:
-    - /$location.redirect/ n'était plus accepté par *angular-ui-router*
-    - Refactoring de *HomeController* pour utiliser plutôt les méthodes mises à disposition par *angular-ui-router*
-- Téléchargement des librairies en local
-  - Ne passe plus par un CDN pour récupérer les librairies *JS* et *CSS*
-  - Ca augmentera la charge serveur (le client interrogera désormais le serveur pour récupérer les librairies au lieu de se tourner vers le CDN)
-  - Mais ça permet à l'utilisateur de travailler sans connexion internet si le serveur est lancé en local
-- Corriger bug AngularJS avec ng-bind-html/Program Steps
-  - L'erreur provient d'une mauvaise utilisation de jQuery par AngularJS [[https://github.com/jquery/sizzle/issues/309][(voir ici)]].
-  - Télécharger jQuery et déclarer /element.getAttribute/ si la méthode n'existe pas suffit à résoudre le problème.
-  - Voir pour une meilleure solution?
-- Adapter TurtleWorld pour webPLM
-  - Ajout des objets et des méthodes Scala pour convertir le monde initial en JSON
-  - Ajout des modèles du monde et des opérations côté client
-- Refactorer Game
-  - J'ai commencé à modifier Game pour qu'il ne soit plus un singleton
-*** Questions
-- Refactorer les Program Steps
-  - A chaque étape du programme, AngularJS est configuré pour ajouter un noeud HTML contenant une phrase décrivant l'action.
-  - Lorsque le programme compte plusieurs centaines d'étapes (Moria par exemple en possède plus de 500), la manipulation du DOM ralentit l'application.
-  - Comment résoudre ce problème?
-    - Au lieu de créer un noeud par étape, créer un noeud qui va contenir les descriptions (du simple texte) de tous les noeuds?
-      - Mais dans ce cas, on perd la possibilité d'associer une étape à une ligne.
-    - Limiter le nombre d'étapes affichées?
-      - Ne charger que les étapes voisines de l'étape actuelle
-	- Voir les performances de cette solution
-      - N'afficher que des intervalles d'étapes et permettre à l'utilisateur d'explorer les intervalles qui l'intéressent
-*** Planned
-**** DONE Corriger bug d'AngularJS avec ng-bind-html
-- Lorsqu'on affiche de l'HTML provenant de PLM dans l'interface, nous utilisons l'attribut /ng-bind-html/ pour l'insérer dans un élément du DOM
-- Cependant, lorsqu'on modifie l'HTML affiché (la consigne est traduite dans une autre langue par exemple), une erreur est levé par *AngularJS*
-- Cas bizarre:
-  - Sur la page de sélection d'une leçon, aucune erreur n'est généré lorsqu'on passe d'une description d'une leçon à une autre...
-  - ... sauf si l'on a démarré l'application sur une autre page (l'exerciseur par exemple) et qu'on s'est ensuite redirigé vers l'accueil...
-**** DONE Corriger les erreurs liées aux Program Steps
-- Lorsqu'on exécute son programme, puis qu'on bascule sur la vue objectif d'un monde, une erreur d'AngularJS est générée pour chaque *Program Steps*
-- Voir pour identifier l'origine de cette erreur
-- Cette erreur n'apparaît pas non plus si on accède à l'appli depuis l'accueil
-**** DONE Mettre à jour les librairies utilisées
-- Voir si ça corrige pas le bug d'AngularJS avec ng-bind-html ou celui avec les Program Steps
-**** DONE Voir pour améliorer la gestion de la boucle dessin
-- Remplacer setTimeout/Interval par $timeout/interval
-- /$scope.$apply()/ nécessaire?
-**** CANCELLED Sortir la boucle de dessin du controller
-- La boucle d'animation devrait se trouver dans le service de dessin ou dans la vue d'un monde et non pas dans le controller.
-**** DONE Refactorer le service canvas
-- Voir pour sortir la méthode de dessin du monde des Buggles du modèle
-- La méthode de dessin devrait se trouver dans un objet prévu pour.
-**** DONE Adapter BatWorld pour webPLM
-- Création de BatWorld côté client
-  - Besoin de créer un modèle de données côté client?
-  - Ou on se contente d'envoyer le résultat (chaîne de caractère + error ou pass) ?
-- Modification de l'interface client
-  - Pas vraiment besoin d'un canvas pour ce monde
-  - Une directive AngularJS semble suffire
-** Semaine du <2015-03-16 lun.> au <2015-03-20 ven.>
-*** Done
-- Correction du bug des baggles invisibles:
-  - Remplacer /DefaultColors.BAGGLE/ par une couleur par défaut tel que /orange/ permet de corriger le bug, le problème semble donc venir de /DefaultColors.BAGGLE/.
-  - Après quelques tests, j'ai remarqué qu'il suffisait de retirer le ';' à la fin de la chaîne 'rgb(209, 105, 31);'
-- Correction des solutions Scala des exercices 2 et 3 de la leçon welcome
-  - Après de nouveaux tests, il s'avère que seulement l'entité /welcome.instructions.ScalaInstructionsEntity/ bug.
-  - Le bug semble provenir du package incorrect de cette classe.
-  - Pourquoi le test d'intégration recherchant les leçons cassées ne l'a pas détecté?
-  - L'exception déclenchée lorsqu'une entité solution n'est pas trouvée est catchée dans /run()/ de *DemoRunner*.
-  - Ajout d'un test lançant la solution à l'aide de *DemoRunner* et détectant si une exception est lancée:
-  - A permis de corriger /welcome.instructions.ScalaInstructionsEntity/ mais aussi /welcome.loopdowhile.ScalaPoucet1Entity/
-- Correction des tests unitaires de Git
-  - Récupération de la valeur de la propriété autorisant le traçage des utilisateurs au lancement des tests.
-  - Autorise le traçage des utilisateurs pendant la durée du test, puis remet l'ancienne valeur.
-- Correction des [[https://github.com/MatthieuNICOLAS/webPLM/issues][issues ouvertes sur GitHub]]
-  - Ajout d'un effet de surbrillance lorsqu'on passe la souris sur un bouton de la barre de menu en haut ([[https://github.com/MatthieuNICOLAS/webPLM/issues/10][fix #10]]).
-  - Ajout d'un bouton "Not yet" à la pop-up invitant l'utilisateur à passer à l'exercice suivant lorsqu'il réussit un exercice ([[https://github.com/MatthieuNICOLAS/webPLM/issues/11][fix #11]]).
-- Ne pas crasher lorsqu'on accède à un exercice non-supporté ([[https://github.com/MatthieuNICOLAS/webPLM/issues/3][fix #3]])
-  - Ajout de l'exception /NonImplementedWorldException/
-  - Ajout du champ /exception/ dans le JSON transmis au client spécifiant l'exception rencontrée, s'il y en a une.
-  - Ajout d'un message d'avertissement indiquant à l'utilisateur que la représentation du monde n'est pas disponible.
-- Améliorer le fonctionnement du canvas
-  - Update du canvas à raison de 10 fois par seconde.
-  - L'utilisateur peut uniquement contrôler le nombre d'opérations appliquées durant ce temps au modèle.
-  - La vitesse d'application des opérations variant de toutes les 40ms à toutes les 3s.
-  - J'ai remarqué que si l'utilisateur naviguer manuellement à travers les états du modèle alors que l'exécution n'est pas terminée (donc que le nombre d'états n'est pas encore fixé), les performances chutent énormement.
-  - Tant que l'exécution du programme n'est pas terminée, les boutons de navigation sont donc inactifs.
-- Tester ngTranslate
-  - Finalement j'ai décidé d'utiliser [[https://angular-gettext.rocketeer.be/][angular-gettext]] pour son efficacité, sa simplicité d'utilisation et sa doc complète.
-  - Mis en place *angular-gettext* et traduit l'application.
-  - Il reste cependant quelques conflits avec les composants de *Foundation* (les tooltips et les alerts ne sont pas correctement mis à jour après un changement de langue).
-- Refactorer setLocale de PLM
-  - Se contente de mettre à jour *i18n* et d'avertir les *HumanLangListeners* du changement de langue
-  - *Lesson* et *Lecture* sont maintenant des *HumanLangListeners*
-  - Ils mettent donc à jour l'énoncé/la description de la leçon dès que la langue est changée
-  - Le serveur avertit le client lorsque le changement de langue a été effectué de son côté
-  - Le client redemande alors le contenu de PLM qui l'intéresse
-    - La description des leçons si on est sur la page /Home/
-    - L'énoncé de l'exercice si on est sur la page /Exercise/
-- Traduire l'API d'un monde lors d'un changement de langue
-  - Il a suffit de mettre à jour l'API du 1er monde initial dans *Exercise* quand /currentHumanLanguageHasChanged/ est appelée
-  - Le client demande donc aussi l'API lorsque la langue est modifiée alors qu'il est sur la page /Exercise/
-- Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
-  - On se contente d'envoyer le nouveau texte de la consigne lors d'un changement de langage de programmation et de mettre à jour l'UI.
-*** Questions
-*** Planned
-**** DONE Ne pas redimensionner l'éditeur de code en fonction du canvas dans un exercice non-supporté
-- L'éditeur de code est actuellement redimensionné pour avoir les mêmes proportions que la représentation du monde
-- Si l'exercice n'est pas supporté, le canvas n'est pas affiché.
-- Si l'utilisateur redimensionne la fenêtre ensuite, la taille de l'éditeur de code est mise à jour et il devient à son tour invisible.
-- Revoir comment l'éditeur de code est redimensionné
-**** DONE Traduire l'API d'un monde lors d'un changement de langue
-- Pour récupérer l'API d'un monde, il faut interroger une instance de ce monde.
-- Il faudrait faire de *World* un *HumanLangListener*
-- Mais afin d'éviter les fuites mémoires, il faut faire attention à gérer correctement les add/removeHumanLangListener
-- Voir si on peut pas simplifier la chose en retirant l'API d'un monde de ses instances
-**** DONE Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
-- Lorsqu'on change de langage de programmation, il faut recharger le texte de la consigne afin que les exemples de code correspondent au nouveau langage selectionné.
-**** DONE Refactorer setLocale de PLM
-- setLocale de PLM devrait juste mettre à jour la langue de *i18n*
-- Le contenu de PLM chargé devrait être re-traduit.
-- Le client doit interroger le serveur pour mettre à jour son interface.
-**** DONE Tester ngTranslate
-- Voir [[http://angular-translate.github.io/][ce module]] ou [[https://github.com/StephanHoyer/ng-translate][celui-ci]].
-- Permettrait de modifier dynamiquement les chaînes de caractères de l'interface sans devoir recharger la page
-- Modifier la mise à jour du contenu de PLM lors d'un changement de langue
-**** DONE Ne pas crasher lorsqu'on accède à un exercice non-supporté ([[https://github.com/MatthieuNICOLAS/webPLM/issues/3][fix #3]])
-- Déclencher une exception lorsque le monde qu'on essaie de convertir un monde non-supporté en JSON.
-- Catcher l'exception et insérer dans le JSON un champ pour prévenir le client que le monde n'est pas supporté.
-- Vérifier côté client la valeur de ce champ et afficher un message d'avertissement s'il est présent.
-**** DONE Corriger les tests unitaires de Git
-- Certains tests unitaires de Git (ceux qui accèdent à un repo distant) échouent si la propriété autorisant le traçage des utilisateurs est à *false*.
-- Modifier les tests pour ne pas tenir compte de cette propriété.
-**** DONE Corriger les solutions Scala des exercices 2 et 3 de la leçon welcome
-- Un problème semble survenir à l'exécution des solutions de ces exercices
-- Ceci empêche l'utilisateur de consulter le monde objectif/d'observer la démo
-- Il suffit alors de cliquer sur /Run/ sans rien faire pour valider l'exercice.
-**** DONE Corriger bug des baggles invisibles
-- Les baggles n'apparaissent pas sur certains navigateurs:
-  - Chrome Canary sous Mac OS
-  - Firefox sous Linux
-- Mais les démonstrations que l'on peut trouver sur Internet de canvas sont compatibles avec ces navigateurs
-- Revoir la méthode /drawBaggle/ pour trouver la raison de ce bug.
-** Semaine du <2015-03-09 lun.> au <2015-03-13 ven.>
-*** Done
-- Améliorer l'interface graphique
-  - Redisposition des éléments
-  - Meilleure gestion de la taille de l'éditeur de code et de la représentation du monde
-  - Ajout d'un bouton permettant d'étendre/réduire à sa taille par défaut le bloc contenant les instructions pour une meilleure lecture
-  - Ces modifications ont été mergées dans la branche master
-- Refactorer setLocale
-  - setLocale, pour mettre à jour la description d'une leçon/la consigne d'un exercice, re-set la leçon et l'exercice courant.
-  - J'ai donc modifié setLocale pour que cette méthode ne se contente que de définir la langue à utiliser.
-  - Puisque à terme, une instance de Game correspondra à une session d'utilisation, j'ai modifié PLMActor pour qu'il définisse la langue à utiliser à son instanciation.
-  - Voir la partie *Questions*
-- Empêcher l'utilisateur de modifier le cookie indiquant sa langue
-  - Puisque la langue de l'utilisateur n'est pas une donnée sensible, crypter la valeur actuelle du cookie paraît démesuré.
-  - On se contente donc de supprimer le cookie si la langue indiquée n'est pas supportée.
-- Ajout du service *langs* :
-  - Interroge le serveur pour récupérer la liste des langues supportées par l'application
-  - Stocke la langue actuelle dans un cookie 
-- Ajout de la directive *selectLang*
-  - Interagit avec *langs* pour afficher la langue actuelle et la liste des langues supportées
-  - Indique à l'utilisateur que l'application a besoin de redémarrer pour prendre en compte le changement de langue
-  - Permet à l'utilisateur de changer la langue sélectionnée
-- Déployer une version de démonstration
-  - A partir de [[https://github.com/opensas/play2-openshift-quickstart][cet exemple]], j'ai pu mettre en ligne *webPLM* sur *Openshift*
-  - L'application est donc testable [[webplm-editorcrdt.rhcloud.com][ici]]
-  - Reste à voir pour contrôler l'accès pour prévenir les bugs liés au singleton Game.
-- Déclencher une BuggleInOuterSpaceException lorsque les coordonnées sont négatives
-  - Il a suffit d'ajouter un /throw new BuggleInOuterSpaceException/ si l'utilisateur appelle setX/setY/setPos avec un paramètre négatif
-*** Questions
-- Aller plus loin dans le refactoring de setLocale?
-  - Quand l'utilisateur change la langue de l'application, je ne vois pas comment mettre à jour la page (notamment l'HTML des directives AngularJS) sans forcer l'utilisateur a rechargé la page
-  - A terme, recharger la page implique la destruction du couple "Acteur - PLM" courant et l'instanciation d'un nouveau
-  - J'ai donc modifié PLM pour que la langue doive être définie à son instanciation
-  - Ca implique que pour que le changement de langue soit pris en compte, l'utilisateur doit redémarrer le serveur actuellement (car PLM est instanciée au lancement du serveur et que le singleton persiste jusqu'à son interruption)
-  - Faut-il refactorer setLocale pour qu'il mette dynamiquement à jour tout son contenu lors d'un changement de langue, évitant ainsi à l'utilisateur de redémarrer le serveur, sachant que cela sera inutile dès lors que Game ne sera plus un singleton?
-  - Ou se contenter pour le moment d'afficher un message invitant l'utilisateur à redémarrer le serveur pour que les changements soient pris en compte?
-*** Planned
-**** DONE Améliorer l'outil de sélection d'un exercice
-- Plus le mettre en valeur (revoir le label du bouton?)
-- Empêcher l'utilisateur de cliquer sur "Switch to" lorsqu'aucun exercice n'est actuellement choisi
-- Lorsque l'utilisateur sélectionne un exercice principal de la liste de gauche, il faudrait que celui-ci soit aussi sélectionné dans la liste de droite
-**** DONE Déclencher une BuggleInOuterSpaceException lorsque les coordonnées sont négatives
-- L'utilisateur peut actuellement affecter des valeurs négatives aux coordonnées du Buggle via setX/setY/setPos.
-- Il faudrait l'en empêcher en levant une exception s'il essaie.
-**** DONE Déployer une version de démonstration
-- Si PLM doit être présentée, une version de démonstration accessible facilement pourrait se révéler utile.
-**** DONE Ajouter des opérations correspondant aux exceptions levées
-- BuggleInOuterSpaceException
-**** DONE Ajouter à l'UI un composant permettant de choisir la langue du programme
-- Ajouter un service AngularJS :
-  - Disposant de la liste des langues supportées par l'application
-  - Pouvant accéder et manipuler les cookies de l'utilisateur
-- Ajouter la directive AngularJS servant d'interface entre l'utilisateur et le service précédemment décrit
-**** DONE Empêcher l'utilisateur de modifier le cookie indiquant sa langue
-- Lorsque l'utilisateur souhaite changer la langue de l'application, je stocke le code de la nouvelle langue choisie dans un cookie
-- Mais un cookie est modifiable en JS
-- L'utilisateur peut donc modifier sa valeur actuelle pour une valeur random, ce qui empêche l'application de fonctionner correctement (le client n'arrive plus à charger les fichiers HTML)
-- Il faut donc mettre en place un mécanisme empêchant la modification du cookie par l'utilisateur:
-  - Cryptage du cookie?
-  - Destruction du cookie si valeur inconnue?
-**** DONE Corriger bug setLocale
-- Lorsqu'on sélectionne certains exercices (tel que celui de la Moria) puis qu'on recharge la page, le serveur plante.
-- L'exception levée provient à priori d'un appel à setLocale qui débouche sur une NullPointerException
-- Voir pour corriger ce bug/refactorer setLocale
-**** DONE Améliorer l'interface graphique
-- Redisposer les éléments de l'UI pour que l'éditeur de code soit côte à côte avec la vue du monde
-** Semaine du <2015-03-02 lun.> au <2015-03-06 ven.>
-*** Done
-- Internationalisation
-  - Plusieurs solutions possibles
-  - Soit gérer la localisation côté serveur avec [[https://www.playframework.com/documentation/2.0/ScalaI18N][i18n]]
-    - Dans ce cas, doit déplacer les fichiers HTML et JS dans *app/views* et ajouter *.scala* dans l'extension.
-    - Refactorer tous les fichiers pour remplacer les chaînes de caractères par /@Messages("key")/
-    - Comment gérer les chaînes des fichiers JS utilisant une ou plusieurs variables?
-  - Soit gérer la localisation côté client avec [[https://github.com/julienrf/play-jsmessages][ce plugin]]
-    - Création d'un service interrogeant le serveur pour récupérer la localisation et la mettant à disposition des différents composants
-    - Doit refaire une passe à chaque fois que la vue/le DOM change
-    - Doit ajouter un attribut à l'HTML pour repérer l'ensemble des chaînes à traduire
-    - Mais *délai* au chargement de la page où la traduction n'est pas encore effectuée...
-    - Délai réduit en insérant la traduction directement dans l'HTML et en initialisant le module à partir de là.
-    - Doit ajouter la méthode traduisant le DOM dans chaque directive afin de s'assurer que le DOM soit bien chargé à ce moment là.
-  - Utiliser les deux?
-    - Côté serveur pour tout le texte statique
-    - Côté client pour toutes les chaînes intégrant des variables JS
-    - Mais plus complexe et moins maintenable.
-  - Quel outil utilisé pour rédiger la traduction?
-    - Le format attendu des traductions est [[https://www.playframework.com/documentation/1.2/guide12#aApplicationmodellocalisationa][le suivant]].
-    - [[http://basmussen.github.io/i18n-maven-plugin/index.html][Ce plugin]] semble simple d'utilisation, mais à voir comment le configurer pour l'adapter à nos besoins.
-    - Voir [[http://www.cantamen.com/i18nedit.php][cet outil]] sinon => outil buggé et inutilisable, ne peut même pas ouvrir un fichier de propriétés...
-    - [[http://attesoro.org/][Attesoro]] est aussi facile d'utilisation, mais les fichiers générés ne sont pas ceux attendus par Play => Voir pour renommer les fichiers/modifier la config de Play
-  - *po4a*
-    - Utilisation de *po4a* pour générer les fichiers HTML traduits
-    - Les fichiers HTML traduits sont placés dans le répertoire /public/lang/filepath
-    - Le routing côté serveur a été configuré pour récupérer les fichiers HTML traduits si besoin et possible
-    - *po4a xhtml* ne donne pas le résultat souhaité: les balises et leurs attributs apparaissent dans les msgIds, ce qui complique le travail des traducteurs.
-    - Utilisation de *po4a xml* qui, avec sa configuration par défaut, permet de récupérer uniquement les chaînes de caractères à traduire.
-- Revert
-  - Ajout d'un bouton déclenchant l'envoi d'un message pour réinitialiser l'exercice dans l'UI.
-  - Configuration du serveur pour déclencher la réinitialisation de l'exercice à la réception de ce message et renvoyer le nouvel état de l'exercice au client.
-- Messages correspondant aux opérations
-  - Au lieu de les définir dans le JS (ce qui complique la traduction), ceux-ci sont maintenant définis dans leur classe Java respective.
-  - Modification de la fonction de conversion des opérations Java -> JSON pour aussi envoyer les messages
-  - Reste à traduire ces messages dans PLM
-- "Sorry Dave"
-  - Deux méthodes de SimpleBuggle "empêchaient" le programme de l'utilisateur de terminer avec une exception s'il utilisait /Left/ ou /Right/
-  - Supprimer ces deux méthodes a permis de correctement stopper l'exécution et d'afficher le message d'erreur "Sorry Dave..." dès que l'utilisateur tente d'accèder à une méthode "interdite"
-*** Questions
-- Comment disposer les différents composants de l'interface?
-  - Lesquels sont indispensables? Ceux qu'il faut mettre le plus en avant?
-  - Lesquels l'utilisateur doit-il pouvoir masquer?
-*** Planned
-**** DONE Refactorer les opérations pour gérer le message côté serveur
-- Actuellement, le message correspondant à une opération affiché dans les "Program Steps" est défini côté client, en JS.
-- Pour faciliter sa traduction, il faudrait plutôt le définir dans PLM directement.
-**** DONE Pouvoir redémarrer un exercice
-- Appeler la méthode /revert/ de PLM
-**** DONE Supporter l'internationalisation
-- Voir cette [[https://github.com/MatthieuNICOLAS/webPLM/issues/1][issue]].
-- [[https://github.com/julienrf/play-jsmessages][Plugin intéressant]]?
-** Semaine du <2015-02-23 lun.> au <2015-02-27 ven.>
-*** Done
-- Refactorer la conversion des objets Java en JSON:
-  - J'ai extrait le code existant des classes principales et l'ai fragmenté en plusieurs classes.
-  - Chacune d'entre elles propose des méthodes pour convertir une classe en JSON.
-- Créer un repo dédié au reporting:
-  - Repository disponible [[https://github.com/MatthieuNICOLAS/PLM-reporting][ici]].
-- Automatisation des tests unitaires de WebPLM
-  - Création d'une tâche *Grunt* permettant de lancer les tests unitaires JavaScript...
-  - ... mais conflit avec /activator test/ qui tente d'accéder aux
-    fichiers de *Grunt* et qui rencontre alors une erreur de droit
-    d'accès...
-  - Conflit évité en utilisant /activator "test-only \*Spec"/ à la place...
-  - ... mais /activator "test-only \*Spec"/ ne déclenche pas
-    l'évènement /test/ nécessaire au [[https://github.com/rossbayer/grunt-sbt][plugin Grunt pour sbt]] pour lancer
-    la tâche *Grunt*.
-  - Finalement j'ai configuré *Travis* pour [[https://github.com/MatthieuNICOLAS/webPLM/blob/master/.travis.yml#L9-L10][lancer les deux scripts de
-    tests]] manuellement et ne pas utiliser de plugin pour lier *Grunt*
-    et *SBT*.
-- Insérer des lignes /read-only/ dans *CodeMirror*
-  - La méthode de *CodeMirror* /markText/ permet de rendre certaines lignes non-modifiables.
-  - Mais /markText/ est incompatible avec /setValue/ => ne peut plus
-    laisser *AngularJS* gérer tout seul le contenu de l'éditeur à
-    l'aide de /ng-model/.
-  - Prototype fonctionnel disponible [[https://github.com/MatthieuNICOLAS/webPLM/tree/read-only-lines][dans cette branche]].
-  - Fonctionne actuellement en repérant un token dans le texte
-  - Rien n'empêche un utilisateur d'ajouter le token dans une de ses
-    lignes, ce qui la rendra après rafraichissement de la page
-    non-modifiable...
-- Service pour la liste des exercices d'une leçon:
-  - Création du service interrogeant le serveur pour récupérer la
-    liste des exercices et la refactorant pour créer un arbre.
-  - /exerciseController/ a été refactoré pour utiliser ce service pour générer son outil de sélection d'un exercice
-  - Mais seulement un objet semble pouvoir écouter les messages reçus par le serveur à moment donné...
-  - ... donc conflit entre /exercisesList/ et /exerciseController/ qui veulent tous les deux écouter le serveur, mais pour des messages différents
-  - A dû refactorer les services /connection/ et /listenersHandler/ pour corriger ce défaut
-*** Questions
-- Lignes en mode /read-only/
-  - Comment spécifier les lignes non-modifiables? A l'aide d'un token
-    ou une autre solution est envisageable?
-  - Si un token est utilisé, comment empêcher un utilisateur de
-    potentiellement se saboter en l'ajoutant à une de ses propres
-    lignes?
-  - Si l'on supprime le token après avoir pris connaissance des lignes
-    à mettre en /read-only/, comment le réinsérer de nouveau avant
-    d'envoyer le code au serveur sachant que le texte a été modifié
-    par l'utilisateur?
-*** Planned
-**** DONE Créer un service récupérant la liste des exercices d'une leçon
-- Méthode *setLesson* déclenchant une requête au serveur pour récupérer la liste des exercices de la leçon
-  - Où appeler cette méthode? Dans le *HomeController*?
-- Fonction *getExercises* retournant la liste des exercices actuellement en mémoire
-  - Fonction utilisée par *ExerciseController*
-**** DONE Création d'un repository dédié au reporting
-**** DONE Refactorer la conversion des objets Java en JSON
-- Mettre en place une (des?) classe(s) utilitaires chargée(s) de convertir les objets en JSON.
-- Retirer le code existant des classes principales.
-**** DONE Automatisation des tests unitaires de WebPLM
-- Voir pour activer *Travis* pour ce projet.
-- Voir pour utiliser [[https://github.com/joescii/sbt-jasmine-plugin][le plugin sbt pour jasmine]] avec ce [[http://perevillega.com/executing-jasmine-tests-in-play-2-dot-0-4/][tutoriel]].
-- Ou [[http://www.position-absolute.com/articles/gluing-together-jasmine-grunt-travis-ci-github-testing-front-end-code-has-never-been-easier/][créer une tâche Grunt pour les tests]] et [[https://github.com/guardian/sbt-grunt-plugin][lancer la tâche Grunt via sbt]].
-
-**** DONE Voir comment spécifier certaines lignes en tant que read-only dans CodeMirror
-  - [[http://codemirror.net/doc/manual.html#markText][A creuser]]
-** Semaine du <2015-02-09 lun.> au <2015-02-13 ven.>
-*** Done
-**** DONE Etablir le plan de la présentation
-**** DONE Créer un dépôt pour la présentation
-- Voir [[https://github.com/MatthieuNICOLAS/IJD-seminar-2015-03-03][ici]].
-**** DONE Prendre en main reveal.js
-- Ajout de [[https://github.com/hakimel/reveal.js][reveal.js]] au dépôt.
-- Utilisation de [[http://johnmacfarlane.net/pandoc/][Pandoc]] pour [[http://johnmacfarlane.net/pandoc/demo/example9/producing-slide-shows-with-pandoc.html][générer les slides]] à partir d'un fichier *Markdown*.
-**** DONE Ajouter l'opération BuggleDontHaveBaggle
-**** DONE Ajouter l'opération CellAlreadyHaveBaggle
-**** DONE Mettre en place les tests unitaires pour le code JS
-- Ajout de [[http://jasmine.github.io/][jasmine]] et de [[http://sinonjs.org/][sinon]] au projet.
-- Création d'une [[http://localhost:9000/specRunner][page]] permettant d'exécuter les tests.
-- Ajout de tests unitaires pour les principales opérations.
-- Ajout de tests unitaires pour les constructeurs des modèles de
-  données.
-- Ajout de tests unitaires pour *BuggleWorld*.
-- Ajout de tests unitaire pour *canvas*.
-*** Questions
-**** Créer le type d'opération "ExceptionOperation" ?
-- Actuellement, il existe un type d'opération spécifique pour chaque
-  au type d'exception existant.
-- Ne faudrait-il mieux pas créer un type d'opération générique
-  possédant juste un nom et un message?
-- Cela permettrait de factoriser le code de la génération des
-  opérations et de leur exécution.
-- Mais cela perdrait en clarté selon moi.
-**** Refactorer BuggleWorld.generateOperation (JS) ?
-- En appliquant *JSHint* sur *BuggleWorld*, j'ai relevé un
-  avertissement généré expliquant que la complexité cyclomatique
-  de *generateOperation* est actuellement trop élevée.
-- Ceci est dû à l'utilisation d'un switch pour déterminer quel
-  constructeur utiliser en fonction des données reçues.
-- Comment pouvons-nous refactorer *generateOperation* pour que sa
-  complexité ne soit plus une source d'avertissement?
-**** Refactorer le code gérant la conversion en JSON des objets Scala ?
-- Les objets Scala du serveur sont transmis au client après avoir été
-  converti au format JSON.
-- Pour chaque type d'objet, une fonction de conversion est définie.
-- Ces fonctions sont actuallement éparpillées dans plusieurs
-  fichiers: *PLMActor* et *ExecutionSpy*
-- Comment mieux gérer cette partie du code? Mise en place d'un utilitaire?
-*** Planned
-**** DONE Préparer la présentation pour le séminaire IJD
-- Travailler le plan de la présentation
-- Voir pour essayer [[https://github.com/hakimel/reveal.js][reveal.js]].
-**** DONE Ajouter des opérations correspondant aux exceptions levées
-- BuggleDontHaveBaggleException
-- CellAlreadyHaveBaggle
-- BuggleInOuterSpaceException
-- "Sorry Dave, I cannot let you use..."
-**** DONE Poursuivre le développement de tests unitaires
-- Ajouter des tests unitaires pour le code JS permettrait de s'assurer de la robustesse du code.
-- Voir comment utiliser [[http://jasmine.github.io/][jasmine]].
-- Voir comment utiliser [[http://sinonjs.org/][sinon]].
-** Semaine du <2015-02-02 lun.>  au <2015-02-06 ven.>
-*** Done
-**** DONE Stocker localement la vitesse d'exécution de l'animation
-- Il serait intéressant pour l'utilisateur que la vitesse d'exécution
-  de l'animations soit conservée entre les exercices/entre les
-  sessions.
-- Utilisation de *localStorage*?
-- Il existe un module *ngStorage* permettant de stocker facilement
-   avec *localStorage* une valeur manipulée par *AngularJS*
-- Implémentation de *ngStorage*.
-- *ngStorage* semble ne plus être maintenu et comporter plusieurs problèmes: [[http://stackoverflow.com/questions/28136231/angularjs-controller-is-caching-in-firefox-and-ie-how-to-disable][voir ce thread]].
-- Implémentation de [[https://github.com/tymondesigns/angular-locker][angular-locker]] à la place.
-**** DONE Fixer le bug de "Program steps" dans le cas d'un monde possédant plusieurs entités
-- Dans certains exercices, tels que BDR, plusieurs entités (buggles
-  dans ce cas là) sont présentes dans le monde. Le programme de
-  l'utilisateur s'exécutant en concurrence sur chacune des entités,
-  les buggles bougent de façon chaotique jusqu'à atteindre l'état
-  final.
- - A cause de cela, les pas décrits dans "Program steps" ne
- correspondent pas à un pas d'un buggle mais aux actions de plusieurs,
-  ce qui peut gêner la compréhension du programme.
-- Stocke maintenant les opérations dans les entités et non plus dans
-  un tableau commun au monde.
-- Lorsqu'un *worldStep* est détecté, on n'envoie les opérations que
-  des entités étant marqué comme prête à envoyer.
-**** DONE Permettre à l'utilisateur de sélectionner une leçon en double-cliquant dessus
-- *$location.path* permet de rediriger l'utilisateur vers une nouvelle page
-- *ng-dblclick* permet de détecter un double-clique
-**** DONE Fixer le changement de monde involontaire
-- Dans le 1er exercice de la leçon labyrinthe par exemple, lorsque
-  l'utilisateur exécute son programme, la vue du monde passe toute
-  seule sur la celle de *Blue cheese*.
-- Dû à une erreur dans la méthode *reset*, qui remplaçait le monde
-  affiché actuellement par le monde qu'on venait de remettre à zéro.
-**** DONE Permettre à l'utilisateur d'écourter le replay
-- Lorsque l'utilisateur rejoue l'exécution de son programme, il n'a
-  pas d'autres choix que d'attendre la fin de l'animation pour pouvoir
-  naviguer de nouveau entre les étapes.
-- Il devrait pouvoir stopper l'animation (avec les boutons *reset* et *last* ?)
-**** DONE Fixer les buggles décalés
-- Si le monde n'est pas carré, les buggles ne sont pas correctement alignés sur le damier
-**** DONE Etudier les options de codeMirror
-- Auto-complétion des {}, ()... => Add-on [[http://codemirror.net/doc/manual.html#addon_closebrackets][closebrackets]]
-- Suggestion de mots-clés => Add-on [[http://codemirror.net/doc/manual.html#addon_show-hint][show-hint]]
-- Indentation par défaut => Option *tabSize* à passer dans la directive AngularJS
-**** DONE Mettre en valeur le message d'erreur reçu lorsqu'on n'a pas réussi un exercice
-- Message affiché dans l'onglet "Result", mais rien n'indique que quelque chose de nouveau y est écrit.
-- Maintenant sélectionne l'onglet "Result" automatiquement lorsqu'il est mis à jour.
-**** DONE Fix la compilation en Scala
-- J'ai tenté de jouer avec les versions de Scala utilisées (2.10, 2.11) et avec l'origine de la dépendance (PLM ou webPLM) pour corriger le bug, sans succès.
-- Je suis tombé sur [[http://stackoverflow.com/questions/27470669/scala-reflect-internal-fatalerror-package-scala-does-not-have-a-member-int][ce sujet]] traitant d'un problème similaire, mais aucune réponse n'a été proposée.
-- Lancer l'application avec *activator start* au lieu de *activator run* permet de "résoudre" le problème!
-**** DONE Bloquer les actions utilisateurs pendant le changement du langage de programmation
-- Empêcher l'utilisateur de changer le langage de programmation actuel alors qu'un programme est en cours.
-**** DONE Ajouter un message de félicitations lorsque l'utilisateur réussit un exercice
-**** DONE Ajouter un bouton permettant de passer à l'exercice suivant
-**** DONE Permettre à l'utilisateur de parcourir la liste des exercices
-**** DONE Permettre à l'utilisateur de passer à l'exercice suivant
-**** DONE Récupérer la liste des exercices pour chaque leçon
-- getRootLectures permet de récupérer les exercices principaux d'une leçon
-- getChildren permet ensuite de récupérer les exercices secondaires
-*** Questions
-**** Pourquoi la compilation de code Scala ne fonctionne pas si on lance l'application en mode développement?
-- Post d'une [[https://groups.google.com/forum/#!topic/play-framework/a_80eHRxbAk][question]] sur la mailing list de *Play Framework* pour demander des explications, en attente d'une réponse.
-**** Y a-t-il un intérêt à extraire la liste des exercices de ExerciseController pour en faire un data service?
-- Un service permettrait de ne récupérer qu'une fois la liste des exercices au début d'une leçon, puisque les données sont conservées entre plusieurs pages.
-- Mais comment le service serait informé du changement de leçon, s'il y en a eu un?
-**** Comment gérer les opérations rajoutées par l'exercice ?
-- Dans l'exercice *Voie du paradis*, les cases sur lesquelles passent
-  le buggle s'illumine d'elles-même au fur et à mesure de l'exécution.
-- Ca correspond à l'ajout d'opérations dans *Program steps* mais qui
-  ne correspondent pas au pas attendu (le buggle avance alors qu'il
-  est écrit qu'il est en train de peindre la case par exemple).
-*** Planned
-**** DONE Fixer la duplication des baggles
-- Un buggle a pu ramassé un baggle et le reposer ailleurs, sans que le baggle original ne soit retiré de la vue du monde.
-- N'a pas réussi à reproduire ce bug depuis que les opérations sont gérées par les entités et non plus par le monde.
-**** DONE Fixer le baggle invisible
-- Lors de la séance de test réalisée avec Gérald sur son Mac, un baggle présent dans l'exercice n'était pas dessiné.
-- N'a pas réussi à reproduire ce bug depuis que les opérations sont gérées par les entités et non plus par le monde.
-**** DONE Refactorer le code concernant le passage au prochain exercice
-- Nettoyer le code
-- Voir pour l'extraire de ExerciseController et en faire un service
-- Code refactoré mais service pas encore implémenté.
-**** DONE Poursuivre le développement de tests unitaires
-** Semaine du <2015-01-27 mar.> au <2015-01-30 ven.>
-*** Done
-**** DONE Rédiger le README du projet
-**** DONE Permettre à l'utilisateur de changer le langage de programmation
-   - Pour chaque exercice, récupérer la liste des langages disponibles
-     et le langage actuellement selectionné.
-   - Afficher cette liste côté client.
-   - La liste doit permettre de changer le langage actuellement
-     sélectionné ainsi que le mode de l'IDE.
-**** DONE Refactorer drawBuggleImage
-   - La méthode actuelle rencontre des difficultés à changer la
-     couleur du Buggle: getImageData permet ed récupérer les pixels
-     représentants l'image et de les modifier, mais ceux-ci
-     correspondent aussi à la cellule sur laquelle se trouve le
-     buggle...
-   - Il faut donc colorier uniquement les pixels du buggle.
-   - Le buggle dessiné n'a pas non plus toujours la bonne taille.
-   - [[http://fabricjs.com/][Fabricjs]] propose des fonctions permettant de manipuler les
-     images, à étudier.
-*** Questions
-**** Pourquoi la compilation de code Scala ne fonctionne pas dans webPLM mais fonctionne dans PLM?
-*** Planned
-**** CANCELLED Refactorer les controllers
-   - Retirer les parties du codes interrogeant le serveur pour
-     récupérer la liste des exercices/les données d'un exercice des
-     controllers et en faire des services à la place.
-   - Actuellement nécessaire d'écouter l'évènement "onmessage" pour
-     traiter les messages provenant du serveur et n'étant pas une
-     réponse à une requête (par exemple "operations"), on peut donc
-     difficilement sortir complètement la logique de communication
-     client/serveur des controllers.
-** Semaine du <2015-01-19 lun.> au <2015-01-23 ven.>
-*** Done
-**** DONE Permettre à l'utilisateur de consulter l'API du monde
-**** DONE Ajouter des tests unitaires côté serveur
-   - Voir [[https://www.playframework.com/documentation/2.3.x/ScalaTestingYourApplication][la documentation de Play]] concernant l'ajout de tests
-     unitaires.
-   - Ajout de tests unitaires pour models.PLM.
-   - Ajout de tests unitaires pour log.RemoteLogWriter.
-**** DONE Retravailler l'interface de l'exerciseur
-   - Revoir le placement des différents composants: consigne, éditeur
-     de code, vue du monde/player.
-   - Ajouter la console de log.
-   - Ajouter le composant "dernier résultat" indiquant si le programme
-     lancé a passé les tests et indiquant l'erreur rencontré dans le
-     cas contraire.
-   - Ajouter une liste des actions réalisées pour chaque monde
-     (alternative au slider).
-   - Lier les nouveaux composants aux données du controller.
-**** DONE Intégrer les collisions avec les murs de BuggleWorld dans WebPLM
-   - Gestion des collisions avec les murs
-     - Transmission du message d'erreur au client
-     - Arrêt de l'exécution du programme
-**** DONE Intégrer les messages au sol de BuggleWorld dans WebPLM
-   - Gestion des messages au sol (attribut content)
-     - Ajout des opérations correspondantes
-     - Représentation des messages dans l'interface cliente
-**** DONE Refactorer l'architecture du projet côté client
-   - Voir les bonnes pratiques listées dans [[https://github.com/johnpapa/angularjs-styleguide][ce guide]] et [[https://github.com/toddmotto/angularjs-styleguide][celui-ci]].
-   - Utilisation de [[http://requirejs.org/docs/commonjs.html][CommonJS]] pour gérer les dépendances?
-     => Non, juste besoin de lister l'ensemble des fichiers JS dans index.html.
-   - Déplacement des directives: une par fichier.
-**** DONE Fix Logger.debug
-   - Rediriger la sortie standard vers l'interface client empêche les
-     messages de debug du serveur de s'afficher.
-   - Ajout d'un LoggerUtils s'occupant de désactiver/réactiver la
-     capture de la sortie lorsque l'on souhaite logger.
-**** DONE Rediriger ce qui est écrit dans la console de la PLM vers l'interface client
-   - Voir Game.setOutputWriter
-   - Ajout de RemoteLogWriter qui redirige la sortie standard vers la websocket.
-**** DONE Fix la démo de RandMouseMaze
-   - Lorsqu'on exécute la démo de cet exercice, le baggle n'est pas
-     ramassé à la fin. De plus, si on recharge la page et relance la
-     démo, la 1ère opération effectuée sera celle ramassant le baggle.
-   - Ajout d'un stepUI à la fin de pickupBaggle
-*** Questions
-*** Planned
 ** du <2014-12-01 lun.> au <2015-01-16 lun.>
 *** Done
 **** DONE S'assurer que la procédure de mise en place de l'environnement de développement décrite ici est complète.
@@ -1198,3 +298,906 @@ case _ => MergeStrategy.first
    - Il reste à déterminer si cette détection automatique est plus
      performante que le refresh manuel de *Foundation*.
 
+** Semaine du <2015-01-19 lun.> au <2015-01-23 ven.>
+*** Done
+**** DONE Permettre à l'utilisateur de consulter l'API du monde
+**** DONE Ajouter des tests unitaires côté serveur
+   - Voir [[https://www.playframework.com/documentation/2.3.x/ScalaTestingYourApplication][la documentation de Play]] concernant l'ajout de tests
+     unitaires.
+   - Ajout de tests unitaires pour models.PLM.
+   - Ajout de tests unitaires pour log.RemoteLogWriter.
+**** DONE Retravailler l'interface de l'exerciseur
+   - Revoir le placement des différents composants: consigne, éditeur
+     de code, vue du monde/player.
+   - Ajouter la console de log.
+   - Ajouter le composant "dernier résultat" indiquant si le programme
+     lancé a passé les tests et indiquant l'erreur rencontré dans le
+     cas contraire.
+   - Ajouter une liste des actions réalisées pour chaque monde
+     (alternative au slider).
+   - Lier les nouveaux composants aux données du controller.
+**** DONE Intégrer les collisions avec les murs de BuggleWorld dans WebPLM
+   - Gestion des collisions avec les murs
+     - Transmission du message d'erreur au client
+     - Arrêt de l'exécution du programme
+**** DONE Intégrer les messages au sol de BuggleWorld dans WebPLM
+   - Gestion des messages au sol (attribut content)
+     - Ajout des opérations correspondantes
+     - Représentation des messages dans l'interface cliente
+**** DONE Refactorer l'architecture du projet côté client
+   - Voir les bonnes pratiques listées dans [[https://github.com/johnpapa/angularjs-styleguide][ce guide]] et [[https://github.com/toddmotto/angularjs-styleguide][celui-ci]].
+   - Utilisation de [[http://requirejs.org/docs/commonjs.html][CommonJS]] pour gérer les dépendances?
+     => Non, juste besoin de lister l'ensemble des fichiers JS dans index.html.
+   - Déplacement des directives: une par fichier.
+**** DONE Fix Logger.debug
+   - Rediriger la sortie standard vers l'interface client empêche les
+     messages de debug du serveur de s'afficher.
+   - Ajout d'un LoggerUtils s'occupant de désactiver/réactiver la
+     capture de la sortie lorsque l'on souhaite logger.
+**** DONE Rediriger ce qui est écrit dans la console de la PLM vers l'interface client
+   - Voir Game.setOutputWriter
+   - Ajout de RemoteLogWriter qui redirige la sortie standard vers la websocket.
+**** DONE Fix la démo de RandMouseMaze
+   - Lorsqu'on exécute la démo de cet exercice, le baggle n'est pas
+     ramassé à la fin. De plus, si on recharge la page et relance la
+     démo, la 1ère opération effectuée sera celle ramassant le baggle.
+   - Ajout d'un stepUI à la fin de pickupBaggle
+*** Questions
+*** Planned
+** Semaine du <2015-01-27 mar.> au <2015-01-30 ven.>
+*** Done
+**** DONE Rédiger le README du projet
+**** DONE Permettre à l'utilisateur de changer le langage de programmation
+   - Pour chaque exercice, récupérer la liste des langages disponibles
+     et le langage actuellement selectionné.
+   - Afficher cette liste côté client.
+   - La liste doit permettre de changer le langage actuellement
+     sélectionné ainsi que le mode de l'IDE.
+**** DONE Refactorer drawBuggleImage
+   - La méthode actuelle rencontre des difficultés à changer la
+     couleur du Buggle: getImageData permet ed récupérer les pixels
+     représentants l'image et de les modifier, mais ceux-ci
+     correspondent aussi à la cellule sur laquelle se trouve le
+     buggle...
+   - Il faut donc colorier uniquement les pixels du buggle.
+   - Le buggle dessiné n'a pas non plus toujours la bonne taille.
+   - [[http://fabricjs.com/][Fabricjs]] propose des fonctions permettant de manipuler les
+     images, à étudier.
+*** Questions
+**** Pourquoi la compilation de code Scala ne fonctionne pas dans webPLM mais fonctionne dans PLM?
+*** Planned
+**** CANCELLED Refactorer les controllers
+   - Retirer les parties du codes interrogeant le serveur pour
+     récupérer la liste des exercices/les données d'un exercice des
+     controllers et en faire des services à la place.
+   - Actuellement nécessaire d'écouter l'évènement "onmessage" pour
+     traiter les messages provenant du serveur et n'étant pas une
+     réponse à une requête (par exemple "operations"), on peut donc
+     difficilement sortir complètement la logique de communication
+     client/serveur des controllers.
+** Semaine du <2015-02-02 lun.>  au <2015-02-06 ven.>
+*** Done
+**** DONE Stocker localement la vitesse d'exécution de l'animation
+- Il serait intéressant pour l'utilisateur que la vitesse d'exécution
+  de l'animations soit conservée entre les exercices/entre les
+  sessions.
+- Utilisation de *localStorage*?
+- Il existe un module *ngStorage* permettant de stocker facilement
+   avec *localStorage* une valeur manipulée par *AngularJS*
+- Implémentation de *ngStorage*.
+- *ngStorage* semble ne plus être maintenu et comporter plusieurs problèmes: [[http://stackoverflow.com/questions/28136231/angularjs-controller-is-caching-in-firefox-and-ie-how-to-disable][voir ce thread]].
+- Implémentation de [[https://github.com/tymondesigns/angular-locker][angular-locker]] à la place.
+**** DONE Fixer le bug de "Program steps" dans le cas d'un monde possédant plusieurs entités
+- Dans certains exercices, tels que BDR, plusieurs entités (buggles
+  dans ce cas là) sont présentes dans le monde. Le programme de
+  l'utilisateur s'exécutant en concurrence sur chacune des entités,
+  les buggles bougent de façon chaotique jusqu'à atteindre l'état
+  final.
+ - A cause de cela, les pas décrits dans "Program steps" ne
+ correspondent pas à un pas d'un buggle mais aux actions de plusieurs,
+  ce qui peut gêner la compréhension du programme.
+- Stocke maintenant les opérations dans les entités et non plus dans
+  un tableau commun au monde.
+- Lorsqu'un *worldStep* est détecté, on n'envoie les opérations que
+  des entités étant marqué comme prête à envoyer.
+**** DONE Permettre à l'utilisateur de sélectionner une leçon en double-cliquant dessus
+- *$location.path* permet de rediriger l'utilisateur vers une nouvelle page
+- *ng-dblclick* permet de détecter un double-clique
+**** DONE Fixer le changement de monde involontaire
+- Dans le 1er exercice de la leçon labyrinthe par exemple, lorsque
+  l'utilisateur exécute son programme, la vue du monde passe toute
+  seule sur la celle de *Blue cheese*.
+- Dû à une erreur dans la méthode *reset*, qui remplaçait le monde
+  affiché actuellement par le monde qu'on venait de remettre à zéro.
+**** DONE Permettre à l'utilisateur d'écourter le replay
+- Lorsque l'utilisateur rejoue l'exécution de son programme, il n'a
+  pas d'autres choix que d'attendre la fin de l'animation pour pouvoir
+  naviguer de nouveau entre les étapes.
+- Il devrait pouvoir stopper l'animation (avec les boutons *reset* et *last* ?)
+**** DONE Fixer les buggles décalés
+- Si le monde n'est pas carré, les buggles ne sont pas correctement alignés sur le damier
+**** DONE Etudier les options de codeMirror
+- Auto-complétion des {}, ()... => Add-on [[http://codemirror.net/doc/manual.html#addon_closebrackets][closebrackets]]
+- Suggestion de mots-clés => Add-on [[http://codemirror.net/doc/manual.html#addon_show-hint][show-hint]]
+- Indentation par défaut => Option *tabSize* à passer dans la directive AngularJS
+**** DONE Mettre en valeur le message d'erreur reçu lorsqu'on n'a pas réussi un exercice
+- Message affiché dans l'onglet "Result", mais rien n'indique que quelque chose de nouveau y est écrit.
+- Maintenant sélectionne l'onglet "Result" automatiquement lorsqu'il est mis à jour.
+**** DONE Fix la compilation en Scala
+- J'ai tenté de jouer avec les versions de Scala utilisées (2.10, 2.11) et avec l'origine de la dépendance (PLM ou webPLM) pour corriger le bug, sans succès.
+- Je suis tombé sur [[http://stackoverflow.com/questions/27470669/scala-reflect-internal-fatalerror-package-scala-does-not-have-a-member-int][ce sujet]] traitant d'un problème similaire, mais aucune réponse n'a été proposée.
+- Lancer l'application avec *activator start* au lieu de *activator run* permet de "résoudre" le problème!
+**** DONE Bloquer les actions utilisateurs pendant le changement du langage de programmation
+- Empêcher l'utilisateur de changer le langage de programmation actuel alors qu'un programme est en cours.
+**** DONE Ajouter un message de félicitations lorsque l'utilisateur réussit un exercice
+**** DONE Ajouter un bouton permettant de passer à l'exercice suivant
+**** DONE Permettre à l'utilisateur de parcourir la liste des exercices
+**** DONE Permettre à l'utilisateur de passer à l'exercice suivant
+**** DONE Récupérer la liste des exercices pour chaque leçon
+- getRootLectures permet de récupérer les exercices principaux d'une leçon
+- getChildren permet ensuite de récupérer les exercices secondaires
+*** Questions
+**** Pourquoi la compilation de code Scala ne fonctionne pas si on lance l'application en mode développement?
+- Post d'une [[https://groups.google.com/forum/#!topic/play-framework/a_80eHRxbAk][question]] sur la mailing list de *Play Framework* pour demander des explications, en attente d'une réponse.
+**** Y a-t-il un intérêt à extraire la liste des exercices de ExerciseController pour en faire un data service?
+- Un service permettrait de ne récupérer qu'une fois la liste des exercices au début d'une leçon, puisque les données sont conservées entre plusieurs pages.
+- Mais comment le service serait informé du changement de leçon, s'il y en a eu un?
+**** Comment gérer les opérations rajoutées par l'exercice ?
+- Dans l'exercice *Voie du paradis*, les cases sur lesquelles passent
+  le buggle s'illumine d'elles-même au fur et à mesure de l'exécution.
+- Ca correspond à l'ajout d'opérations dans *Program steps* mais qui
+  ne correspondent pas au pas attendu (le buggle avance alors qu'il
+  est écrit qu'il est en train de peindre la case par exemple).
+*** Planned
+**** DONE Fixer la duplication des baggles
+- Un buggle a pu ramassé un baggle et le reposer ailleurs, sans que le baggle original ne soit retiré de la vue du monde.
+- N'a pas réussi à reproduire ce bug depuis que les opérations sont gérées par les entités et non plus par le monde.
+**** DONE Fixer le baggle invisible
+- Lors de la séance de test réalisée avec Gérald sur son Mac, un baggle présent dans l'exercice n'était pas dessiné.
+- N'a pas réussi à reproduire ce bug depuis que les opérations sont gérées par les entités et non plus par le monde.
+**** DONE Refactorer le code concernant le passage au prochain exercice
+- Nettoyer le code
+- Voir pour l'extraire de ExerciseController et en faire un service
+- Code refactoré mais service pas encore implémenté.
+**** DONE Poursuivre le développement de tests unitaires
+** Semaine du <2015-02-09 lun.> au <2015-02-13 ven.>
+*** Done
+**** DONE Etablir le plan de la présentation
+**** DONE Créer un dépôt pour la présentation
+- Voir [[https://github.com/MatthieuNICOLAS/IJD-seminar-2015-03-03][ici]].
+**** DONE Prendre en main reveal.js
+- Ajout de [[https://github.com/hakimel/reveal.js][reveal.js]] au dépôt.
+- Utilisation de [[http://johnmacfarlane.net/pandoc/][Pandoc]] pour [[http://johnmacfarlane.net/pandoc/demo/example9/producing-slide-shows-with-pandoc.html][générer les slides]] à partir d'un fichier *Markdown*.
+**** DONE Ajouter l'opération BuggleDontHaveBaggle
+**** DONE Ajouter l'opération CellAlreadyHaveBaggle
+**** DONE Mettre en place les tests unitaires pour le code JS
+- Ajout de [[http://jasmine.github.io/][jasmine]] et de [[http://sinonjs.org/][sinon]] au projet.
+- Création d'une [[http://localhost:9000/specRunner][page]] permettant d'exécuter les tests.
+- Ajout de tests unitaires pour les principales opérations.
+- Ajout de tests unitaires pour les constructeurs des modèles de
+  données.
+- Ajout de tests unitaires pour *BuggleWorld*.
+- Ajout de tests unitaire pour *canvas*.
+*** Questions
+**** Créer le type d'opération "ExceptionOperation" ?
+- Actuellement, il existe un type d'opération spécifique pour chaque
+  au type d'exception existant.
+- Ne faudrait-il mieux pas créer un type d'opération générique
+  possédant juste un nom et un message?
+- Cela permettrait de factoriser le code de la génération des
+  opérations et de leur exécution.
+- Mais cela perdrait en clarté selon moi.
+**** Refactorer BuggleWorld.generateOperation (JS) ?
+- En appliquant *JSHint* sur *BuggleWorld*, j'ai relevé un
+  avertissement généré expliquant que la complexité cyclomatique
+  de *generateOperation* est actuellement trop élevée.
+- Ceci est dû à l'utilisation d'un switch pour déterminer quel
+  constructeur utiliser en fonction des données reçues.
+- Comment pouvons-nous refactorer *generateOperation* pour que sa
+  complexité ne soit plus une source d'avertissement?
+**** Refactorer le code gérant la conversion en JSON des objets Scala ?
+- Les objets Scala du serveur sont transmis au client après avoir été
+  converti au format JSON.
+- Pour chaque type d'objet, une fonction de conversion est définie.
+- Ces fonctions sont actuallement éparpillées dans plusieurs
+  fichiers: *PLMActor* et *ExecutionSpy*
+- Comment mieux gérer cette partie du code? Mise en place d'un utilitaire?
+*** Planned
+**** DONE Préparer la présentation pour le séminaire IJD
+- Travailler le plan de la présentation
+- Voir pour essayer [[https://github.com/hakimel/reveal.js][reveal.js]].
+**** DONE Ajouter des opérations correspondant aux exceptions levées
+- BuggleDontHaveBaggleException
+- CellAlreadyHaveBaggle
+- BuggleInOuterSpaceException
+- "Sorry Dave, I cannot let you use..."
+**** DONE Poursuivre le développement de tests unitaires
+- Ajouter des tests unitaires pour le code JS permettrait de s'assurer de la robustesse du code.
+- Voir comment utiliser [[http://jasmine.github.io/][jasmine]].
+- Voir comment utiliser [[http://sinonjs.org/][sinon]].
+** Semaine du <2015-02-23 lun.> au <2015-02-27 ven.>
+*** Done
+- Refactorer la conversion des objets Java en JSON:
+  - J'ai extrait le code existant des classes principales et l'ai fragmenté en plusieurs classes.
+  - Chacune d'entre elles propose des méthodes pour convertir une classe en JSON.
+- Créer un repo dédié au reporting:
+  - Repository disponible [[https://github.com/MatthieuNICOLAS/PLM-reporting][ici]].
+- Automatisation des tests unitaires de WebPLM
+  - Création d'une tâche *Grunt* permettant de lancer les tests unitaires JavaScript...
+  - ... mais conflit avec /activator test/ qui tente d'accéder aux
+    fichiers de *Grunt* et qui rencontre alors une erreur de droit
+    d'accès...
+  - Conflit évité en utilisant /activator "test-only \*Spec"/ à la place...
+  - ... mais /activator "test-only \*Spec"/ ne déclenche pas
+    l'évènement /test/ nécessaire au [[https://github.com/rossbayer/grunt-sbt][plugin Grunt pour sbt]] pour lancer
+    la tâche *Grunt*.
+  - Finalement j'ai configuré *Travis* pour [[https://github.com/MatthieuNICOLAS/webPLM/blob/master/.travis.yml#L9-L10][lancer les deux scripts de
+    tests]] manuellement et ne pas utiliser de plugin pour lier *Grunt*
+    et *SBT*.
+- Insérer des lignes /read-only/ dans *CodeMirror*
+  - La méthode de *CodeMirror* /markText/ permet de rendre certaines lignes non-modifiables.
+  - Mais /markText/ est incompatible avec /setValue/ => ne peut plus
+    laisser *AngularJS* gérer tout seul le contenu de l'éditeur à
+    l'aide de /ng-model/.
+  - Prototype fonctionnel disponible [[https://github.com/MatthieuNICOLAS/webPLM/tree/read-only-lines][dans cette branche]].
+  - Fonctionne actuellement en repérant un token dans le texte
+  - Rien n'empêche un utilisateur d'ajouter le token dans une de ses
+    lignes, ce qui la rendra après rafraichissement de la page
+    non-modifiable...
+- Service pour la liste des exercices d'une leçon:
+  - Création du service interrogeant le serveur pour récupérer la
+    liste des exercices et la refactorant pour créer un arbre.
+  - /exerciseController/ a été refactoré pour utiliser ce service pour générer son outil de sélection d'un exercice
+  - Mais seulement un objet semble pouvoir écouter les messages reçus par le serveur à moment donné...
+  - ... donc conflit entre /exercisesList/ et /exerciseController/ qui veulent tous les deux écouter le serveur, mais pour des messages différents
+  - A dû refactorer les services /connection/ et /listenersHandler/ pour corriger ce défaut
+*** Questions
+- Lignes en mode /read-only/
+  - Comment spécifier les lignes non-modifiables? A l'aide d'un token
+    ou une autre solution est envisageable?
+  - Si un token est utilisé, comment empêcher un utilisateur de
+    potentiellement se saboter en l'ajoutant à une de ses propres
+    lignes?
+  - Si l'on supprime le token après avoir pris connaissance des lignes
+    à mettre en /read-only/, comment le réinsérer de nouveau avant
+    d'envoyer le code au serveur sachant que le texte a été modifié
+    par l'utilisateur?
+*** Planned
+**** DONE Créer un service récupérant la liste des exercices d'une leçon
+- Méthode *setLesson* déclenchant une requête au serveur pour récupérer la liste des exercices de la leçon
+  - Où appeler cette méthode? Dans le *HomeController*?
+- Fonction *getExercises* retournant la liste des exercices actuellement en mémoire
+  - Fonction utilisée par *ExerciseController*
+**** DONE Création d'un repository dédié au reporting
+**** DONE Refactorer la conversion des objets Java en JSON
+- Mettre en place une (des?) classe(s) utilitaires chargée(s) de convertir les objets en JSON.
+- Retirer le code existant des classes principales.
+**** DONE Automatisation des tests unitaires de WebPLM
+- Voir pour activer *Travis* pour ce projet.
+- Voir pour utiliser [[https://github.com/joescii/sbt-jasmine-plugin][le plugin sbt pour jasmine]] avec ce [[http://perevillega.com/executing-jasmine-tests-in-play-2-dot-0-4/][tutoriel]].
+- Ou [[http://www.position-absolute.com/articles/gluing-together-jasmine-grunt-travis-ci-github-testing-front-end-code-has-never-been-easier/][créer une tâche Grunt pour les tests]] et [[https://github.com/guardian/sbt-grunt-plugin][lancer la tâche Grunt via sbt]].
+
+**** DONE Voir comment spécifier certaines lignes en tant que read-only dans CodeMirror
+  - [[http://codemirror.net/doc/manual.html#markText][A creuser]]
+** Semaine du <2015-03-02 lun.> au <2015-03-06 ven.>
+*** Done
+- Internationalisation
+  - Plusieurs solutions possibles
+  - Soit gérer la localisation côté serveur avec [[https://www.playframework.com/documentation/2.0/ScalaI18N][i18n]]
+    - Dans ce cas, doit déplacer les fichiers HTML et JS dans *app/views* et ajouter *.scala* dans l'extension.
+    - Refactorer tous les fichiers pour remplacer les chaînes de caractères par /@Messages("key")/
+    - Comment gérer les chaînes des fichiers JS utilisant une ou plusieurs variables?
+  - Soit gérer la localisation côté client avec [[https://github.com/julienrf/play-jsmessages][ce plugin]]
+    - Création d'un service interrogeant le serveur pour récupérer la localisation et la mettant à disposition des différents composants
+    - Doit refaire une passe à chaque fois que la vue/le DOM change
+    - Doit ajouter un attribut à l'HTML pour repérer l'ensemble des chaînes à traduire
+    - Mais *délai* au chargement de la page où la traduction n'est pas encore effectuée...
+    - Délai réduit en insérant la traduction directement dans l'HTML et en initialisant le module à partir de là.
+    - Doit ajouter la méthode traduisant le DOM dans chaque directive afin de s'assurer que le DOM soit bien chargé à ce moment là.
+  - Utiliser les deux?
+    - Côté serveur pour tout le texte statique
+    - Côté client pour toutes les chaînes intégrant des variables JS
+    - Mais plus complexe et moins maintenable.
+  - Quel outil utilisé pour rédiger la traduction?
+    - Le format attendu des traductions est [[https://www.playframework.com/documentation/1.2/guide12#aApplicationmodellocalisationa][le suivant]].
+    - [[http://basmussen.github.io/i18n-maven-plugin/index.html][Ce plugin]] semble simple d'utilisation, mais à voir comment le configurer pour l'adapter à nos besoins.
+    - Voir [[http://www.cantamen.com/i18nedit.php][cet outil]] sinon => outil buggé et inutilisable, ne peut même pas ouvrir un fichier de propriétés...
+    - [[http://attesoro.org/][Attesoro]] est aussi facile d'utilisation, mais les fichiers générés ne sont pas ceux attendus par Play => Voir pour renommer les fichiers/modifier la config de Play
+  - *po4a*
+    - Utilisation de *po4a* pour générer les fichiers HTML traduits
+    - Les fichiers HTML traduits sont placés dans le répertoire /public/lang/filepath
+    - Le routing côté serveur a été configuré pour récupérer les fichiers HTML traduits si besoin et possible
+    - *po4a xhtml* ne donne pas le résultat souhaité: les balises et leurs attributs apparaissent dans les msgIds, ce qui complique le travail des traducteurs.
+    - Utilisation de *po4a xml* qui, avec sa configuration par défaut, permet de récupérer uniquement les chaînes de caractères à traduire.
+- Revert
+  - Ajout d'un bouton déclenchant l'envoi d'un message pour réinitialiser l'exercice dans l'UI.
+  - Configuration du serveur pour déclencher la réinitialisation de l'exercice à la réception de ce message et renvoyer le nouvel état de l'exercice au client.
+- Messages correspondant aux opérations
+  - Au lieu de les définir dans le JS (ce qui complique la traduction), ceux-ci sont maintenant définis dans leur classe Java respective.
+  - Modification de la fonction de conversion des opérations Java -> JSON pour aussi envoyer les messages
+  - Reste à traduire ces messages dans PLM
+- "Sorry Dave"
+  - Deux méthodes de SimpleBuggle "empêchaient" le programme de l'utilisateur de terminer avec une exception s'il utilisait /Left/ ou /Right/
+  - Supprimer ces deux méthodes a permis de correctement stopper l'exécution et d'afficher le message d'erreur "Sorry Dave..." dès que l'utilisateur tente d'accèder à une méthode "interdite"
+*** Questions
+- Comment disposer les différents composants de l'interface?
+  - Lesquels sont indispensables? Ceux qu'il faut mettre le plus en avant?
+  - Lesquels l'utilisateur doit-il pouvoir masquer?
+*** Planned
+**** DONE Refactorer les opérations pour gérer le message côté serveur
+- Actuellement, le message correspondant à une opération affiché dans les "Program Steps" est défini côté client, en JS.
+- Pour faciliter sa traduction, il faudrait plutôt le définir dans PLM directement.
+**** DONE Pouvoir redémarrer un exercice
+- Appeler la méthode /revert/ de PLM
+**** DONE Supporter l'internationalisation
+- Voir cette [[https://github.com/MatthieuNICOLAS/webPLM/issues/1][issue]].
+- [[https://github.com/julienrf/play-jsmessages][Plugin intéressant]]?
+** Semaine du <2015-03-09 lun.> au <2015-03-13 ven.>
+*** Done
+- Améliorer l'interface graphique
+  - Redisposition des éléments
+  - Meilleure gestion de la taille de l'éditeur de code et de la représentation du monde
+  - Ajout d'un bouton permettant d'étendre/réduire à sa taille par défaut le bloc contenant les instructions pour une meilleure lecture
+  - Ces modifications ont été mergées dans la branche master
+- Refactorer setLocale
+  - setLocale, pour mettre à jour la description d'une leçon/la consigne d'un exercice, re-set la leçon et l'exercice courant.
+  - J'ai donc modifié setLocale pour que cette méthode ne se contente que de définir la langue à utiliser.
+  - Puisque à terme, une instance de Game correspondra à une session d'utilisation, j'ai modifié PLMActor pour qu'il définisse la langue à utiliser à son instanciation.
+  - Voir la partie *Questions*
+- Empêcher l'utilisateur de modifier le cookie indiquant sa langue
+  - Puisque la langue de l'utilisateur n'est pas une donnée sensible, crypter la valeur actuelle du cookie paraît démesuré.
+  - On se contente donc de supprimer le cookie si la langue indiquée n'est pas supportée.
+- Ajout du service *langs* :
+  - Interroge le serveur pour récupérer la liste des langues supportées par l'application
+  - Stocke la langue actuelle dans un cookie 
+- Ajout de la directive *selectLang*
+  - Interagit avec *langs* pour afficher la langue actuelle et la liste des langues supportées
+  - Indique à l'utilisateur que l'application a besoin de redémarrer pour prendre en compte le changement de langue
+  - Permet à l'utilisateur de changer la langue sélectionnée
+- Déployer une version de démonstration
+  - A partir de [[https://github.com/opensas/play2-openshift-quickstart][cet exemple]], j'ai pu mettre en ligne *webPLM* sur *Openshift*
+  - L'application est donc testable [[webplm-editorcrdt.rhcloud.com][ici]]
+  - Reste à voir pour contrôler l'accès pour prévenir les bugs liés au singleton Game.
+- Déclencher une BuggleInOuterSpaceException lorsque les coordonnées sont négatives
+  - Il a suffit d'ajouter un /throw new BuggleInOuterSpaceException/ si l'utilisateur appelle setX/setY/setPos avec un paramètre négatif
+*** Questions
+- Aller plus loin dans le refactoring de setLocale?
+  - Quand l'utilisateur change la langue de l'application, je ne vois pas comment mettre à jour la page (notamment l'HTML des directives AngularJS) sans forcer l'utilisateur a rechargé la page
+  - A terme, recharger la page implique la destruction du couple "Acteur - PLM" courant et l'instanciation d'un nouveau
+  - J'ai donc modifié PLM pour que la langue doive être définie à son instanciation
+  - Ca implique que pour que le changement de langue soit pris en compte, l'utilisateur doit redémarrer le serveur actuellement (car PLM est instanciée au lancement du serveur et que le singleton persiste jusqu'à son interruption)
+  - Faut-il refactorer setLocale pour qu'il mette dynamiquement à jour tout son contenu lors d'un changement de langue, évitant ainsi à l'utilisateur de redémarrer le serveur, sachant que cela sera inutile dès lors que Game ne sera plus un singleton?
+  - Ou se contenter pour le moment d'afficher un message invitant l'utilisateur à redémarrer le serveur pour que les changements soient pris en compte?
+*** Planned
+**** DONE Améliorer l'outil de sélection d'un exercice
+- Plus le mettre en valeur (revoir le label du bouton?)
+- Empêcher l'utilisateur de cliquer sur "Switch to" lorsqu'aucun exercice n'est actuellement choisi
+- Lorsque l'utilisateur sélectionne un exercice principal de la liste de gauche, il faudrait que celui-ci soit aussi sélectionné dans la liste de droite
+**** DONE Déclencher une BuggleInOuterSpaceException lorsque les coordonnées sont négatives
+- L'utilisateur peut actuellement affecter des valeurs négatives aux coordonnées du Buggle via setX/setY/setPos.
+- Il faudrait l'en empêcher en levant une exception s'il essaie.
+**** DONE Déployer une version de démonstration
+- Si PLM doit être présentée, une version de démonstration accessible facilement pourrait se révéler utile.
+**** DONE Ajouter des opérations correspondant aux exceptions levées
+- BuggleInOuterSpaceException
+**** DONE Ajouter à l'UI un composant permettant de choisir la langue du programme
+- Ajouter un service AngularJS :
+  - Disposant de la liste des langues supportées par l'application
+  - Pouvant accéder et manipuler les cookies de l'utilisateur
+- Ajouter la directive AngularJS servant d'interface entre l'utilisateur et le service précédemment décrit
+**** DONE Empêcher l'utilisateur de modifier le cookie indiquant sa langue
+- Lorsque l'utilisateur souhaite changer la langue de l'application, je stocke le code de la nouvelle langue choisie dans un cookie
+- Mais un cookie est modifiable en JS
+- L'utilisateur peut donc modifier sa valeur actuelle pour une valeur random, ce qui empêche l'application de fonctionner correctement (le client n'arrive plus à charger les fichiers HTML)
+- Il faut donc mettre en place un mécanisme empêchant la modification du cookie par l'utilisateur:
+  - Cryptage du cookie?
+  - Destruction du cookie si valeur inconnue?
+**** DONE Corriger bug setLocale
+- Lorsqu'on sélectionne certains exercices (tel que celui de la Moria) puis qu'on recharge la page, le serveur plante.
+- L'exception levée provient à priori d'un appel à setLocale qui débouche sur une NullPointerException
+- Voir pour corriger ce bug/refactorer setLocale
+**** DONE Améliorer l'interface graphique
+- Redisposer les éléments de l'UI pour que l'éditeur de code soit côte à côte avec la vue du monde
+** Semaine du <2015-03-16 lun.> au <2015-03-20 ven.>
+*** Done
+- Correction du bug des baggles invisibles:
+  - Remplacer /DefaultColors.BAGGLE/ par une couleur par défaut tel que /orange/ permet de corriger le bug, le problème semble donc venir de /DefaultColors.BAGGLE/.
+  - Après quelques tests, j'ai remarqué qu'il suffisait de retirer le ';' à la fin de la chaîne 'rgb(209, 105, 31);'
+- Correction des solutions Scala des exercices 2 et 3 de la leçon welcome
+  - Après de nouveaux tests, il s'avère que seulement l'entité /welcome.instructions.ScalaInstructionsEntity/ bug.
+  - Le bug semble provenir du package incorrect de cette classe.
+  - Pourquoi le test d'intégration recherchant les leçons cassées ne l'a pas détecté?
+  - L'exception déclenchée lorsqu'une entité solution n'est pas trouvée est catchée dans /run()/ de *DemoRunner*.
+  - Ajout d'un test lançant la solution à l'aide de *DemoRunner* et détectant si une exception est lancée:
+  - A permis de corriger /welcome.instructions.ScalaInstructionsEntity/ mais aussi /welcome.loopdowhile.ScalaPoucet1Entity/
+- Correction des tests unitaires de Git
+  - Récupération de la valeur de la propriété autorisant le traçage des utilisateurs au lancement des tests.
+  - Autorise le traçage des utilisateurs pendant la durée du test, puis remet l'ancienne valeur.
+- Correction des [[https://github.com/MatthieuNICOLAS/webPLM/issues][issues ouvertes sur GitHub]]
+  - Ajout d'un effet de surbrillance lorsqu'on passe la souris sur un bouton de la barre de menu en haut ([[https://github.com/MatthieuNICOLAS/webPLM/issues/10][fix #10]]).
+  - Ajout d'un bouton "Not yet" à la pop-up invitant l'utilisateur à passer à l'exercice suivant lorsqu'il réussit un exercice ([[https://github.com/MatthieuNICOLAS/webPLM/issues/11][fix #11]]).
+- Ne pas crasher lorsqu'on accède à un exercice non-supporté ([[https://github.com/MatthieuNICOLAS/webPLM/issues/3][fix #3]])
+  - Ajout de l'exception /NonImplementedWorldException/
+  - Ajout du champ /exception/ dans le JSON transmis au client spécifiant l'exception rencontrée, s'il y en a une.
+  - Ajout d'un message d'avertissement indiquant à l'utilisateur que la représentation du monde n'est pas disponible.
+- Améliorer le fonctionnement du canvas
+  - Update du canvas à raison de 10 fois par seconde.
+  - L'utilisateur peut uniquement contrôler le nombre d'opérations appliquées durant ce temps au modèle.
+  - La vitesse d'application des opérations variant de toutes les 40ms à toutes les 3s.
+  - J'ai remarqué que si l'utilisateur naviguer manuellement à travers les états du modèle alors que l'exécution n'est pas terminée (donc que le nombre d'états n'est pas encore fixé), les performances chutent énormement.
+  - Tant que l'exécution du programme n'est pas terminée, les boutons de navigation sont donc inactifs.
+- Tester ngTranslate
+  - Finalement j'ai décidé d'utiliser [[https://angular-gettext.rocketeer.be/][angular-gettext]] pour son efficacité, sa simplicité d'utilisation et sa doc complète.
+  - Mis en place *angular-gettext* et traduit l'application.
+  - Il reste cependant quelques conflits avec les composants de *Foundation* (les tooltips et les alerts ne sont pas correctement mis à jour après un changement de langue).
+- Refactorer setLocale de PLM
+  - Se contente de mettre à jour *i18n* et d'avertir les *HumanLangListeners* du changement de langue
+  - *Lesson* et *Lecture* sont maintenant des *HumanLangListeners*
+  - Ils mettent donc à jour l'énoncé/la description de la leçon dès que la langue est changée
+  - Le serveur avertit le client lorsque le changement de langue a été effectué de son côté
+  - Le client redemande alors le contenu de PLM qui l'intéresse
+    - La description des leçons si on est sur la page /Home/
+    - L'énoncé de l'exercice si on est sur la page /Exercise/
+- Traduire l'API d'un monde lors d'un changement de langue
+  - Il a suffit de mettre à jour l'API du 1er monde initial dans *Exercise* quand /currentHumanLanguageHasChanged/ est appelée
+  - Le client demande donc aussi l'API lorsque la langue est modifiée alors qu'il est sur la page /Exercise/
+- Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
+  - On se contente d'envoyer le nouveau texte de la consigne lors d'un changement de langage de programmation et de mettre à jour l'UI.
+*** Questions
+*** Planned
+**** DONE Ne pas redimensionner l'éditeur de code en fonction du canvas dans un exercice non-supporté
+- L'éditeur de code est actuellement redimensionné pour avoir les mêmes proportions que la représentation du monde
+- Si l'exercice n'est pas supporté, le canvas n'est pas affiché.
+- Si l'utilisateur redimensionne la fenêtre ensuite, la taille de l'éditeur de code est mise à jour et il devient à son tour invisible.
+- Revoir comment l'éditeur de code est redimensionné
+**** DONE Traduire l'API d'un monde lors d'un changement de langue
+- Pour récupérer l'API d'un monde, il faut interroger une instance de ce monde.
+- Il faudrait faire de *World* un *HumanLangListener*
+- Mais afin d'éviter les fuites mémoires, il faut faire attention à gérer correctement les add/removeHumanLangListener
+- Voir si on peut pas simplifier la chose en retirant l'API d'un monde de ses instances
+**** DONE Mettre à jour le texte de la consigne lorsqu'on change de langage de programmation
+- Lorsqu'on change de langage de programmation, il faut recharger le texte de la consigne afin que les exemples de code correspondent au nouveau langage selectionné.
+**** DONE Refactorer setLocale de PLM
+- setLocale de PLM devrait juste mettre à jour la langue de *i18n*
+- Le contenu de PLM chargé devrait être re-traduit.
+- Le client doit interroger le serveur pour mettre à jour son interface.
+**** DONE Tester ngTranslate
+- Voir [[http://angular-translate.github.io/][ce module]] ou [[https://github.com/StephanHoyer/ng-translate][celui-ci]].
+- Permettrait de modifier dynamiquement les chaînes de caractères de l'interface sans devoir recharger la page
+- Modifier la mise à jour du contenu de PLM lors d'un changement de langue
+**** DONE Ne pas crasher lorsqu'on accède à un exercice non-supporté ([[https://github.com/MatthieuNICOLAS/webPLM/issues/3][fix #3]])
+- Déclencher une exception lorsque le monde qu'on essaie de convertir un monde non-supporté en JSON.
+- Catcher l'exception et insérer dans le JSON un champ pour prévenir le client que le monde n'est pas supporté.
+- Vérifier côté client la valeur de ce champ et afficher un message d'avertissement s'il est présent.
+**** DONE Corriger les tests unitaires de Git
+- Certains tests unitaires de Git (ceux qui accèdent à un repo distant) échouent si la propriété autorisant le traçage des utilisateurs est à *false*.
+- Modifier les tests pour ne pas tenir compte de cette propriété.
+**** DONE Corriger les solutions Scala des exercices 2 et 3 de la leçon welcome
+- Un problème semble survenir à l'exécution des solutions de ces exercices
+- Ceci empêche l'utilisateur de consulter le monde objectif/d'observer la démo
+- Il suffit alors de cliquer sur /Run/ sans rien faire pour valider l'exercice.
+**** DONE Corriger bug des baggles invisibles
+- Les baggles n'apparaissent pas sur certains navigateurs:
+  - Chrome Canary sous Mac OS
+  - Firefox sous Linux
+- Mais les démonstrations que l'on peut trouver sur Internet de canvas sont compatibles avec ces navigateurs
+- Revoir la méthode /drawBaggle/ pour trouver la raison de ce bug.
+** Semaine du <2015-03-23 lun.> au <2015-03-27 ven.>
+*** Done
+- Adapter BatWorld
+  - Transmet l'état initial du BatWorld au client
+  - A la fin de l'exécution du programme client, envoie le nouvel état
+  - On se contente de transmettre le résultat et de le stocker côté client (pas d'opérations faisant évoluer le modèle "pas-à-pas")
+  - Ajout d'un modèle pour BatWorld côté client.
+- Retravailler ExerciseController
+  - Tous les mondes n'ont pas besoin d'un canvas pour être dessiné
+  - Il fallait donc refactorer ExerciseController pour qu'il soit capable de gérer plusieurs services de dessin (un pour canvas, un pour le DOM...)
+  - Tous les mondes n'ont pas non plus besoin d'un monde objectif, d'une démo, d'un historique...
+  - Ajout de variables permettant de retirer dynamiquement les composants de l'interface inutiles pour un exercice
+- Ajout du service *drawWithDOM*
+  - Possèdera à terme plusieurs méthodes de dessin (une pour chaque monde supporté)
+  - Lorsqu'un monde est choisi, il sélectionne la méthode de dessin appropriée
+- Représenter *BatWorld* avec *drawWithDOM*
+  - Se contente d'injecter une directive AngularJS dans le DOM
+  - Celle-ci affiche les tests visibles en ajoutant du style selon les paramètres supplémentaires
+- Refactoring de la gestion des méthodes de dessin
+  - Les méthodes de dessin sont contenues dans des objets spécifiques, les vues
+  - Lorsque le controller instancie un modèle, il fournit aussi au service de dessin la méthode de la vue qui correspond
+  - Ajout de *BatWorldView* selon cette architecture
+- Refactorer le service canvas
+  - Ajout de *BuggleWorldView* regroupant les méthodes de dessin jusque là contenues dans *BuggleWorld*, *BuggleWorldCell*...
+  - Modification de canvas pour la méthode dessin utilisée lui soit fournie par le controller.
+  - Adaptation des tests unitaires pour canvas à ce nouveau fonctionnement.
+- Sortir la boucle de dessin du controller
+  - Tout d'abord, gérer la boucle de dessin dans le service de dessin paraît peu adapté car redondant 
+  - Ensuite, sortir la boucle de dessin du controller peut être nécessaire si on considère que certains mondes n'en ont pas la nécessité (BatWorld par exemple)
+  - Mais si l'on considère que tous les mondes possèdent une ou plusieurs étapes, alors son fonctionnement ne dépend pas du monde.
+  - Il ne reste plus que la création d'un service dédié.
+  - L'intérêt me paraît faible pour le moment.
+- Voir pour améliorer la gestion de la boucle dessin
+  - Il est conseillé d'utiliser $timeout et $interval au lieu de setTimeout et setInterval lorsqu'on utilise AngularJS
+  - Ceci a permis de se passer de l'instruction  /$scope.$apply()/
+- Mise à jour des librairies utilisées
+  - Passage d'AngularJS 1.3.6 à AngularJS 1.3.15
+  - Apparition d'un bug avec le routing côté client:
+    - /$location.redirect/ n'était plus accepté par *angular-ui-router*
+    - Refactoring de *HomeController* pour utiliser plutôt les méthodes mises à disposition par *angular-ui-router*
+- Téléchargement des librairies en local
+  - Ne passe plus par un CDN pour récupérer les librairies *JS* et *CSS*
+  - Ca augmentera la charge serveur (le client interrogera désormais le serveur pour récupérer les librairies au lieu de se tourner vers le CDN)
+  - Mais ça permet à l'utilisateur de travailler sans connexion internet si le serveur est lancé en local
+- Corriger bug AngularJS avec ng-bind-html/Program Steps
+  - L'erreur provient d'une mauvaise utilisation de jQuery par AngularJS [[https://github.com/jquery/sizzle/issues/309][(voir ici)]].
+  - Télécharger jQuery et déclarer /element.getAttribute/ si la méthode n'existe pas suffit à résoudre le problème.
+  - Voir pour une meilleure solution?
+- Adapter TurtleWorld pour webPLM
+  - Ajout des objets et des méthodes Scala pour convertir le monde initial en JSON
+  - Ajout des modèles du monde et des opérations côté client
+- Refactorer Game
+  - J'ai commencé à modifier Game pour qu'il ne soit plus un singleton
+*** Questions
+- Refactorer les Program Steps
+  - A chaque étape du programme, AngularJS est configuré pour ajouter un noeud HTML contenant une phrase décrivant l'action.
+  - Lorsque le programme compte plusieurs centaines d'étapes (Moria par exemple en possède plus de 500), la manipulation du DOM ralentit l'application.
+  - Comment résoudre ce problème?
+    - Au lieu de créer un noeud par étape, créer un noeud qui va contenir les descriptions (du simple texte) de tous les noeuds?
+      - Mais dans ce cas, on perd la possibilité d'associer une étape à une ligne.
+    - Limiter le nombre d'étapes affichées?
+      - Ne charger que les étapes voisines de l'étape actuelle
+	- Voir les performances de cette solution
+      - N'afficher que des intervalles d'étapes et permettre à l'utilisateur d'explorer les intervalles qui l'intéressent
+*** Planned
+**** DONE Corriger bug d'AngularJS avec ng-bind-html
+- Lorsqu'on affiche de l'HTML provenant de PLM dans l'interface, nous utilisons l'attribut /ng-bind-html/ pour l'insérer dans un élément du DOM
+- Cependant, lorsqu'on modifie l'HTML affiché (la consigne est traduite dans une autre langue par exemple), une erreur est levé par *AngularJS*
+- Cas bizarre:
+  - Sur la page de sélection d'une leçon, aucune erreur n'est généré lorsqu'on passe d'une description d'une leçon à une autre...
+  - ... sauf si l'on a démarré l'application sur une autre page (l'exerciseur par exemple) et qu'on s'est ensuite redirigé vers l'accueil...
+**** DONE Corriger les erreurs liées aux Program Steps
+- Lorsqu'on exécute son programme, puis qu'on bascule sur la vue objectif d'un monde, une erreur d'AngularJS est générée pour chaque *Program Steps*
+- Voir pour identifier l'origine de cette erreur
+- Cette erreur n'apparaît pas non plus si on accède à l'appli depuis l'accueil
+**** DONE Mettre à jour les librairies utilisées
+- Voir si ça corrige pas le bug d'AngularJS avec ng-bind-html ou celui avec les Program Steps
+**** DONE Voir pour améliorer la gestion de la boucle dessin
+- Remplacer setTimeout/Interval par $timeout/interval
+- /$scope.$apply()/ nécessaire?
+**** CANCELLED Sortir la boucle de dessin du controller
+- La boucle d'animation devrait se trouver dans le service de dessin ou dans la vue d'un monde et non pas dans le controller.
+**** DONE Refactorer le service canvas
+- Voir pour sortir la méthode de dessin du monde des Buggles du modèle
+- La méthode de dessin devrait se trouver dans un objet prévu pour.
+**** DONE Adapter BatWorld pour webPLM
+- Création de BatWorld côté client
+  - Besoin de créer un modèle de données côté client?
+  - Ou on se contente d'envoyer le résultat (chaîne de caractère + error ou pass) ?
+- Modification de l'interface client
+  - Pas vraiment besoin d'un canvas pour ce monde
+  - Une directive AngularJS semble suffire
+** Semaine du <2015-03-30 lun.> au <2015-04-03 ven.>
+*** Done
+- Suppression des composants de l'ancienne UI.
+  - Il reste toutefois des boîtes de dialogues (*JOptionPane*) par endroits
+- Refactorer Game
+  - Remplacement des /Game.getInstance()/ par le passage en paramètre du constructeur d'une instance de Game
+  - Suppression de la fonction /Game.getInstance()/
+  - Refactoring des classes nécessitant faisant appel à /Game.getInstance()/ pour récupérer un attribut (i18n et programmingLanguage majoritairement)
+    - Le refactoring a consisté principalement à ajouter un attribut *game* à ces classes et à modifier leur(s) constructeur(s) en conséquence.
+- Corriger bug BatWorld
+  - On appelle stepUI() dans *BatEntity* uniquement pour indiquer aux espions que le monde a évolué
+  - stepUI() avertit le spy ajouté par le serveur qu'il peut envoyer la liste d'opérations au client
+  - L'erreur survient ensuite, dans le code ajoutant du délai dans l'exécution pour limiter la vitesse de l'animation dans Swing
+  - Ce code n'étant plus nécessaire, on peut se contenter de le supprimer
+  - Sinon, pour référence, la *NullPointerException* provenait de l'instruction /game.stepModeEnabled()/ de stepUI()
+    - Depuis le refactoring de *Game* en tant que classe et non singleton, les entités ont besoin d'avoir une instance de *Game* en tant que paramètre.
+    - J'ai juste oublié de passer l'instance de *Game* au constructeur de *BatEntity*
+- Corriger bug boucle infinie récursive
+  - Dans les *BatExercises*, on exécute la solution une première fois pour calculer la valeur de *expected* à partir de la valeur de *result* obtenue
+  - Si on déclenche une boucle infinie, le thread est tué avant d'avoir modifié *result*, qui conserve alors sa dernière valeur...
+  - Mettre *result* à *null* après avoir obtenu *expected* a suffit à résoudre le problème.
+- Fixer les tests des entités solutions
+  - L'origine de ce bug semble provenir du constructeur par défaut manquant, maintenant que j'ai ajouté *game* en paramètre
+  - Ajouter un constructeur sans paramètre corrige ce bug.
+  - Cependant des erreurs sont toujours présentes dans ces mondes
+- Améliorer la gestion de la machine TELECOM Nancy
+  - Création d'un hook *pre-receive*
+  - Création d'un hook *post-receive*
+  - Déclaration des variables d'environnement sur le serveur
+  - Mais bugs:
+    - Les variables d'environnement non pas l'air d'être prises en compte (déclarées dans .bash_profile, est-ce qu'elles sont pas chargées avant un git push?)
+    - Message d'erreur "On ne peut pas mettre à jour la branche courante"
+    - A tenté de checkout une autre branche le temps de l'update depuis le script *pre-receive* mais message d'erreur "n'est pas un repo Git" (à revérifier)
+- Empêcher LightBot de faire crasher le serveur
+  - LightBotWorld héritant de *GridWorld*, il n'était pas considéré comme non-supporté
+  - Lève désormais une *NonImplementedWorldException* dans *GridWorldToJson* aussi
+  - Mais bug si on démarre un exo LightBot et qu'on change avant d'avoir exécuter son programme (lastResult != null alors qu'il ne devrait pas à mon sens)
+    - GitSpy essaie alors d'enregistrer les fichiers correspondant au code de l'utilisateur
+    - Mais lastResult.language == JAVA alors que l'exercice n'est disponible qu'en LightBot
+    - Le SourceFile à mettre à jour est alors introuvable
+  - Pour le moment, je réinitialise le lastResult lorsqu'on change de langage de programmation pour éviter ce bug.
+- Ajout de ProgLangListener
+  - Permet de mieux gérer le changement du langage de programmation
+- Ajout de HumanLangListener
+  - Permet de mieux gérer le changement de langue
+*** Questions
+- Gestion des comptes utilisateurs
+  - Comment gérer les comptes utilisateurs?
+  - Proposition 1: avant la connexion à webPLM, demander à l'utilisateur de lui fournir un UUID ou lui proposer d'en générer un?
+    - Constructeur de Game prend en paramètre l'UUID pour retrouver la bonne session
+    - Si UUID passé est inconnu, le refuser ou le créer?
+  - Proposition 2: gestion des comptes classiques
+    - On demande à l'utilisateur de s'inscrire à l'aide d'un pseudo, d'une @mail et d'un mot de passe
+    - On lui associe un UUID et on stocke le couple dans une BDD
+  - Question annexe: Pouvoir utiliser la PLM sans session?
+    - Game instancié sans identifiant de session
+    - Pas de conservation des traces utilisateurs 
+- Gestion des différents langages de programmation
+  - Actuellement, les objets utilisés pour compiler et exécuter le code de l'élève dans chaque langage de programmation sont des singletons.
+  - Faut-il mieux garder ces objets de cette manière?
+  - Ou les refactorer pour que chaque utilisateur instancie son compilateur et son exécuteur pour chaque langage de programmation.
+*** Planned
+**** DONE Empêcher LightBot de faire crasher le serveur
+- Identifier la source du plantage
+**** DONE Refactorer Game
+- Modifier Game pour qu'il ne soit plus un singleton
+**** DONE Corriger bug boucle infinie récursive
+- Si l'utilisateur déclenche une boucle infinie d'appel récursif dans les exercices Bat
+  - L'exécution de son programme est correctement stoppée par le système...
+  - Mais le programme indique que l'utilisateur a réussi l'exercice...
+- Dans un autre type d'exercice (j'ai testé avec celui de la Moria)
+  - L'exécution du programme est aussi stoppée par le système...
+  - Mais le programme compare le résultat avec le monde solution et détecte l'erreur de l'utilisateur
+- Trouver l'origine de ce bug
+**** DONE Corriger bug BatWorld
+- Dans [[https://github.com/MatthieuNICOLAS/webPLM/tree/79062db63585156e786cad9e5ae6f6414688cf71][cette version]] de webPLM, une NullPointerException est levée dans stepUI() lorsque l'utilisateur exécute son programme sur un BatExercise.
+- Comme une exception a été levé, l'exercice n'est pas validé.
+- Voir d'où provient cette exception.
+- Bug non présent dans [[https://github.com/MatthieuNICOLAS/webPLM/tree/b13c0c3720dad5a4917cb98dee41eae68a913e59][cette version précédente]].
+** Semaine du <2015-04-07 mar.> au <2015-04-10 ven.>
+*** Done
+- Fixer tâche Ant de tests
+  - Ajout de haltonfailure="true" haltonerror="true" dans la configuration des tâches de tests de Ant.
+- Fixer les tests des entités solutions
+  - Suppression du constructeur des entités prenant en paramètre un Game
+  - A la place, les entités récupèrent le game du monde qu'il leur est fourni.
+  - Mais le bug suivant reste à résoudre:
+    - Pour certaines entités, la classe compilée est incorrecte (il manque le *Entity*)
+    - En effet, la classe compilée s'appelle par exemple *DutchFlagAlgo* au lieu de *DutchFlagAlgoEntity*
+    - L'instanciation de cette entité échoue donc.
+    - L'erreur apparaît dans tous les langages de programmation mais l'erreur n'est fatale qu'en Java.
+    - *tabName* sert comme nom de la classe compilée
+    - Si on a défini un constructeur, le nom de celui-ci doit correspondre au *tabName*
+    - Il a donc suffit de retirer les constructeurs que j'avais ajouté lors du refactoring de Game pour corriger ces bugs.
+- Améliorer la gestion du monde objectif
+  - Si on bascule sur le monde objectif et que la démo n'a pas encore été jouée, on l'exécute
+- Corriger BatWorld
+  - La NullPointerException provient de l'instruction /ProgrammingLanguage pl = game.getProgrammingLanguage();/
+  - Il s'agissait d'une erreur d'affectation de game dans le constructeur.
+- Améliorer la gestion de la machine TELECOM Nancy
+  - Création d'un webhook dans GitHub
+  - Définition d'une signature secrète
+  - Création d'un serveur
+    - Code disponible [[https://github.com/MatthieuNICOLAS/webhook-handler][ici]] 
+    - Le serveur met à disposition un service pour lancer le script pour redémarrer webPLM
+    - Ce service est accessible par le biais d'une requête POST
+    - La signature de la requête doit correspondre à celle définie dans le webhook GitHub
+  - Le serveur NodeJS est maintenu en ligne grâce à [[https://github.com/foreverjs/forever][forever]].
+  - Refactoring des git hooks précédemment développé pour implémenter un nouveau script pour redémarrer webPLM
+    - Kill webPLM si le serveur est déjà en route
+    - Supprime le fichier RUNNING_PID
+    - Redémarre webPLM
+  - Il suffit maintenant de pusher sur la branche *prod* de *WebPLM* pour que le serveur se mette à jour automatiquement
+- Mettre en place un Logger dans PLM
+  - PLM définit une interface de Logger
+    - Un Logger doit avoir une méthode log pour logger les messages sur le serveur
+    - Un Logger doit avoir une méthode send pour logger les messages sur l'interface cliente
+  - Le constructeur de Game prend maintenant en paramètre un Logger
+  - Dans webPLM, on définit une classe implémentant cette interface
+  - Finalement, ce n'est pas le logger qui se charge de traduire les messages
+    - On a pas forcément envie de traduire tous les messages (les logs serveurs par exemple)
+    - Tout le texte traduit n'est pas loggé non plus (consignes des exercices...)
+  - J'ai remplacé la majorité des /System.out.println/ par des /logger.log/
+*** Questions
+*** Planned
+**** DONE Mettre en place un Logger dans PLM
+- Actuellement dans PLM, on remplace *System.out* et *System.err* pour capturer les messages
+- Mettre en place un *Logger* paraît plus propre
+- Le *Logger* posséderait l'outil de traduction des messages
+- Un paramètre permettrait de spécifier si le message est loggé côté serveur ou côté client.
+**** DONE Améliorer la gestion de la machine TELECOM Nancy
+- Utiliser des git hooks pour:
+  - Stopper la JVM lorsqu'un push est reçu (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/stop][ce script]])
+  - Relancer le serveur d'appli après la mise à jour des fichiers (s'inspirer de [[https://github.com/opensas/play2-openshift-quickstart/blob/master/.openshift/action_hooks/start][celui-ci]])
+**** DONE Corriger BatWorld
+- La conversion des entités BatTests en JSON rencontre une NullPointerException
+- Voir d'où vient cette erreur
+**** DONE Améliorer la gestion du monde objectif
+- Lorsqu'on passe sur la vue objectif d'un monde, celui-ci est encore dans son état initial.
+- Il faut lancer la démo pour que l'objectif apparaisse.
+- Voir pour :
+  - Lancer la démo automatiquement lorsqu'on bascule sur la vue objectif la 1ère fois
+  - Récupérer à l'initialisation l'état objectif 
+**** DONE Fixer les tests des entités solutions
+- Une erreur est déclenchée lorsqu'on reset certains mondes (Pancakes, Dutchflag, Hanoi)
+- La copie des entités de ces mondes lors d'un reset échoue, déclenchant l'erreur
+**** DONE Fixer SimpleExerciseTest
+- Ces tests échouent puisque l'on passe à une leçon sans l'avoir chargé.
+- Revoir le constructeur de SimpleExerciseTest
+**** DONE Fixer tâche Ant de tests
+- Si une erreur survient lors des tests, le build n'est pas marqué comme *failed*
+- Des bugs ont donc pu passer inaperçus
+- Corriger ce bug
+** Semaine du <2015-04-13 lun.> au <2015-04-17 ven.>
+*** Done
+- Refactorer le système de traduction
+  - Suppression de l'attribut *locale* de *FileUtils*
+    - *locale* est maintenant un paramètre passé lors de la lecture d'un fichier
+  - Ajout de l'attribut *locale* dans *Game*
+    - Le constructeur possède maintenant un argument supplémentaire
+    - Les getters/setters sont modifiés pour fonctionner avec l'attribut *locale* de *Game*, et non celui de *FileUtils*
+  - L'attribut *i18n* n'est plus /static/
+    - Les objets/méthodes en ayant besoin pour traduire des messages ont été refactorés
+- Mise en place du Trello
+  - Disponible à cette adresse: https://trello.com/b/zdQyQX6N/plm
+- Mise en place d'une BDD
+  - SQL
+    - *Play Framework* propose d'utiliser  *Java Persistence API*: https://www.playframework.com/documentation/2.3.x/JavaJPA
+    - [[http://slick.typesafe.com/][Slick]] peut être une alternative.
+    - Reste à voir quel SGBD utiliser ?
+      - H2
+      - MySQL
+  - NoSQL
+    - [[https://github.com/ReactiveMongo/Play-ReactiveMongo][ReactiveMongo]] permet d'utiliser *MongoDB* à la place
+    - Moins pratique à utiliser que JPA
+    - Voir pour mettre en place [[http://hibernate.org/ogm/][Hibernate OGM]] plutôt?
+  - Play + Hibernate OGM + MongoDB
+    - Après avoir tenté tant bien que mal à mettre en place le tout, je rencontre tjrs une erreur au lancement de l'appli
+    - Malgré plusieurs [[http://docs.jboss.org/hibernate/ogm/4.1/reference/en-US/pdf/hibernate_ogm_reference.pdf][refs]], j'ai pas réussi à débugger l'appli
+    - Je n'ai pas réussi non plus à trouver d'exemples complets avec cet ensemble de technos
+  - Kundera
+    - Semble être une alternative à Hibernate OGM mais compatible avec Play
+    - [[https://github.com/impetus-opensource/Kundera/wiki/Using-Kundera-with-Play!-Framework][Voir ce tuto]]
+  - Reactive Mongo
+    - Il existe un [[https://github.com/ReactiveMongo/Play-ReactiveMongo][plugin ReactiveMongo pour Play]].
+    - J'ai pu réaliser rapidement un [[https://github.com/MatthieuNICOLAS/webPLM/tree/098a79d9790a2710cef711b611bca092bd6238f5][prototype fonctionnel]].
+- Gestion des comptes utilisateurs
+  - OAuth permet de rediriger l'utilisateur vers un site externe (Google, GitHub)
+  - Une fois l'utilisateur loggé sur ce site, on lui demande le droit d'acceder à certaines fonctionnalités de ce site
+  - Dans notre cas, on veut juste (pour le moment) récupérer un identifiant unique
+  - [[https://developer.github.com/v3/oauth/][OAuth pour GitHub]]
+    - [[http://typesafe.com/activator/template/play-oauth2-scala][Voir cet exemple]]
+    - A voir pour trouver un identifiant unique dans la réponse de GitHub
+  - [[https://developers.google.com/identity/protocols/OpenIDConnect?csw=1#authenticatingtheuser][OAuth pour se log via Google]]
+    - En décodant l'ID token de la réponse grâce à ces [[https://developers.google.com/wallet/instant-buy/about-jwts#jwt_libraries][informations]], on peut récupérer l'attribut *sub*
+    - Il s'agit d'un ID unique de l'utilisateur chez Google
+  - Une fois qu'on a récupérer un ID unique via un service, on peut l'utiliser pour créer son compte/récupérer son compte
+  - Mettre en place [[https://github.com/mohiva/play-silhouette][Silhouette]]
+    - Module pour Play Framework supportant déjà l'authentification par le biais de différents services
+    - [[https://github.com/mohiva/play-silhouette-seed][Voir cet exemple]]
+    - Utilise [[https://github.com/sahat/satellizer][Satellizer]]
+  - Données stockées
+    - ID
+    - Git ID
+    - Provider? (Google, FB, GitHub...)
+    - Lang
+    - ProgLang
+*** Questions
+- Qui interagit avec la BDD pour récupérer le profil de l'utilisateur?
+  - L'acteur instancie un utilisateur à partir de la BDD?
+  - Le modèle utilisateur s'instancie à partir de la BDD?
+*** Planned
+**** DONE Mise en place d'une BDD
+- Voir les technos disponibles
+- Mettre en place la solution choisie
+- Interfacer WebPLM avec la BDD
+**** DONE Mettre en place Trello
+- Pour que Olivier Kautz puisse suivre facilement l'évolution du projet et les tâches en cours
+**** DONE Refactorer le système de traduction
+- Actuellement, *i18n* est un attribut static de *Game*
+- Devrait y avoir une instance par utilisateur pour que les actions d'un utilisateur ne perturbent pas avec les autres utilisateurs
+- Obliger de changer l'objet *Locale* de la JVM?
+- Ou l'on peut se contenter de conserver l'objet *Locale* désiré dans la session de l'utilisateur pour générer les traductions?
+** Semaine du <2015-04-20 lun.> au <2015-04-24 ven.>
+*** Done
+- Mettre en place Silhouette
+  - Tuto pour Play + AngularJS: https://github.com/mohiva/play-silhouette-angular-seed
+  - A mergé ce tuto dans WebPLM
+  - Refactoring du code:
+    - Suppression des fichiers inutiles
+    - Modification de l'architecture pour s'adapter à celle de WebPLM
+  - Ajout de la page d'authentification
+  - Ajout de "Sign in with *Google*"
+  - Ajout de "Sign in with *GitHub*"
+  - Fusion avec la branche /add-reactivemongo/
+- Difficultés rencontrées:
+  - Adapter l'exemple de *Silhouette* avec le code existant
+  - Dans l'exemple, on gère l'authentification avec des controllers
+  - Dans notre cas, on veut que ça soit l'acteur correspondant à la websocket du client qui gère ça
+    - Permet de mettre à jour l'instance de PLM avec les informations retrouvées dans la BDD après authentification
+  - Refactoring de l'acteur
+    - Quelles dépendances ajouter?
+      - Seulement l'environnement?
+      - Qui instancie ces dépendances? Controller? Actor lui-même? Injector?
+  - Refactoring de *Satellizer*
+    - Ne doit plus se baser sur une API Rest mais sur un protocole de communication avec la websocket
+- Couplage Controller/Acteur
+  - Finalement, plutôt que de refactorer le fonctionnement de *Silhouette*, il est plus simple d'indiquer à l'acteur que son utilisateur vient de se connecter
+  - Pour ça, ajout d'un UUID aux acteurs, qui sont transmis à leur utilisateur respectif
+  - Lors qu'un utilisateur s'identifie auprès d'un controller, celui retrouve l'acteur à l'aide de l'UUID et lui envoie un message
+- Implémentation de UserDAO pour Mongo
+  - Permet à l'utilisateur de s'enregistrer dans la BDD à sa 1ère connexion
+  - Son profil est récupéré lors de ses connexions suivantes
+  - Correction d'un bug dupliquant son profil à chacune de ses connexions
+*** Questions
+*** Planned
+**** DONE Implémenter la gestion des comptes utilisateurs
+- Se renseigner sur OAuth
+- Définir les données stockées
+- Créer le modèle correspondant
+- Ajouter le formulaire de création de compte
+  - *EDIT:* Séparé dans une autre tâche
+** Semaine du <2015-04-27 lun.> au <2015-04-30 jeu.>
+*** Done
+- Mettre en place la création de compte PLM
+  - Ajout du controller *SignUp* et des directives correspondantes
+  - L'utilisateur peut créer un compte, se déconnecter, se reconnecter...
+  - Mais 
+- Ajouter les identifiants Git dans les comptes utilisateurs
+  - L'identifiant Git est pour le moment connu uniquement dans le coeur de PLM
+  - Il faudrait que le service d'authentification soit en mesure de le récupérer pour l'associer au compte de l'utilisateur lors de sa création
+  - Refactorer le système d'utilisateurs dans PLM:
+    - Si les comptes utilisateurs sont gérés par webPLM, on n'a plus besoin de les gérer dans PLM
+*** Questions
+*** Planned
+**** DONE Mettre en place la création de compte PLM
+- *Silhouette* propose déjà un système de création de compte
+- Le mettre en place et l'adapter pour webPLM
+**** TODO Ajouter les identifiants Git dans les comptes utilisateurs
+- Lorsqu'un utilisateur se connecte au site, un identifiant Git doit être généré
+- Lorsque l'utilisateur s'identifie pour la 1ère fois  (via un compte PLM ou un site tiers), cet identifiant lui est associé
+- Lorsqu'il s'authentifie les prochaines fois, l'instance de PLM doit changer d'utilisateur pour passer sur son compte
+**** TODO Fixer bug empêchant les utilisateurs de se connecter après un redémarrage serveur
+- Si le serveur redémarre, les comptes précédemment créés deviennent inaccessibles
+  - Ils existent toujours mais l'authentification échoue
+  - L'erreur générée est [[https://github.com/MatthieuNICOLAS/webPLM/blob/add-silhouette/app/controllers/CredentialsAuthController.scala#L77][celle-ci]]
+**** TODO Corriger changement de langue et selection d'exos
+- Si on change de langue et qu'on accède à la liste des exos, cette dernière n'est pas traduite
+- Mettre à jour la liste des exercices lors d'un changement de langue
+**** TODO Extraire les préférences de l'utilisateur de Game
+- C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
+- Les préférences de l'utilisateur comporte la langue, le langage de programmation...
+- Elles sont stockées actuellement dans un fichier de propriétés Java
+- Mettre en place une BDD à la place
+- Gérer ça dans un composant séparé
+**** TODO Extraire le gestionnaire de session de Game
+- Les données de la session courante font partie de *Game*
+- La session courante de l'utilisateur comprend la leçon sélectionnée, l'exercice en cours, les mondes de travail...
+- En faire un composant séparé
+**** TODO Extraire le contenu commun de Game
+- Plusieurs éléments sont communs à tous les utilisateurs
+- Les leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...
+- Extraire ces objets de la classe *Game*
+**** TODO Finaliser le système de traduction
+- Au cours du refactoring, j'ai dû remplacer /Direction.toString/ par /Direction.direction2translated/
+  - Voir où était appelé /Direction.toString/ pour mettre à jour le code
+**** TODO Finaliser le script redémarrant webPLM
+- Voir pour killer /activator start/ qui reste actif et bouffe des ressources actuellement
+- Dans le fichier de log du script, le PID indiqué après le redémarrage du serveur n'est pas le bon.
+- Voir pour rediriger les logs de webPLM dans un fichier
+**** TODO Finaliser le système de log
+- Les diagnostics d'erreurs lors de la compilation/de l'exécution ne sont pas loggés correctement
+  - Par exemple /javax.tools.DiagnosticCollector@5e2be792/
+  - Corriger ça
+- Il reste des /System.out.println/ dans les classes des langages de programmation
+  - Comment les remplacer?
+- Voir quels sont les messages loggés actuellement qu'il faudrait plutôt faire parvenir au client
+**** TODO Refactorer les Program Steps
+- Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
+- Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
+**** TODO Adapter TurtleWorld pour webPLM
+- Implémenter la vue du monde
+**** TODO Améliorer l'interaction directives/controllers
+- Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
+- Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
+- Voir pour prévenir ce genre de bugs
+  
