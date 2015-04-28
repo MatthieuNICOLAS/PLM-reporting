@@ -1141,7 +1141,9 @@ case _ => MergeStrategy.first
 - Mettre en place la création de compte PLM
   - Ajout du controller *SignUp* et des directives correspondantes
   - L'utilisateur peut créer un compte, se déconnecter, se reconnecter...
-  - Mais 
+  - Mais après un redémarrage du serveur, impossible de se reconnecter à son compte...
+    - Bug dû à l'oubli de l'implémentation d'un nouveau DAO store pour les mots de passe
+    - Ajout d'un nouveau *PasswordInfoDAO* utilisant MongoDB pour stocker les mots de passe
 - Ajouter les identifiants Git dans les comptes utilisateurs
   - L'identifiant Git est pour le moment connu uniquement dans le coeur de PLM
   - Il faudrait que le service d'authentification soit en mesure de le récupérer pour l'associer au compte de l'utilisateur lors de sa création
@@ -1152,14 +1154,14 @@ case _ => MergeStrategy.first
 **** DONE Mettre en place la création de compte PLM
 - *Silhouette* propose déjà un système de création de compte
 - Le mettre en place et l'adapter pour webPLM
+**** DONE Fixer bug empêchant les utilisateurs de se connecter après un redémarrage serveur
+- Si le serveur redémarre, les comptes précédemment créés deviennent inaccessibles
+  - Ils existent toujours mais l'authentification échoue
+  - L'erreur générée est [[https://github.com/MatthieuNICOLAS/webPLM/blob/add-silhouette/app/controllers/CredentialsAuthController.scala#L77][celle-ci]]
 **** TODO Ajouter les identifiants Git dans les comptes utilisateurs
 - Lorsqu'un utilisateur se connecte au site, un identifiant Git doit être généré
 - Lorsque l'utilisateur s'identifie pour la 1ère fois  (via un compte PLM ou un site tiers), cet identifiant lui est associé
 - Lorsqu'il s'authentifie les prochaines fois, l'instance de PLM doit changer d'utilisateur pour passer sur son compte
-**** TODO Fixer bug empêchant les utilisateurs de se connecter après un redémarrage serveur
-- Si le serveur redémarre, les comptes précédemment créés deviennent inaccessibles
-  - Ils existent toujours mais l'authentification échoue
-  - L'erreur générée est [[https://github.com/MatthieuNICOLAS/webPLM/blob/add-silhouette/app/controllers/CredentialsAuthController.scala#L77][celle-ci]]
 **** TODO Corriger changement de langue et selection d'exos
 - Si on change de langue et qu'on accède à la liste des exos, cette dernière n'est pas traduite
 - Mettre à jour la liste des exercices lors d'un changement de langue
@@ -1200,4 +1202,3 @@ case _ => MergeStrategy.first
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
 - Voir pour prévenir ce genre de bugs
-  
