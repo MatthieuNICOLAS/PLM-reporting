@@ -1147,7 +1147,7 @@ case _ => MergeStrategy.first
 - Ajouter les identifiants Git dans les comptes utilisateurs
   - L'identifiant Git est pour le moment connu uniquement dans le coeur de PLM
   - Il faudrait que le service d'authentification soit en mesure de le récupérer pour l'associer au compte de l'utilisateur lors de sa création
-    - [ ] soit l'id Git est transmis au client qui le retransmet au controller d'inscription
+    - [X] soit l'id Git est transmis au client qui le retransmet au controller d'inscription
     - [ ] soit lorsque le controller d'inscription interroge l'acteur du client pour récupérer l'id Git
   - Refactorer le système d'utilisateurs dans PLM:
     - Si les comptes utilisateurs sont gérés par webPLM, on n'a plus besoin de les gérer dans PLM
@@ -1156,15 +1156,19 @@ case _ => MergeStrategy.first
   - Reste à voir pour récupérer le code du nouvel utilisateur
     - Lorsqu'on démarre une leçon, l'ensemble du code de l'utilisateur courant pour les exercices de cette leçon est récupéré
     - Lorsqu'on change d'utilisateur, il faut donc
-      - [ ] soit supprimer les instances de leçons existantes
+      - [X] soit supprimer les instances de leçons existantes
       - [ ] soit mettre à jour ces dernières avec les nouveaux paramètres (langage de prog, langue, code source utilisateur...)
+  - Mise en place d'un cookie *GitID*
+    - Si l'utilisateur ne possède pas de compte, nous utilisons ce cookie pour retrouver sa session
+    - Lorsqu'il créé un compte, la valeur de ce cookie est associé à son compte
+    - Plus besoin de ce cookie lorsqu'on possède un compte, il n'est donc plus utilisé ensuite
 *** Questions
 - Un repo Git est créé à chaque connexion
   - Par exemple, lorsqu'un utilisateur arrive sur le site, un repo Git lui est *momentanément* attribué
-  - Lorsqu'il s'identifie avec son compte (manuellement ou avec son cookie), on lui réattribue son repo Git habituel
+  - Lorsqu'il s'identifie avec son compte (manuellement ou avec son token), on lui réattribue son repo Git habituel
   - Que faire du repo Git momentanément utilisé?
     - Le garder et envoyer la trace sur le repo *GitHub*
-      - Le marquer en tant que *momentané* à l'aide d'un fichier/d'un token dans l'id?
+      - Le marquer en tant que *momentané* à l'aide d'un fichier ou d'un token dans l'id?
     - Le supprimer à la connexion de l'utilisateur?
       - Dans ce cas, on limite le nombre de branches vides
       - Mais il peut arriver qu'on supprime un repo d'un utilisateur car un autre utilisateur s'est loggé ensuite
@@ -1176,7 +1180,7 @@ case _ => MergeStrategy.first
 - Si le serveur redémarre, les comptes précédemment créés deviennent inaccessibles
   - Ils existent toujours mais l'authentification échoue
   - L'erreur générée est [[https://github.com/MatthieuNICOLAS/webPLM/blob/add-silhouette/app/controllers/CredentialsAuthController.scala#L77][celle-ci]]
-**** TODO Ajouter les identifiants Git dans les comptes utilisateurs
+**** DONE Ajouter les identifiants Git dans les comptes utilisateurs
 - Lorsqu'un utilisateur se connecte au site, un identifiant Git doit être généré
 - Lorsque l'utilisateur s'identifie pour la 1ère fois  (via un compte PLM ou un site tiers), cet identifiant lui est associé
 - Lorsqu'il s'authentifie les prochaines fois, l'instance de PLM doit changer d'utilisateur pour passer sur son compte
