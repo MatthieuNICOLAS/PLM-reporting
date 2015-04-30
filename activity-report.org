@@ -1162,6 +1162,9 @@ case _ => MergeStrategy.first
     - Si l'utilisateur ne possède pas de compte, nous utilisons ce cookie pour retrouver sa session
     - Lorsqu'il créé un compte, la valeur de ce cookie est associé à son compte
     - Plus besoin de ce cookie lorsqu'on possède un compte, il n'est donc plus utilisé ensuite
+- Corriger changement de langue et selection d'exos
+  - Les exos sont maintenant enregistrés en tant que *HumanLangListener* à leur instanciation, et non pas quand l'utilisateur les sélectionne.
+  - Le service JS gérant la liste des exercices interroge de nouveau le serveur lorsqu'il reçoit un message indiquant que la langue a changé.
 *** Questions
 - Un repo Git est créé à chaque connexion
   - Par exemple, lorsqu'un utilisateur arrive sur le site, un repo Git lui est *momentanément* attribué
@@ -1184,7 +1187,7 @@ case _ => MergeStrategy.first
 - Lorsqu'un utilisateur se connecte au site, un identifiant Git doit être généré
 - Lorsque l'utilisateur s'identifie pour la 1ère fois  (via un compte PLM ou un site tiers), cet identifiant lui est associé
 - Lorsqu'il s'authentifie les prochaines fois, l'instance de PLM doit changer d'utilisateur pour passer sur son compte
-**** TODO Corriger changement de langue et selection d'exos
+**** DONE Corriger changement de langue et selection d'exos
 - Si on change de langue et qu'on accède à la liste des exos, cette dernière n'est pas traduite
 - Mettre à jour la liste des exercices lors d'un changement de langue
 **** TODO Extraire les préférences de l'utilisateur de Game
@@ -1224,3 +1227,6 @@ case _ => MergeStrategy.first
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
 - Voir pour prévenir ce genre de bugs
+**** TODO Mettre en place un repo Maven PLM
+- Plutôt que de compiler PLM à chaque modification et de mettre le jar dans le répertoire /lib/ de webPLM, il faudrait que PLM soit une dépendance Maven pour webPLM
+- Voir comment migrer le projet vers Maven ou un autre système de build (SBT? Gradle?) permettant de déboucher sur la mise en place d'un repo Maven
