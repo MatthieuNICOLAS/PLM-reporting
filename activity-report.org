@@ -1202,10 +1202,11 @@ case _ => MergeStrategy.first
   - Si l'utilisateur n'avait pas encore de gitID, on lui envoie un message pour qu'il set son cookie
   - Si l'utilisateur reçoit un nouveau gitID alors qu'il se croit authentifié, c'est que son token a expiré => suppression du token
   - Reste à transmettre l'identité de l'utilisateur à l'acteur
-    - Passer l'objet user au constructeur de PLMActor
+    - Ajout d'un constructeur PLMActor prenant l'objet user en paramètre
+    - Envoie les données du profil au client
 *** Questions
 *** Planned
-**** TODO Améliorer le workflow lors de la connexion d'un utilisateur
+**** DONE Améliorer le workflow lors de la connexion d'un utilisateur
 - Lorsqu'un utilisateur se connecte
   - Vérifier s'il est déjà authentifié
     - Si oui, récupérer son gitID et le transmettre à l'acteur lors de son instanciation
