@@ -1210,6 +1210,16 @@ case _ => MergeStrategy.first
   - Refactoring au passage de la méthode appelée à chaque changement d'onglet
     - Vérifie si l'on passe sur un nouveau monde avant d'appeler /setCurrentWorld/
     - Vérifie si l'on passe sur une nouvelle méthode de dessin avant d'appeler /setDrawFnct/
+- Gérer les erreurs lors de la connexion d'un utilisateur
+  - Modification de /user.service/ pour retourner la promise lorsqu'on appelle les méthodes de /$auth/
+  - Ajout de blocs /catch/ pour gérer l'erreur rencontrée par la requête
+  - Affichage d'un message selon l'erreur rencontrée
+- Extraire les préférences de l'utilisateur de Game
+  - Gestion de la langue
+    - Ajout de la langue préférée dans le modèle User
+    - Lorsque l'utilisateur s'inscrit, on stocke sa langue actuelle
+    - Lorsque l'utilisateur change de langue, s'il est authentifié, on modifie la valeur stockée
+    - Lorsque l'utilisateur se connecte, s'il est authentifié, on récupère en priorité la langue de son profil
 *** Questions
 - Emettre un feedback pour l'utilisateur lorsque celui-ci se connecte/déconnecte?
   - Afficher un écran de chargement lorsqu'on interroge le serveur pour authentifier l'utilisateur
@@ -1232,18 +1242,28 @@ case _ => MergeStrategy.first
   - On exécute la démo plusieurs fois et on stocke l'ensemble des opérations générées
   - La démo devient inconsistente
 - Ne pas relancer la démo si celle-ci est déjà en cours d'exécution
-**** TODO Gérer les erreurs lors de la connexion d'un utilisateur
+**** DONE Gérer les erreurs lors de la connexion d'un utilisateur
 - Crédentials incorrects
 - Refus d'autoriser PLM à interroger le compte tiers si on essaie de se connecter via un provider
-**** TODO Améliorer la connexion via un provider
+**** DONE Ajouter le style des boutons de connexion via un provider
 - Styliser les boutons *g+* et *GitHub* pour correspondre à leur service respectif
-- Ajouter d'autres providers (Twitter? Facebook?)
 **** TODO Extraire les préférences de l'utilisateur de Game
 - C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
 - Les préférences de l'utilisateur comporte la langue, le langage de programmation...
 - Elles sont stockées actuellement dans un fichier de propriétés Java
 - Mettre en place une BDD à la place
 - Gérer ça dans un composant séparé
+**** TODO Ajouter d'autres providers 
+- Twitter?
+- Facebook?
+**** TODO Permettre aux utilisateurs de changer leur mot de passe
+**** TODO Ajouter la fonctionnalité "j'ai oublié mon mot de passe"
+- Voir [[https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet][cette page]]
+**** TODO Empêcher une attaque de type "Brute force" pour récupérer les mots de passe de la BDD
+- [[https://www.owasp.org/index.php/Authentication_Cheat_Sheet#Prevent_Brute-Force_Attacks][Cette page]] rassemble diverses bonnes pratiques nécessaires à un mécanisme d'authentification
+- Une des recommandations est de mettre en place un mécanisme empêchant une attaque de type "Brute force"
+- Pour cela, il "suffit" de désactiver temporairement un compte lorsque plusieurs tentatives de connexion avec un mot de passe erroné ont été détectées
+- Implémenter ce mécanisme
 **** TODO Extraire le gestionnaire de session de Game
 - Les données de la session courante font partie de *Game*
 - La session courante de l'utilisateur comprend la leçon sélectionnée, l'exercice en cours, les mondes de travail...
@@ -1278,3 +1298,8 @@ case _ => MergeStrategy.first
 **** TODO Mettre en place un repo Maven PLM
 - Plutôt que de compiler PLM à chaque modification et de mettre le jar dans le répertoire /lib/ de webPLM, il faudrait que PLM soit une dépendance Maven pour webPLM
 - Voir comment migrer le projet vers Maven ou un autre système de build (SBT? Gradle?) permettant de déboucher sur la mise en place d'un repo Maven
+**** TODO Rédiger la documentation de WebPLM
+- Voir quels outils de documentation utiliser
+- Documenter les composants et leurs méthodes
+- Documenter le protocole de communication de la websocket entre le client et le serveur
+- Documenter le système de traduction
