@@ -1204,7 +1204,17 @@ case _ => MergeStrategy.first
   - Reste à transmettre l'identité de l'utilisateur à l'acteur
     - Ajout d'un constructeur PLMActor prenant l'objet user en paramètre
     - Envoie les données du profil au client
+- Corriger la démo se lançant plusieurs fois simultanément
+  - Le flag permettant de déterminer si la démo a déjà été jouée est mis à vrai dès le lancement de la démo
+  - Ceci prévient le fait de re-interroger le serveur si la démo est toujours en cours
+  - Refactoring au passage de la méthode appelée à chaque changement d'onglet
+    - Vérifie si l'on passe sur un nouveau monde avant d'appeler /setCurrentWorld/
+    - Vérifie si l'on passe sur une nouvelle méthode de dessin avant d'appeler /setDrawFnct/
 *** Questions
+- Emettre un feedback pour l'utilisateur lorsque celui-ci se connecte/déconnecte?
+  - Afficher un écran de chargement lorsqu'on interroge le serveur pour authentifier l'utilisateur
+  - Afficher un message pour informer l'utilisateur qu'il s'est correctement connecté
+  - Afficher un message pour informer l'utilisateur qu'il s'est correctement déconnecté
 *** Planned
 **** DONE Améliorer le workflow lors de la connexion d'un utilisateur
 - Lorsqu'un utilisateur se connecte
@@ -1215,6 +1225,19 @@ case _ => MergeStrategy.first
       - Sinon, générer un UUID aléatoire et le transmettre à l'acteur lors de son instanciation
 - Pour cela, il faut vérifier l'identité de l'utilisateur à la création de la websocket
   - Voir pour fusionner Application et ApplicationController
+**** DONE Corriger demo se lançant plusieurs fois simultanément
+- Maintenant la démo se lance automatiquement lorsqu'on bascule sur la vue objectif
+- Si on a noté que la démo a déjà été jouée, on se contente de rejouer les opérations reçues
+- Mais si l'utilisateur bascule plusieurs fois sur la vue objectif avant que la démo n'ait finie de s'exécuter
+  - On exécute la démo plusieurs fois et on stocke l'ensemble des opérations générées
+  - La démo devient inconsistente
+- Ne pas relancer la démo si celle-ci est déjà en cours d'exécution
+**** TODO Gérer les erreurs lors de la connexion d'un utilisateur
+- Crédentials incorrects
+- Refus d'autoriser PLM à interroger le compte tiers si on essaie de se connecter via un provider
+**** TODO Améliorer la connexion via un provider
+- Styliser les boutons *g+* et *GitHub* pour correspondre à leur service respectif
+- Ajouter d'autres providers (Twitter? Facebook?)
 **** TODO Extraire les préférences de l'utilisateur de Game
 - C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
 - Les préférences de l'utilisateur comporte la langue, le langage de programmation...
