@@ -1229,6 +1229,12 @@ case _ => MergeStrategy.first
     - Lorsque PLM instancie *Game*, il lui fournit le dernier language de programmation utilisé ou "Java" par défaut
     - Lorsque l'utilisateur change de langage de programmation, s'il est authentifié, on met à jour la valeur stockée
   - Reste à faire la gestion du tracking de l'utilisateur
+- Finaliser le script redémarrant webPLM
+  - Correction du PID affiché dans le fichier de log du script
+  - Rediriger les logs de webPLM dans un fichier
+    - Les logs ne sont pas redirigés dans le fichier si on démarre le serveur avec /activator start/
+    - Par contre, avec /activator run/, les logs sont bien ajoutés au fichier
+    - Voir [[http://logback.qos.ch/manual/index.html][la doc]] de *logback* pour modifier la configuration des logs
 *** Questions
 - Emettre un feedback pour l'utilisateur lorsque celui-ci se connecte/déconnecte?
   - Afficher un écran de chargement lorsqu'on interroge le serveur pour authentifier l'utilisateur
