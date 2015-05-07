@@ -1220,6 +1220,15 @@ case _ => MergeStrategy.first
     - Lorsque l'utilisateur s'inscrit, on stocke sa langue actuelle
     - Lorsque l'utilisateur change de langue, s'il est authentifié, on modifie la valeur stockée
     - Lorsque l'utilisateur se connecte, s'il est authentifié, on récupère en priorité la langue de son profil
+    - Suppression du cookie pour la langue si on est authentifié
+    - Amélioration au passage des messages entre client/serveur lors d'un changement de langue pour éviter les doublons
+  - Gestion du langage de programmation
+    - Modification du constructeur de Game pour prendre en paramètre le langage de programmation initial
+    - Modification du modèle User: ajout de l'attribut /lastProgLang: Option[String]/
+    - Ajout du paramètre /lastProgLang: Option[String]/ au constructeur de PLMActor et de PLM
+    - Lorsque PLM instancie *Game*, il lui fournit le dernier language de programmation utilisé ou "Java" par défaut
+    - Lorsque l'utilisateur change de langage de programmation, s'il est authentifié, on met à jour la valeur stockée
+  - Reste à faire la gestion du tracking de l'utilisateur
 *** Questions
 - Emettre un feedback pour l'utilisateur lorsque celui-ci se connecte/déconnecte?
   - Afficher un écran de chargement lorsqu'on interroge le serveur pour authentifier l'utilisateur
@@ -1253,7 +1262,7 @@ case _ => MergeStrategy.first
 - Elles sont stockées actuellement dans un fichier de propriétés Java
 - Mettre en place une BDD à la place
 - Gérer ça dans un composant séparé
-**** TODO Ajouter d'autres providers 
+**** TODO Ajouter d'autres providers
 - Twitter?
 - Facebook?
 **** TODO Permettre aux utilisateurs de changer leur mot de passe
