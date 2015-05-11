@@ -1262,6 +1262,20 @@ case _ => MergeStrategy.first
 - Refus d'autoriser PLM à interroger le compte tiers si on essaie de se connecter via un provider
 **** DONE Ajouter le style des boutons de connexion via un provider
 - Styliser les boutons *g+* et *GitHub* pour correspondre à leur service respectif
+** Semaine du <2015-05-11 lun.> au <2015-05-13 mer.>
+*** Done
+- Finaliser le script redémarrant webPLM
+  - Rediriger les logs de webPLM dans un fichier
+    - En fait, les logs sont correctement effectués
+    - Ils sont juste stockés à un emplacement différent: *target/universal/stage/logs/application.log* au lieu de *logs/application.log* en mode développement
+    - Au passage, j'ai modifié la configuration de logging pour ne stocker les logs qu'un certain temps (30 jours actuellement)
+  - Voir pour killer /activator start/ qui reste actif et bouffe des ressources actuellement
+    - Kill *activator* 30 secondes après son démarrage
+*** Planned
+**** DONE Finaliser le script redémarrant webPLM
+- Voir pour killer /activator start/ qui reste actif et bouffe des ressources actuellement
+- Dans le fichier de log du script, le PID indiqué après le redémarrage du serveur n'est pas le bon.
+- Voir pour rediriger les logs de webPLM dans un fichier
 **** TODO Extraire les préférences de l'utilisateur de Game
 - C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
 - Les préférences de l'utilisateur comporte la langue, le langage de programmation...
@@ -1290,10 +1304,6 @@ case _ => MergeStrategy.first
 **** TODO Finaliser le système de traduction
 - Au cours du refactoring, j'ai dû remplacer /Direction.toString/ par /Direction.direction2translated/
   - Voir où était appelé /Direction.toString/ pour mettre à jour le code
-**** TODO Finaliser le script redémarrant webPLM
-- Voir pour killer /activator start/ qui reste actif et bouffe des ressources actuellement
-- Dans le fichier de log du script, le PID indiqué après le redémarrage du serveur n'est pas le bon.
-- Voir pour rediriger les logs de webPLM dans un fichier
 **** TODO Finaliser le système de log
 - Les diagnostics d'erreurs lors de la compilation/de l'exécution ne sont pas loggés correctement
   - Par exemple /javax.tools.DiagnosticCollector@5e2be792/
