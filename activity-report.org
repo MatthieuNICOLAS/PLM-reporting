@@ -1301,9 +1301,19 @@ case _ => MergeStrategy.first
 - Elles sont stockées actuellement dans un fichier de propriétés Java
 - Mettre en place une BDD à la place
 - Gérer ça dans un composant séparé
+**** TODO Ajouter un système de notification
+- Un système de notifications basé sur [[http://codeseven.github.io/toastr/demo.html][toastr]] ou une alternative permettrait de rendre le site plus dynamique
+  - Une notification pour indiquer que la connexion/déconnexion s'est correctement déroulée
+  - Une notification pour indiquer que les préférences de l'utilisateur ont bien été mises à jour
+  - Une notification pour indiquer que la websocket a été fermée et qu'un problème est survenue, invitant l'utilisateur à recharger la page
 **** TODO Ajouter d'autres providers
 - Twitter?
 - Facebook?
+**** TODO Rédiger un README pour PLM-data
+- Lorsqu'on demande à l'utilisateur s'il souhaite rendre ses données d'utilisation publique, un lien lui permet d'accéder [[https://github.com/mquinson/PLM-data][au repo]]
+- Un README expliquant les données stockées et leur format aurait plusieurs utilités:
+  - Un utilisateur lambda pourrait visualiser et comprendre quelles sont ses données concernées
+  - Ce README servirait aussi de documentation pour les chercheurs souhaitant travailler sur ce jeu de données
 **** TODO Permettre aux utilisateurs de changer leur mot de passe
 **** TODO Ajouter la fonctionnalité "j'ai oublié mon mot de passe"
 - Voir [[https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet][cette page]]
