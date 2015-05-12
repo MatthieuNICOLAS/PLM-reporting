@@ -1278,6 +1278,16 @@ case _ => MergeStrategy.first
       - Prévient la *NullPointerException* en vérifiant la leçon courante au moment où le serveur reçoit le message
   - Gestion du langage de programmation
     - Lorsque l'utilisateur se connecte, on modifie le langage de programmation actuel pour reprendre le dernier utilisé
+  - Gestion du traçage de l'utilisateur
+    - Ajout de la propriété *trackingUser* dans le modèle des utilisateurs
+    - Ajout d'une pop-up renseignant l'utilisateur sur le traçage de ses actions et demandant s'il souhaite qu'on publie ses traces ou non
+      - Pop-up s'affiche à la connexion de l'utilisateur s'il n'y a pas de valeur définie pour *trackingUser*
+      - L'utilisateur peut accepter, refuser, ou reporter le choix à plus tard.
+    - Ajout du message /setTrackUser/
+      - Généré lorsque le client répond à la question
+      - Met à jour ses préférences utilisateur sauvegardées
+      - Met à jour la propriété de *Game*
+    - Modification des tests unitaires en conséquence
 - Corriger bug empêchant l'authentification
   - Les utilisateurs enregistrés dans la BDD du serveur ne possède pas de langue préférée alors que le modèle stipule qu'ils en possèdent une
     - Lorsque l'utilisateur s'inscrit, la langue utilisée à ce moment est stockée en tant que langue préférée
@@ -1287,6 +1297,14 @@ case _ => MergeStrategy.first
     - Lorsqu'un utilisateur se connecte, on vérifie s'il a une préférence pour la langue
     - Si oui, on passe sur cette langue
     - Sinon, on conserve la langue actuelle et on met à jour ses préférences avec cette dernière
+*** Questions
+- Traçage des utilisateurs
+  - Lorsqu'un utilisateur ne possède pas de compte, actuellement sa trace d'utilisation est rendue publique sur *GitHub*
+    - Modifier ce comportement?
+  - L'utilisateur doit pouvoir changer au fil du temps sa préférence concernant la publication de ses données
+    - Que faire s'il décide de ne plus partager ses données?
+      - On se contente de ne plus pusher sa branche sur *GitHub*?
+      - On supprime sa branche de *GitHub*?
 *** Planned
 **** DONE Finaliser le script redémarrant webPLM
 - Voir pour killer /activator start/ qui reste actif et bouffe des ressources actuellement
