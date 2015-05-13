@@ -1297,6 +1297,10 @@ case _ => MergeStrategy.first
     - Lorsqu'un utilisateur se connecte, on vérifie s'il a une préférence pour la langue
     - Si oui, on passe sur cette langue
     - Sinon, on conserve la langue actuelle et on met à jour ses préférences avec cette dernière
+- Edition du profil
+  - Ajout d'un mode *Edit* pour la page de profil
+  - Envoi du message /updateUser/ lorsque l'utilisateur valide ses modifications
+  - L'acteur met à jour les données stockées à partir du contenu de ce message lorsqu'il le reçoit
 *** Questions
 - Traçage des utilisateurs
   - Lorsqu'un utilisateur ne possède pas de compte, actuellement sa trace d'utilisation est rendue publique sur *GitHub*
@@ -1313,6 +1317,8 @@ case _ => MergeStrategy.first
 **** DONE Corriger bug empêchant l'authentification
 - Un bug présent sur le serveur empêche un utilisateur de se connecter à son compte
 - D'après les logs, une erreur est liée à la langue de l'utilisateur
+**** DONE Edition du profil
+- Pouvoir modifier les données de son profil d'utilisateur et ses préférences
 **** TODO Extraire les préférences de l'utilisateur de Game
 - C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
 - Les préférences de l'utilisateur comporte la langue, le langage de programmation...
