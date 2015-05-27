@@ -1326,8 +1326,14 @@ case _ => MergeStrategy.first
   - Cependant, lorsque l'*ExerciseController* est détruit (lorsqu'on change de page), ces derniers ne sont pas retirés.
   - Si l'utilisateur modifie ensuite la taille de sa fenêtre, on se retrouve alors à essayer de modifier la taille d'éléments qui n'appartiennent plus au DOM.
   - Ces *EventListeners* sont donc maintenant retirés à la destruction de *ExerciseController*.
+- Extraire les préférences de l'utilisateur de Game
+  - Gestion du traçage de l'utilisateur
+    - Mise à jour de la branche /add-track-user/ avec les changements apportés à la branche /master/
+    - *trackUser* n'est plus nécessaire pour que l'inscription soit validée.
+    - Mise à jour de la page de profil pour que l'utilisateur puisse modifier ensuite sa préférence.
+    - Modification du message /updateUser/ pour prendre en compte cette donnée additionnelle.
 *** Planned
-**** TODO Extraire les préférences de l'utilisateur de Game
+**** DONE Extraire les préférences de l'utilisateur de Game
 - C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
 - Les préférences de l'utilisateur comporte la langue, le langage de programmation...
 - Elles sont stockées actuellement dans un fichier de propriétés Java
