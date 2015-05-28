@@ -1332,6 +1332,16 @@ case _ => MergeStrategy.first
     - *trackUser* n'est plus nécessaire pour que l'inscription soit validée.
     - Mise à jour de la page de profil pour que l'utilisateur puisse modifier ensuite sa préférence.
     - Modification du message /updateUser/ pour prendre en compte cette donnée additionnelle.
+- Ajouter un système de notification
+  - Ajout de la librairie [[https://github.com/jirikavi/AngularJS-Toaster][AngularJS-Toaster]]
+  - Ajout d'un utilitaire pour *Toaster*
+    - Englobe la génération de la notification dans un /$timeout/
+      - Il peut arriver que la notification ne soit pas affichée (bug de *AngularJS-Toaster*)
+      - Un /$timeout/ force *AngularJS* à actualiser l'affichage
+    - Met à disposition des méthodes pour générer des notifications de succès, d'avertissement et d'erreur
+  - Ajout d'un toaster pour notifier l'utilisateur de la fermeture de la websocket
+    - Warning s'il s'agit d'une déconnexion souhaitée (par défaut)
+    - Error s'il s'agit d'une déconnexion forcée (close code === 1000)
 *** Planned
 **** DONE Extraire les préférences de l'utilisateur de Game
 - C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
