@@ -1342,6 +1342,16 @@ case _ => MergeStrategy.first
   - Ajout d'un toaster pour notifier l'utilisateur de la fermeture de la websocket
     - Warning s'il s'agit d'une déconnexion souhaitée (par défaut)
     - Error s'il s'agit d'une déconnexion forcée (close code === 1000)
+- Ajouter un évènement de commit IDLE
+  - Ajout d'un timer de 5min sur la page d'exercice
+  - Lorsque le timer est écoulé, l'utilisateur est noté *idle*
+  - Le timer est remis à 0 si
+    - L'utilisateur tape du code
+    - L'utilisateur utilise le player pour (re)jouer une animation
+    - L'utilisateur change d'onglets
+      - Monde courant <-> Monde objectif
+      - Instructions <-> API <-> Contrôles
+      - Résultats <-> Logs
 *** Planned
 **** DONE Extraire les préférences de l'utilisateur de Game
 - C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
