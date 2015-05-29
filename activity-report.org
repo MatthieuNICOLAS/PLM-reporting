@@ -1359,6 +1359,9 @@ case _ => MergeStrategy.first
     - La date de réception du message /userIdle/
     - La date de réception du message /userBack/
     - La durée de la période d'inactivité
+- Refactorer l'indicateur de résultat d'exécution
+  - L'indicateur n'est plus une pastille de couleur, mais un message.
+  - Lorsque le programme utilisateur ne passe pas l'exercice, l'indicateur renvoie au message d'erreur affiché plus bas.
 *** Planned
 **** DONE Extraire les préférences de l'utilisateur de Game
 - C'est dans *Game*, à l'aide des propriétés, que l'on récupère les préférences de l'utilisateur
@@ -1372,6 +1375,11 @@ case _ => MergeStrategy.first
   - Une notification pour indiquer que la connexion/déconnexion s'est correctement déroulée
   - Une notification pour indiquer que les préférences de l'utilisateur ont bien été mises à jour
   - Une notification pour indiquer que la websocket a été fermée et qu'un problème est survenue, invitant l'utilisateur à recharger la page
+**** DONE Refactorer l'indicateur de résultat d'exécution
+- Un indicateur change de couleur en fonction du résultat de l'exécution du programme utilisateur.
+- Lorsque le programme échoue, le message complet de l'erreur rencontrée est affiché plus bas, dans un autre composant de l'UI.
+- Mais le message de l'erreur n'est pas suffisamment mis en avant [[https://github.com/MatthieuNICOLAS/webPLM/issues/12][(voir cette issue)]].
+- Refactorer l'indicateur pour renvoyer clairement vers le message d'erreur.
 **** TODO Ajouter d'autres providers
 - Twitter?
 - Facebook?
