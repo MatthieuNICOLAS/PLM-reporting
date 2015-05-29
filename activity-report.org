@@ -1342,6 +1342,8 @@ case _ => MergeStrategy.first
   - Ajout d'un toaster pour notifier l'utilisateur de la fermeture de la websocket
     - Warning s'il s'agit d'une déconnexion souhaitée (par défaut)
     - Error s'il s'agit d'une déconnexion forcée (close code === 1000)
+  - Ajout d'un toaster pour notifier l'utilisateur du bon déroulement de son authentification/de sa déconnexion
+  - Ajout d'un toaster pour notifier l'utilisateur du bon déroulement de la mise à jour de son profil
 - Ajouter un évènement de commit IDLE
   - Ajout d'un timer de 5min sur la page d'exercice
   - Le timer est réinitialisé si
@@ -1364,8 +1366,8 @@ case _ => MergeStrategy.first
 - Elles sont stockées actuellement dans un fichier de propriétés Java
 - Mettre en place une BDD à la place
 - Gérer ça dans un composant séparé
-**** TODO Ajouter un évènement de commit IDLE
-**** TODO Ajouter un système de notification
+**** DONE Ajouter un évènement de commit IDLE
+**** DONE Ajouter un système de notification
 - Un système de notifications basé sur [[http://codeseven.github.io/toastr/demo.html][toastr]] ou une alternative permettrait de rendre le site plus dynamique
   - Une notification pour indiquer que la connexion/déconnexion s'est correctement déroulée
   - Une notification pour indiquer que les préférences de l'utilisateur ont bien été mises à jour
