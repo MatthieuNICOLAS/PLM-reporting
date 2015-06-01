@@ -1382,8 +1382,14 @@ case _ => MergeStrategy.first
 - Refactorer l'indicateur pour renvoyer clairement vers le message d'erreur.
 ** Semaine du <2015-06-01 lun.> au <2015-06-05 ven.>
 *** Done
+- Amélioration de l'option "traçage de l'utilisateur"
+  - Lorsque l'utilisateur choisi l'option "Let me decide later", on stocke la date qu'il sera 3 jours plus tard
+  - Lors de ses prochaines connexions, on vérifie si la date stockée au préalable est maintenant dépassée
+    - Si oui, on affiche de nouveau le formulaire l'informant de notre volonté de rendre public ses traces d'utilisation
+    - Sinon, on n'affiche pas le formulaire
+  - Si aucune date n'est stockée, alors il s'agit de sa 1ère connexion et on affiche le formulaire
 *** Planned
-**** TODO Amélioration de l'option "traçage de l'utilisateur"
+**** DONE Amélioration de l'option "traçage de l'utilisateur"
 - Répondre "Let me decide later" devrait empêcher la pop-up d'apparaître pendant une certaine durée
 **** TODO Mettre à jour la traduction
 - De nouvelles pages/fonctionnalités ont été implémentées
