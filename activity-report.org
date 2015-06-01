@@ -1380,6 +1380,32 @@ case _ => MergeStrategy.first
 - Lorsque le programme échoue, le message complet de l'erreur rencontrée est affiché plus bas, dans un autre composant de l'UI.
 - Mais le message de l'erreur n'est pas suffisamment mis en avant [[https://github.com/MatthieuNICOLAS/webPLM/issues/12][(voir cette issue)]].
 - Refactorer l'indicateur pour renvoyer clairement vers le message d'erreur.
+** Semaine du <2015-06-01 lun.> au <2015-06-05 ven.>
+*** Done
+*** Planned
+**** TODO Amélioration de l'option "traçage de l'utilisateur"
+- Répondre "Let me decide later" devrait empêcher la pop-up d'apparaître pendant une certaine durée
+**** TODO Mettre à jour la traduction
+- De nouvelles pages/fonctionnalités ont été implémentées
+  - Formulaire d'inscription
+  - Formulaire de connexion
+  - Page de profil
+  - Toasters
+- Il serait temps de refaire une passe de traduction
+**** TODO Rédiger la documentation expliquant comment traduire l'application
+- L'outil utilisé pour traduire webPLM n'est pas le même que PLM
+- Il est donc nécessaire de rédiger un tutoriel pour les contributeurs
+**** TODO Mettre en place un service d'authentification
+- Permet de séparer la gestion des comptes de webPLM
+- Permet de partager un compte entre le serveur centralisé et les serveurs locaux
+- Doit déployer un serveur OAuth
+- Doit ajouter le service en tant que provider dans webPLM
+**** TODO Mettre en place un service de profil
+- Permet de séparer la gestion des profils de webPLM
+- Permet de partager un profil entre le serveur centralisé et les serveurs locaux
+- Doit déployer un serveur exposant les profils par le biais d'une API REST
+**** TODO Réalisation d'une interface admin
+- Retrouver l'id Git des utilisateurs enregistrés
 **** TODO Ajouter d'autres providers
 - Twitter?
 - Facebook?
@@ -1388,6 +1414,7 @@ case _ => MergeStrategy.first
 - Un README expliquant les données stockées et leur format aurait plusieurs utilités:
   - Un utilisateur lambda pourrait visualiser et comprendre quelles sont ses données concernées
   - Ce README servirait aussi de documentation pour les chercheurs souhaitant travailler sur ce jeu de données
+**** TODO Ajouter l'évènement IDLE à la branche master de PLM
 **** TODO Permettre aux utilisateurs de changer leur mot de passe
 **** TODO Ajouter la fonctionnalité "j'ai oublié mon mot de passe"
 - Voir [[https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet][cette page]]
