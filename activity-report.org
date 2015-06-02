@@ -1390,13 +1390,18 @@ case _ => MergeStrategy.first
   - Si aucune date n'est stockée, alors il s'agit de sa 1ère connexion et on affiche le formulaire
 - Fermer les threads d'exécution à la fermeture de l'onglet
   - Ajout d'un appel à /stopExerciseExecution()/ dans /Game.quit()/
+- Mettre à jour la traduction
+  - Ajout de l'attribut /translate/ servant à spécifier les chaînes à traduire dans les balises où il était manquant
+  - Modification de l'HTML pour faciliter le travail de traduction
+  - Ajout d'appels à /gettextCatalog.getString/ dans les fichiers .JS pour traduire les chaînes présentes dans ces fichiers
+  - Traduction des chaînes du catalogue en français
 *** Planned
 **** DONE Amélioration de l'option "traçage de l'utilisateur"
 - Répondre "Let me decide later" devrait empêcher la pop-up d'apparaître pendant une certaine durée
 **** DONE Fermer les threads d'exécution à la fermeture de l'onglet
 - Actuellement, si un élève démarre une boucle infinie puis ferme son onglet, le programme continue de s'exécuter
 - Il faudrait donc stopper les threads d'exécution à la destruction de l'acteur
-**** TODO Mettre à jour la traduction
+**** DONE Mettre à jour la traduction
 - De nouvelles pages/fonctionnalités ont été implémentées
   - Formulaire d'inscription
   - Formulaire de connexion
