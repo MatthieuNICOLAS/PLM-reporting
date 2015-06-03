@@ -1395,6 +1395,11 @@ case _ => MergeStrategy.first
   - Modification de l'HTML pour faciliter le travail de traduction
   - Ajout d'appels à /gettextCatalog.getString/ dans les fichiers .JS pour traduire les chaînes présentes dans ces fichiers
   - Traduction des chaînes du catalogue en français
+- Mise en place d'un service d'authentification
+  - Recherche de librairies permettant de mettre en place un service OAuth
+    - [[https://github.com/t1msh/node-oauth20-provider][t1msh/node-oauth20-provider]] semble interéssant, à tester.
+    - [[https://github.com/thomseddon/node-oauth2-server][thomseddon/node-oauth2-server]] aussi, le projet a l'air d'être plus mature et de disposer d'une plus grande communauté
+    - Ces projets utilisant *Node.js*, utiliser [[http://mean.io/][MEAN]] pour créer la base de l'application semble une bonne idée
 *** Planned
 **** DONE Amélioration de l'option "traçage de l'utilisateur"
 - Répondre "Let me decide later" devrait empêcher la pop-up d'apparaître pendant une certaine durée
