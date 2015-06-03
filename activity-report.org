@@ -1400,6 +1400,15 @@ case _ => MergeStrategy.first
     - [[https://github.com/t1msh/node-oauth20-provider][t1msh/node-oauth20-provider]] semble interéssant, à tester.
     - [[https://github.com/thomseddon/node-oauth2-server][thomseddon/node-oauth2-server]] aussi, le projet a l'air d'être plus mature et de disposer d'une plus grande communauté
     - Ces projets utilisant *Node.js*, utiliser [[http://mean.io/][MEAN]] pour créer la base de l'application semble une bonne idée
+    - Une autre librairie pour créer son service OAuth et qui semble plus indiquée: [[https://github.com/jaredhanson/oauth2orize][jaredhanson/oauth2orize]] 
+  - MEAN
+    - Permet de générer la base d'une appli *Node.js* avec comme librairies/dépendances
+      - MongoDB et [[http://mongoosejs.com/][Mongoose]], un wrapper pour interagir avec la BDD
+      - [[http://expressjs.com/][Express]]: framework pour gérer les routes, les vues, les middlewares...
+      - AngularJS
+    - Organise l'application sous forme de packages
+      - Un package est composé d'une partie serveur, d'une partie cliente et de fichiers de configs
+      - L'ensemble des packages sont chargés au lancement du serveur
 *** Planned
 **** DONE Amélioration de l'option "traçage de l'utilisateur"
 - Répondre "Let me decide later" devrait empêcher la pop-up d'apparaître pendant une certaine durée
