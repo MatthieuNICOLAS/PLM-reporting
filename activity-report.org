@@ -1399,9 +1399,9 @@ case _ => MergeStrategy.first
   - Recherche de librairies permettant de mettre en place un service OAuth
     - [[https://github.com/t1msh/node-oauth20-provider][t1msh/node-oauth20-provider]] semble interéssant, à tester.
     - [[https://github.com/thomseddon/node-oauth2-server][thomseddon/node-oauth2-server]] aussi, le projet a l'air d'être plus mature et de disposer d'une plus grande communauté
-    - Ces projets utilisant *Node.js*, utiliser [[http://mean.io/][MEAN]] pour créer la base de l'application semble une bonne idée
+    - Ces projets utilisant *Node.js*, utiliser [[http://mean.io/][MEAN]].IO pour créer la base de l'application semble une bonne idée
     - Une autre librairie pour créer son service OAuth et qui semble plus indiquée: [[https://github.com/jaredhanson/oauth2orize][jaredhanson/oauth2orize]] 
-  - MEAN
+  - MEAN.IO
     - Permet de générer la base d'une appli *Node.js* avec comme librairies/dépendances
       - MongoDB et [[http://mongoosejs.com/][Mongoose]], un wrapper pour interagir avec la BDD
       - [[http://expressjs.com/][Express]]: framework pour gérer les routes, les vues, les middlewares...
@@ -1409,6 +1409,13 @@ case _ => MergeStrategy.first
     - Organise l'application sous forme de packages
       - Un package est composé d'une partie serveur, d'une partie cliente et de fichiers de configs
       - L'ensemble des packages sont chargés au lancement du serveur
+    - Embarque par défaut les packages *admin* et *users*
+      - Voir si complet et facilement utilisable
+    - Des erreurs surviennent à la génération de l'application
+    - Application de démonstration complète
+	- Création de compte, authentification, réinitialisation du mot de passe
+	- Gestion des utilisateurs depuis l'interface admin
+        - Quelques bugs comme la modification des paramètres de l'appli qui échoue
 *** Planned
 **** DONE Amélioration de l'option "traçage de l'utilisateur"
 - Répondre "Let me decide later" devrait empêcher la pop-up d'apparaître pendant une certaine durée
