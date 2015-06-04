@@ -1400,6 +1400,7 @@ case _ => MergeStrategy.first
     - [[https://github.com/t1msh/node-oauth20-provider][t1msh/node-oauth20-provider]] semble interéssant, à tester.
     - [[https://github.com/thomseddon/node-oauth2-server][thomseddon/node-oauth2-server]] aussi, le projet a l'air d'être plus mature et de disposer d'une plus grande communauté
     - Ces projets utilisant *Node.js*, utiliser [[http://mean.io/][MEAN]].IO pour créer la base de l'application semble une bonne idée
+    - Il existe un fork de MEAN.IO, par le développeur originel du projet: [[http://meanjs.org/][MEAN.JS]], plus récent
     - Une autre librairie pour créer son service OAuth et qui semble plus indiquée: [[https://github.com/jaredhanson/oauth2orize][jaredhanson/oauth2orize]] 
   - MEAN.IO
     - Permet de générer la base d'une appli *Node.js* avec comme librairies/dépendances
@@ -1413,9 +1414,18 @@ case _ => MergeStrategy.first
       - Voir si complet et facilement utilisable
     - Des erreurs surviennent à la génération de l'application
     - Application de démonstration complète
-	- Création de compte, authentification, réinitialisation du mot de passe
-	- Gestion des utilisateurs depuis l'interface admin
-        - Quelques bugs comme la modification des paramètres de l'appli qui échoue
+      - Création de compte, authentification, réinitialisation du mot de passe
+      - Gestion des utilisateurs depuis l'interface admin
+      - Quelques bugs comme la modification des paramètres de l'appli qui échoue
+  - MEAN.JS
+    - L'architecture a été remaniée par rapport à MEAN.IO
+      - Sépare la partie serveur de la partie cliente
+      - Utilise des modules pour cloisonner les fonctionnalités
+      - Plus lisible à mon sens
+    - Application de démonstration
+      - Création de compte, authentification, réinitialisation du mot de passe
+      - Pas d'interface d'admin mais [[https://github.com/meanjs/mean/pull/559][PR en cours]]
+      - Pas de bugs remarqués
 *** Planned
 **** DONE Amélioration de l'option "traçage de l'utilisateur"
 - Répondre "Let me decide later" devrait empêcher la pop-up d'apparaître pendant une certaine durée
