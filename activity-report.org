@@ -1426,6 +1426,14 @@ case _ => MergeStrategy.first
       - Création de compte, authentification, réinitialisation du mot de passe
       - Pas d'interface d'admin mais [[https://github.com/meanjs/mean/pull/559][PR en cours]]
       - Pas de bugs remarqués
+  - Application
+    - J'ai choisi comme socle MEAN.JS
+    - Suppression du contenu relatif aux comptes externes
+      - S'authentifier par le biais d'un service comme Google, FB
+      - Attacher des comptes externes à son compte
+    - Suppression du contenu relatif aux articles
+      - L'application de démonstration permet de publier, éditer, supprimer des articles
+      - Pas pertinant dans notre cas
 *** Planned
 **** DONE Amélioration de l'option "traçage de l'utilisateur"
 - Répondre "Let me decide later" devrait empêcher la pop-up d'apparaître pendant une certaine durée
