@@ -1434,6 +1434,13 @@ case _ => MergeStrategy.first
     - Suppression du contenu relatif aux articles
       - L'application de démonstration permet de publier, éditer, supprimer des articles
       - Pas pertinant dans notre cas
+    - Ajout de oAuth2orize
+      - Création des modèles nécessaires à son fonctionnement
+	- AccessToken
+	- AuthorizationCode
+	- Client
+      - Ajout des controllers correspondant
+      - Ajout du controller oAuth2 réimplémentant [[https://github.com/jaredhanson/oauth2orize/blob/master/examples/express2/oauth2.js][cet exemple]]
 *** Planned
 **** DONE Amélioration de l'option "traçage de l'utilisateur"
 - Répondre "Let me decide later" devrait empêcher la pop-up d'apparaître pendant une certaine durée
