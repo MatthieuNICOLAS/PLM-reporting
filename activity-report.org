@@ -1454,6 +1454,18 @@ case _ => MergeStrategy.first
   - Page de profil
   - Toasters
 - Il serait temps de refaire une passe de traduction
+** Semaine du <2015-06-08 lun.> au <2015-06-12 ven.>
+*** Done
+- Mise en place d'un service d'authentification
+  - Ajout de oAuth2orize
+    - L'URL de redirection passée en paramètre lorsque l'utilisateur accède à la page de login n'est pas conservée par l'application
+      - On ne peut donc pas vérifier s'il s'agit de la même URL que celle renseignée lors de la configuration du client
+      - Il s'agit d'une faille de sécurité
+      - Ajout d'une méthode intermédiaire retrouvant l'URL de redirection et qui la place à l'endroit où la librairie s'attend à la trouver
+    - Redirection vers /dialog/authorize après login
+      - Lorsque l'utilisateur accède à /dialog/authorize, on le redirige vers /signin s'il n'est pas authentifié
+      - Après son authentification, il faut cependant le rediriger de nouveau vers /dialog/authorize
+*** Planned
 **** TODO Rédiger la documentation expliquant comment traduire l'application
 - L'outil utilisé pour traduire webPLM n'est pas le même que PLM
 - Il est donc nécessaire de rédiger un tutoriel pour les contributeurs
