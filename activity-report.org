@@ -1481,6 +1481,14 @@ case _ => MergeStrategy.first
     - Configuration de Satellizer (côté client) et Silhouette (côté serveur) pour supporter ce nouveau provider
     - Ajout d'un provider Custom dans Silhouette
     - Ajout du bouton correspondant dans la page de login
+- Améliorer le service d'authentification
+  - Refactoration du code
+    - Utilisation des stratégies *BasicStrategy* & *ClientPasswordStrategy* pour gérer l'ensemble des négociations jusqu'à l'obtention du token
+  - Amélioration de la sécurité
+    - Vérification à chaque échange que l'ensemble des données est correct:
+      - ClientID
+      - ClientSecret
+      - RedirectURI
 *** Planned
 **** DONE Mettre en place un service d'authentification
 - Permet de séparer la gestion des comptes de webPLM
