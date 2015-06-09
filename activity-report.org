@@ -1465,15 +1465,38 @@ case _ => MergeStrategy.first
     - Redirection vers /dialog/authorize après login
       - Lorsque l'utilisateur accède à /dialog/authorize, on le redirige vers /signin s'il n'est pas authentifié
       - Après son authentification, il faut cependant le rediriger de nouveau vers /dialog/authorize
+      - Modification de la réponse à la requête de login pour spécifier l'url de redirection
+    - Décision de l'utilisateur
+      - Ajout du formulaire demandant à l'utilisateur de s'il accepte que le client accède à son compte
+      - Génération d'un code d'accès s'il accepte
+      - Redirection vers l'URL indiquée en paramètre
+    - Négociation du token d'accès à l'API
+      - Vérification que le code fourni est valide et prévu pour ce client
+      - Suppression du code et génération d'un token d'accès
+      - Transmission de ce  token au client
+    - Mise en place de l'API
+      - Récupération de l'utilisateur lié à ce token
+      - Transmission des données de l'utilisateur au client
+  - Intégration dans PLM
+    - Configuration de Satellizer (côté client) et Silhouette (côté serveur) pour supporter ce nouveau provider
+    - Ajout d'un provider Custom dans Silhouette
+    - Ajout du bouton correspondant dans la page de login
 *** Planned
-**** TODO Rédiger la documentation expliquant comment traduire l'application
-- L'outil utilisé pour traduire webPLM n'est pas le même que PLM
-- Il est donc nécessaire de rédiger un tutoriel pour les contributeurs
-**** TODO Mettre en place un service d'authentification
+**** DONE Mettre en place un service d'authentification
 - Permet de séparer la gestion des comptes de webPLM
 - Permet de partager un compte entre le serveur centralisé et les serveurs locaux
 - Doit déployer un serveur OAuth
 - Doit ajouter le service en tant que provider dans webPLM
+**** TODO Améliorer le service d'authentification
+- Refactorer/Nettoyer le code
+- Sauvegarder la décision de l'utilisateur concernant l'accès à son compte
+  - Ne pas redemander l'autorisation à chaque fois
+- Amélioration de la sécurité
+  - Vérifier que le token utilisé pour accéder à l'API est bien lié à ce client
+- Que deviennent les  tokens stockées dans la base de données?
+**** TODO Rédiger la documentation expliquant comment traduire l'application
+- L'outil utilisé pour traduire webPLM n'est pas le même que PLM
+- Il est donc nécessaire de rédiger un tutoriel pour les contributeurs
 **** TODO Mettre en place un service de profil
 - Permet de séparer la gestion des profils de webPLM
 - Permet de partager un profil entre le serveur centralisé et les serveurs locaux
