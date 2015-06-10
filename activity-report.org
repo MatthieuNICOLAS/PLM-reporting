@@ -1489,19 +1489,30 @@ case _ => MergeStrategy.first
       - ClientID
       - ClientSecret
       - RedirectURI
+  - Fix bug ne tenant pas compte du refus de l'utilisateur que PLM accède à son compte
+  - Limiter le nombre de token
+    - Conserve maintenant qu'un token par couple (userID, clientID)
+  - Gestion de la mise en prod
+    - [[https://github.com/Unitech/pm2][pm2]] est un utilitaire qui risque de se révéler utile
+      - Permet de lancer plusieurs instances de l'application
+      - S'occupe du load-balancing
+      - S'occupe de redémarrer une instance qui a crashé
+      - Met à disposition des outils de monitoring
 *** Planned
-**** DONE Mettre en place un service d'authentification
+**** DONE Mettre en place un  service d'authentification
 - Permet de séparer la gestion des comptes de webPLM
 - Permet de partager un compte entre le serveur centralisé et les serveurs locaux
 - Doit déployer un serveur OAuth
 - Doit ajouter le service en tant que provider dans webPLM
-**** TODO Améliorer le service d'authentification
+**** DONE Améliorer le service d'authentification
 - Refactorer/Nettoyer le code
 - Sauvegarder la décision de l'utilisateur concernant l'accès à son compte
   - Ne pas redemander l'autorisation à chaque fois
 - Amélioration de la sécurité
   - Vérifier que le token utilisé pour accéder à l'API est bien lié à ce client
 - Que deviennent les  tokens stockées dans la base de données?
+  - Leur attribuer une date de création
+  - A partir d'un certain temps, refuser de les valider et les supprimer
 **** TODO Rédiger la documentation expliquant comment traduire l'application
 - L'outil utilisé pour traduire webPLM n'est pas le même que PLM
 - Il est donc nécessaire de rédiger un tutoriel pour les contributeurs
