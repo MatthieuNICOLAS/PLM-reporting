@@ -1498,6 +1498,14 @@ case _ => MergeStrategy.first
       - S'occupe du load-balancing
       - S'occupe de redémarrer une instance qui a crashé
       - Met à disposition des outils de monitoring
+- Mettre en place un service de profil
+  - Socle MEAN.JS
+  - Ajout du modèle et du controlleur correspondant aux profils
+  - Ajout des méthodes CRUD
+    - Create
+    - Read
+    - Update
+    - Delete
 *** Planned
 **** DONE Mettre en place un  service d'authentification
 - Permet de séparer la gestion des comptes de webPLM
@@ -1513,6 +1521,9 @@ case _ => MergeStrategy.first
 - Que deviennent les  tokens stockées dans la base de données?
   - Leur attribuer une date de création
   - A partir d'un certain temps, refuser de les valider et les supprimer
+**** TODO Documenter le service d'authentification
+- Rédiger README
+- Revoir LICENSE
 **** TODO Rédiger la documentation expliquant comment traduire l'application
 - L'outil utilisé pour traduire webPLM n'est pas le même que PLM
 - Il est donc nécessaire de rédiger un tutoriel pour les contributeurs
