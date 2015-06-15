@@ -1506,6 +1506,18 @@ case _ => MergeStrategy.first
     - Read
     - Update
     - Delete
+  - Suppression du contenu relatif aux articles
+  - Intégration dans PLM
+    - Ajout d'un objet dialoguant avec l'API REST pour gérer les profils
+      - La méthode *find* déclenche une requête GET pour un profil donné
+      - La méthode *save* déclenche une requête POST
+      - La méthode *update* déclenche une requête PUT pour un profil donné
+    - Modification du workflow de UserService
+      - Distinction entre les méthodes *save* et *update*
+      - Démarre en vérifiant si l'utilisateur existe déjà via la méthode *find*
+      - Si pas d'utilisateur trouvé, sauvegarde ce nouvel utilisateur avec la méthode *save*
+      - Lorsque les préférences de l'utilisateur sont modifiées, utilise la méthode *update* pour transmettre les mises à jour au service
+    - Ajout d'une classe permettant de convertir une instance *User* en JSON et inversement
 *** Planned
 **** DONE Mettre en place un  service d'authentification
 - Permet de séparer la gestion des comptes de webPLM
@@ -1521,16 +1533,27 @@ case _ => MergeStrategy.first
 - Que deviennent les  tokens stockées dans la base de données?
   - Leur attribuer une date de création
   - A partir d'un certain temps, refuser de les valider et les supprimer
+** Semaine du <2015-06-15 lun.> au <2015-06-19 ven.>
+*** Done
+- Mettre en place un service de profil
+  - Intégration dans PLM
+    - Correction du modèle de profil dans le service pour correspondre à celui de webPLM
+    - Suppression de la gestion des mots de passes dans PLM
+    - Suppression de MongoDB dans PLM
+*** Planned
+**** TODO Mettre en place un service de profil
+- Permet de séparer la gestion des profils de webPLM
+- Permet de partager un profil entre le serveur centralisé et les serveurs locaux
+- Doit déployer un serveur exposant les profils par le biais d'une API REST
 **** TODO Documenter le service d'authentification
 - Rédiger README
 - Revoir LICENSE
 **** TODO Rédiger la documentation expliquant comment traduire l'application
 - L'outil utilisé pour traduire webPLM n'est pas le même que PLM
 - Il est donc nécessaire de rédiger un tutoriel pour les contributeurs
-**** TODO Mettre en place un service de profil
-- Permet de séparer la gestion des profils de webPLM
-- Permet de partager un profil entre le serveur centralisé et les serveurs locaux
-- Doit déployer un serveur exposant les profils par le biais d'une API REST
+**** TODO Documenter le service de profil
+- Rédiger README
+- Revoir LICENSE
 **** TODO Réalisation d'une interface admin
 - Retrouver l'id Git des utilisateurs enregistrés
 **** TODO Ajouter d'autres providers
