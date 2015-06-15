@@ -1540,20 +1540,53 @@ case _ => MergeStrategy.first
     - Correction du modèle de profil dans le service pour correspondre à celui de webPLM
     - Suppression de la gestion des mots de passes dans PLM
     - Suppression de MongoDB dans PLM
+    - Suppression de la page d'inscription et de login avec des credentials
+- Permettre aux utilisateurs de changer leur mot de passe
+  - Tâche annulée car déjà pris en charge par l'application par défaut de MEAN.js
+- Ajouter la fonctionnalité "j'ai oublié mon mot de passe"
+  - Tâche annulée car déjà pris en charge par l'application par défaut de MEAN.js
+- Ajouter l'évènement IDLE à la branche master de PLM
+  - Tâche annulée pour se concentrer plutôt sur la nouvelle version Web, pouvant fonctionner en local ou en centralisé
 *** Planned
-**** TODO Mettre en place un service de profil
+**** DONE Mettre en place un service de profil
 - Permet de séparer la gestion des profils de webPLM
 - Permet de partager un profil entre le serveur centralisé et les serveurs locaux
 - Doit déployer un serveur exposant les profils par le biais d'une API REST
+**** CANCELLED Permettre aux utilisateurs de changer leur mot de passe
+**** CANCELLED Ajouter la fonctionnalité "j'ai oublié mon mot de passe"
+- Voir [[https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet][cette page]]
+**** CANCELLED Ajouter l'évènement IDLE à la branche master de PLM
+**** TODO Améliorer le service d'authentification
+- Changer la page d'accueil
+- Empêcher l'utilisateur d'accèder à la page de demande d'autorisation d'accès au compte sans être connecté
+- Stocker que l'utilisateur a déjà accepté d'autoriser l'accès à son compte pour un client et ne plus lui redemander son avis
+- Permettre à l'utilisateur de supprimer l'autorisation d'accès d'un client à son compte à partir son profil
+**** TODO Merger les PR de Théodore
+- WebPLM
+  - PR correction des bugs présents dans BaseBallWorld
+  - PR ajout du monde de Hanoi
+  - PR ajout de la vue temporelle pour DutchFlagWorld
+- PLM
+  - PR ajout du monde de Hanoi
+**** TODO Merger les PR de Baptiste
+- WebPLM
+  - PR ajout de Blockly
+- PLM
+  - PR ajout de Blockly
+**** TODO Merger les PR de Benjamin
+- WebPLM
+  - PR ajout de l'éditeur d'exercices
+- PLM
+  - PR ajout de l'exercice par défaut et sauvegarde d'un nouvel exercice
 **** TODO Documenter le service d'authentification
+- Rédiger README
+- Revoir LICENSE
+**** TODO Documenter le service de profil
 - Rédiger README
 - Revoir LICENSE
 **** TODO Rédiger la documentation expliquant comment traduire l'application
 - L'outil utilisé pour traduire webPLM n'est pas le même que PLM
 - Il est donc nécessaire de rédiger un tutoriel pour les contributeurs
-**** TODO Documenter le service de profil
-- Rédiger README
-- Revoir LICENSE
 **** TODO Réalisation d'une interface admin
 - Retrouver l'id Git des utilisateurs enregistrés
 **** TODO Ajouter d'autres providers
@@ -1564,10 +1597,6 @@ case _ => MergeStrategy.first
 - Un README expliquant les données stockées et leur format aurait plusieurs utilités:
   - Un utilisateur lambda pourrait visualiser et comprendre quelles sont ses données concernées
   - Ce README servirait aussi de documentation pour les chercheurs souhaitant travailler sur ce jeu de données
-**** TODO Ajouter l'évènement IDLE à la branche master de PLM
-**** TODO Permettre aux utilisateurs de changer leur mot de passe
-**** TODO Ajouter la fonctionnalité "j'ai oublié mon mot de passe"
-- Voir [[https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet][cette page]]
 **** TODO Empêcher une attaque de type "Brute force" pour récupérer les mots de passe de la BDD
 - [[https://www.owasp.org/index.php/Authentication_Cheat_Sheet#Prevent_Brute-Force_Attacks][Cette page]] rassemble diverses bonnes pratiques nécessaires à un mécanisme d'authentification
 - Une des recommandations est de mettre en place un mécanisme empêchant une attaque de type "Brute force"
