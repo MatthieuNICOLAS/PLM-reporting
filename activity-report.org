@@ -1547,6 +1547,17 @@ case _ => MergeStrategy.first
   - Tâche annulée car déjà pris en charge par l'application par défaut de MEAN.js
 - Ajouter l'évènement IDLE à la branche master de PLM
   - Tâche annulée pour se concentrer plutôt sur la nouvelle version Web, pouvant fonctionner en local ou en centralisé
+- Améliorer le service d'authentification
+  - Empêcher l'utilisateur d'accèder à la page de demande d'autorisation d'accès au compte sans être connecté
+    - Redirige correctement l'utilisateur s'il accède à la page de demande d'autorisation d'accès au compte sans être connecté
+    - Une fois qu'il s'est authentifié avec succès, il est correctement redirigé sur la page de demande d'autorisation
+  - Stocker que l'utilisateur a déjà accepté d'autoriser l'accès à son compte pour un client et ne plus lui redemander son avis
+    - Lorsque l'utilisateur accède à la page de demande d'autorisation d'accès à son compte, on vérifie si un token existe partageant
+      - Le même userID
+      - Le même clientID
+    - Si oui, on stocke un nouveau code d'accès que l'on communique à l'utilisateur
+    - Si l'utilisateur reçoit un code d'accès lorsqu'il arrive sur la page de demande d'accès, alors il est automatiquement redirigé vers webPLM en fournissant le code
+    - Le workflow passe alors directement à la négociation du token entre le client et le service à l'aide du code
 *** Planned
 **** DONE Mettre en place un service de profil
 - Permet de séparer la gestion des profils de webPLM
@@ -1560,6 +1571,9 @@ case _ => MergeStrategy.first
 - Changer la page d'accueil
 - Empêcher l'utilisateur d'accèder à la page de demande d'autorisation d'accès au compte sans être connecté
 - Stocker que l'utilisateur a déjà accepté d'autoriser l'accès à son compte pour un client et ne plus lui redemander son avis
+  - L'entrée du token dans la base de données permet de lier un client à un utilisateur
+  - Lorsque l'utilisateur accède à la page d'autorisation, vérifier si on peut trouver un token déjà existant pour cet utilisateur
+  - Si une entrée existe, fournir un code d'accès directement
 - Permettre à l'utilisateur de supprimer l'autorisation d'accès d'un client à son compte à partir son profil
 **** TODO Merger les PR de Théodore
 - WebPLM
