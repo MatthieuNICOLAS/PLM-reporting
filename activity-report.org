@@ -1558,11 +1558,32 @@ case _ => MergeStrategy.first
     - Si oui, on stocke un nouveau code d'accès que l'on communique à l'utilisateur
     - Si l'utilisateur reçoit un code d'accès lorsqu'il arrive sur la page de demande d'accès, alors il est automatiquement redirigé vers webPLM en fournissant le code
     - Le workflow passe alors directement à la négociation du token entre le client et le service à l'aide du code
+- Merger les PR de Théodore
+  - PR correction des bugs présents dans BaseBallWorld
+  - PR ajout du monde de Hanoi
+  - PR ajout de la vue temporelle pour DutchFlagWorld
+- Merger les PR de Baptiste
+  - PR ajout de Blockly
+  - Correction de bugs présents
+    - Appelle les méthodes sur Blockly uniquement si Blockly est utilisé dans l'exercice courant
+    - Dans /setIDE/, vérifie que l'éditeur est bien chargé avant d'appeler ses méthodes
+  - Correction des tests unitaires
+    - Les tests unitaires JS ne passent plus
+    - Lorsqu'on les lance, une erreur est détectée par PhantomJS qui fait échouer les tests
+    - Aucune information n'est disponible sur l'erreur
+    - Si on force l'exécution des tests malgré cette erreur, ceux-ci réussissent.
 *** Planned
 **** DONE Mettre en place un service de profil
 - Permet de séparer la gestion des profils de webPLM
 - Permet de partager un profil entre le serveur centralisé et les serveurs locaux
 - Doit déployer un serveur exposant les profils par le biais d'une API REST
+**** DONE Merger les PR de Théodore
+- WebPLM
+  - PR correction des bugs présents dans BaseBallWorld
+  - PR ajout du monde de Hanoi
+  - PR ajout de la vue temporelle pour DutchFlagWorld
+- PLM
+  - PR ajout du monde de Hanoi
 **** CANCELLED Permettre aux utilisateurs de changer leur mot de passe
 **** CANCELLED Ajouter la fonctionnalité "j'ai oublié mon mot de passe"
 - Voir [[https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet][cette page]]
@@ -1575,13 +1596,6 @@ case _ => MergeStrategy.first
   - Lorsque l'utilisateur accède à la page d'autorisation, vérifier si on peut trouver un token déjà existant pour cet utilisateur
   - Si une entrée existe, fournir un code d'accès directement
 - Permettre à l'utilisateur de supprimer l'autorisation d'accès d'un client à son compte à partir son profil
-**** TODO Merger les PR de Théodore
-- WebPLM
-  - PR correction des bugs présents dans BaseBallWorld
-  - PR ajout du monde de Hanoi
-  - PR ajout de la vue temporelle pour DutchFlagWorld
-- PLM
-  - PR ajout du monde de Hanoi
 **** TODO Merger les PR de Baptiste
 - WebPLM
   - PR ajout de Blockly
