@@ -1572,6 +1572,16 @@ case _ => MergeStrategy.first
     - Lorsqu'on les lance, une erreur est détectée par PhantomJS qui fait échouer les tests
     - Aucune information n'est disponible sur l'erreur
     - Si on force l'exécution des tests malgré cette erreur, ceux-ci réussissent.
+    - Il s'agissait en fait d'une erreur syntaxique présente dans le fichier /blockymsg.service.js/
+    - Les attributs *BRUSH_DOWN_TITLE* et *BRUSH_DOWN_TOOLTIP* étaient définis deux fois à la suite pour servir de titre et tooltip pour deux blocs différents (brushDown() et isBrushDown())
+    - Renommage d'un couple *BRUSH_DOWN_######* vers *IS_BRUSH_DOWN_######*
+    - Modification du bloc /brush_position/ pour qu'il utilise plutôt *IS_BRUSH_DOWN_######*
+*** Questions
+- Comment gérer la fusion des repos PLM et WebPLM
+  - Mise en place d'un système de dépendance?
+    - Dépendance Maven?
+    - Sous-projet Git?
+  - Mise en commun de l'ensemble des fichiers dans un repo?
 *** Planned
 **** DONE Mettre en place un service de profil
 - Permet de séparer la gestion des profils de webPLM
@@ -1584,23 +1594,24 @@ case _ => MergeStrategy.first
   - PR ajout de la vue temporelle pour DutchFlagWorld
 - PLM
   - PR ajout du monde de Hanoi
+**** DONE Merger les PR de Baptiste
+- WebPLM
+  - PR ajout de Blockly
+- PLM
+  - PR ajout de Blockly
 **** CANCELLED Permettre aux utilisateurs de changer leur mot de passe
 **** CANCELLED Ajouter la fonctionnalité "j'ai oublié mon mot de passe"
 - Voir [[https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet][cette page]]
 **** CANCELLED Ajouter l'évènement IDLE à la branche master de PLM
 **** TODO Améliorer le service d'authentification
-- Changer la page d'accueil
-- Empêcher l'utilisateur d'accèder à la page de demande d'autorisation d'accès au compte sans être connecté
-- Stocker que l'utilisateur a déjà accepté d'autoriser l'accès à son compte pour un client et ne plus lui redemander son avis
+- [ ] Changer la page d'accueil
+- [X] Empêcher l'utilisateur d'accèder à la page de demande d'autorisation d'accès au compte sans être connecté
+- [X] Stocker que l'utilisateur a déjà accepté d'autoriser l'accès à son compte pour un client et ne plus lui redemander son avis
   - L'entrée du token dans la base de données permet de lier un client à un utilisateur
   - Lorsque l'utilisateur accède à la page d'autorisation, vérifier si on peut trouver un token déjà existant pour cet utilisateur
   - Si une entrée existe, fournir un code d'accès directement
-- Permettre à l'utilisateur de supprimer l'autorisation d'accès d'un client à son compte à partir son profil
-**** TODO Merger les PR de Baptiste
-- WebPLM
-  - PR ajout de Blockly
-- PLM
-  - PR ajout de Blockly
+- [ ] Permettre à l'utilisateur de supprimer l'autorisation d'accès d'un client à son compte à partir son profil
+- [ ] Permettre à l'utilisateur de s'inscrire et d'être ensuite redirigé vers la page d'autorisation d'accès au compte
 **** TODO Merger les PR de Benjamin
 - WebPLM
   - PR ajout de l'éditeur d'exercices
