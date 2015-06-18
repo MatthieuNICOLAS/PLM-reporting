@@ -1558,6 +1558,10 @@ case _ => MergeStrategy.first
     - Si oui, on stocke un nouveau code d'accès que l'on communique à l'utilisateur
     - Si l'utilisateur reçoit un code d'accès lorsqu'il arrive sur la page de demande d'accès, alors il est automatiquement redirigé vers webPLM en fournissant le code
     - Le workflow passe alors directement à la négociation du token entre le client et le service à l'aide du code
+  - Permettre à l'utilisateur de s'inscrire et d'être ensuite redirigé vers la page d'autorisation d'accès au compte
+    - Si l'utilisateur accède à la fenêtre de dialogue sans être authentifié, il est redirigé sur la page de connexion
+    - S'il ne possède pas de compte, il peut demander à s'inscrire
+    - A la validation de son inscription, il est alors redirigé sur la fenêtre de dialogue
 - Merger les PR de Théodore
   - PR correction des bugs présents dans BaseBallWorld
   - PR ajout du monde de Hanoi
@@ -1582,6 +1586,12 @@ case _ => MergeStrategy.first
     - Dépendance Maven?
     - Sous-projet Git?
   - Mise en commun de l'ensemble des fichiers dans un repo?
+  - Après discussion avec Gérald
+    - Garder les repos distincts
+      - On a besoin de conserver un JAR de PLM pour le futur service de compilation et d'exécution
+    - Mettre donc en place un versionning des JARs de PLM et de WebPLM
+      - Il va falloir mettre en place un repo Maven pour héberger ces JARs
+    - Intégrer la dépendance vers le JAR de PLM dans WebPLM
 *** Planned
 **** DONE Mettre en place un service de profil
 - Permet de séparer la gestion des profils de webPLM
@@ -1611,7 +1621,7 @@ case _ => MergeStrategy.first
   - Lorsque l'utilisateur accède à la page d'autorisation, vérifier si on peut trouver un token déjà existant pour cet utilisateur
   - Si une entrée existe, fournir un code d'accès directement
 - [ ] Permettre à l'utilisateur de supprimer l'autorisation d'accès d'un client à son compte à partir son profil
-- [ ] Permettre à l'utilisateur de s'inscrire et d'être ensuite redirigé vers la page d'autorisation d'accès au compte
+- [X] Permettre à l'utilisateur de s'inscrire et d'être ensuite redirigé vers la page d'autorisation d'accès au compte
 **** TODO Merger les PR de Benjamin
 - WebPLM
   - PR ajout de l'éditeur d'exercices
@@ -1626,6 +1636,8 @@ case _ => MergeStrategy.first
 **** TODO Rédiger la documentation expliquant comment traduire l'application
 - L'outil utilisé pour traduire webPLM n'est pas le même que PLM
 - Il est donc nécessaire de rédiger un tutoriel pour les contributeurs
+**** TODO Faire une image Docker du service d'authentification
+**** TODO Faire une image Docker du service de profil
 **** TODO Réalisation d'une interface admin
 - Retrouver l'id Git des utilisateurs enregistrés
 **** TODO Ajouter d'autres providers
