@@ -1580,6 +1580,11 @@ case _ => MergeStrategy.first
     - Les attributs *BRUSH_DOWN_TITLE* et *BRUSH_DOWN_TOOLTIP* étaient définis deux fois à la suite pour servir de titre et tooltip pour deux blocs différents (brushDown() et isBrushDown())
     - Renommage d'un couple *BRUSH_DOWN_######* vers *IS_BRUSH_DOWN_######*
     - Modification du bloc /brush_position/ pour qu'il utilise plutôt *IS_BRUSH_DOWN_######*
+- Documenter le service d'authentification
+  - Passage à la licence AGPL
+  - Modification du nom et de la description de l'appli dans /package.json/
+  - Rédaction du README
+  - Changement du nom de BDD utilisée, maintenant c'est plmaccounts
 *** Questions
 - Comment gérer la fusion des repos PLM et WebPLM
   - Mise en place d'un système de dépendance?
@@ -1609,6 +1614,9 @@ case _ => MergeStrategy.first
   - PR ajout de Blockly
 - PLM
   - PR ajout de Blockly
+**** DONE Documenter le service d'authentification
+- Rédiger README
+- Revoir LICENSE
 **** CANCELLED Permettre aux utilisateurs de changer leur mot de passe
 **** CANCELLED Ajouter la fonctionnalité "j'ai oublié mon mot de passe"
 - Voir [[https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet][cette page]]
@@ -1616,20 +1624,18 @@ case _ => MergeStrategy.first
 **** TODO Améliorer le service d'authentification
 - [ ] Changer la page d'accueil
 - [X] Empêcher l'utilisateur d'accèder à la page de demande d'autorisation d'accès au compte sans être connecté
+- [X] Permettre à l'utilisateur de s'inscrire et d'être ensuite redirigé vers la page d'autorisation d'accès au compte
 - [X] Stocker que l'utilisateur a déjà accepté d'autoriser l'accès à son compte pour un client et ne plus lui redemander son avis
   - L'entrée du token dans la base de données permet de lier un client à un utilisateur
   - Lorsque l'utilisateur accède à la page d'autorisation, vérifier si on peut trouver un token déjà existant pour cet utilisateur
   - Si une entrée existe, fournir un code d'accès directement
 - [ ] Permettre à l'utilisateur de supprimer l'autorisation d'accès d'un client à son compte à partir son profil
-- [X] Permettre à l'utilisateur de s'inscrire et d'être ensuite redirigé vers la page d'autorisation d'accès au compte
+- [ ] Permettre à un utilisateur d'enregistrer un nouveau client
 **** TODO Merger les PR de Benjamin
 - WebPLM
   - PR ajout de l'éditeur d'exercices
 - PLM
   - PR ajout de l'exercice par défaut et sauvegarde d'un nouvel exercice
-**** TODO Documenter le service d'authentification
-- Rédiger README
-- Revoir LICENSE
 **** TODO Documenter le service de profil
 - Rédiger README
 - Revoir LICENSE
