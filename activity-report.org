@@ -1585,6 +1585,20 @@ case _ => MergeStrategy.first
   - Modification du nom et de la description de l'appli dans /package.json/
   - Rédaction du README
   - Changement du nom de BDD utilisée, maintenant c'est plmaccounts
+- Retravailler l'UI
+  - Utilisation de Flexbox
+    - Permet de générer un conteneur d'une taille prédéfinie
+    - Les items de ce conteneur sont redimensionnés pour s'adapter au conteneur
+  - Création d'une 1ère flexbox
+    - Contient
+      - La vue du monde + la consigne
+      - L'éditeur de code
+      - L'API
+    - Chaque item peut être caché/affiché pour n'afficher que ceux dont on a besoin
+  - Création d'une 2nd flexbox
+    - Contient
+      - La console de résultats
+      - Le panel permettant de lancer son programme sur les différents mondes
 *** Questions
 - Comment gérer la fusion des repos PLM et WebPLM
   - Mise en place d'un système de dépendance?
@@ -1621,6 +1635,12 @@ case _ => MergeStrategy.first
 **** CANCELLED Ajouter la fonctionnalité "j'ai oublié mon mot de passe"
 - Voir [[https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet][cette page]]
 **** CANCELLED Ajouter l'évènement IDLE à la branche master de PLM
+**** TODO Retravailler l'UI
+- Page d'exercice
+  - Faire en sorte qu'elle tienne sur un écran, qu'il n'y ait pas besoin de scroller
+  - Rassembler vue du monde et mission
+  - Déplacer la console en-dessous
+  - Distinguer l'exécution sur les différents mondes et placer ce composant sous l'éditeur de code
 **** TODO Améliorer le service d'authentification
 - [ ] Changer la page d'accueil
 - [X] Empêcher l'utilisateur d'accèder à la page de demande d'autorisation d'accès au compte sans être connecté
