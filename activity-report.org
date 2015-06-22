@@ -1635,6 +1635,12 @@ case _ => MergeStrategy.first
 **** CANCELLED Ajouter la fonctionnalité "j'ai oublié mon mot de passe"
 - Voir [[https://www.owasp.org/index.php/Forgot_Password_Cheat_Sheet][cette page]]
 **** CANCELLED Ajouter l'évènement IDLE à la branche master de PLM
+** Semaine du <2015-06-22 lun.> au <2015-06-26 ven.>
+*** Done
+- Retravailler l'UI
+  - Suppression de la sous-barre pour gagner de la place en hauteur
+  - Ajout de [[http://foundation.zurb.com/docs/components/offcanvas.html][offcanvas]] pour ajouter des menus déroulants sur le côté
+*** Planned
 **** TODO Retravailler l'UI
 - Page d'exercice
   - Faire en sorte qu'elle tienne sur un écran, qu'il n'y ait pas besoin de scroller
