@@ -1640,6 +1640,14 @@ case _ => MergeStrategy.first
 - Retravailler l'UI
   - Suppression de la sous-barre pour gagner de la place en hauteur
   - Ajout de [[http://foundation.zurb.com/docs/components/offcanvas.html][offcanvas]] pour ajouter des menus déroulants sur le côté
+  - Finalement, ne garde que le menu sur la gauche qui permet
+    - d'accéder à son profil
+    - de choisir sa langue et son langage de programmation
+    - de naviguer sur le site
+      - page d'accueil/choix d'une leçon
+      - choix d'un exercice si actuellement dans une leçon
+      - page de rapport de bug
+      - formulaire de contact
 *** Planned
 **** TODO Retravailler l'UI
 - Page d'exercice
@@ -1657,6 +1665,9 @@ case _ => MergeStrategy.first
   - Si une entrée existe, fournir un code d'accès directement
 - [ ] Permettre à l'utilisateur de supprimer l'autorisation d'accès d'un client à son compte à partir son profil
 - [ ] Permettre à un utilisateur d'enregistrer un nouveau client
+**** TODO Ajouter un formulaire de récupération d'un UUID
+- L'utilisateur peut demander à se faire envoyer par mail son UUID Git
+- A sa prochaine connexion, si le cookie a expiré, il peut le regénérer par le biais d'un formulaire
 **** TODO Merger les PR de Benjamin
 - WebPLM
   - PR ajout de l'éditeur d'exercices
