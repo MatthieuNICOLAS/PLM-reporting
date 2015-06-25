@@ -1648,6 +1648,8 @@ case _ => MergeStrategy.first
       - choix d'un exercice si actuellement dans une leçon
       - page de rapport de bug
       - formulaire de contact
+  - Implémentation d'une nouvelle directive permettant de choisir sa langue depuis le menu déroulant
+  - Implémentation d'une nouvelle directive permettant de choisir son exercice depuis le menu déroulant
 *** Planned
 **** TODO Retravailler l'UI
 - Page d'exercice
