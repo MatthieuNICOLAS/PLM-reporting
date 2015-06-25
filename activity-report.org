@@ -1650,6 +1650,14 @@ case _ => MergeStrategy.first
       - formulaire de contact
   - Implémentation d'une nouvelle directive permettant de choisir sa langue depuis le menu déroulant
   - Implémentation d'une nouvelle directive permettant de choisir son exercice depuis le menu déroulant
+  - Implémentation d'une nouvelle directive permettant de choisir son langage de programmation depuis le menu déroulant
+  - Implémentation d'un service progLangs
+    - Tiens la liste des langages de programmation disponible à jour en fonction de l'exercice actuel
+    - Permet de changer de langage de programmation
+  - Implémentation d'un service navigation
+    - Fournit les informations nécessaires à la directive gérant le menu
+    - Connaît la page actuelle
+    - Connaît la leçon actuelle et l'exercice actuel
 *** Planned
 **** TODO Retravailler l'UI
 - Page d'exercice
@@ -1657,6 +1665,8 @@ case _ => MergeStrategy.first
   - Rassembler vue du monde et mission
   - Déplacer la console en-dessous
   - Distinguer l'exécution sur les différents mondes et placer ce composant sous l'éditeur de code
+**** TODO Corriger bug Welcome / LoopWhile
+- En blockly, le programme ne peut pas s'exécuter ni la démo
 **** TODO Améliorer le service d'authentification
 - [ ] Changer la page d'accueil
 - [X] Empêcher l'utilisateur d'accèder à la page de demande d'autorisation d'accès au compte sans être connecté
