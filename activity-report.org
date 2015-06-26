@@ -1658,6 +1658,12 @@ case _ => MergeStrategy.first
     - Fournit les informations nécessaires à la directive gérant le menu
     - Connaît la page actuelle
     - Connaît la leçon actuelle et l'exercice actuel
+  - Implémentation des nouveaux contrôles pour lancer le code
+    - Chaque monde possède son propre bouton de test
+    - Cliquer sur le nom du monde permet de switcher sur sa vue
+    - Cliquer sur le bouton "Play" permet d'exécuter son code
+    - Reste un bug lorsqu'on passe d'un monde à l'autre
+      - Le player ne s'initialise pas correctement, empêchant de parcourir les opérations déjà enregistrées pour ce monde
 *** Planned
 **** TODO Retravailler l'UI
 - Page d'exercice
