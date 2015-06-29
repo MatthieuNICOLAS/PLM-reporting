@@ -1665,14 +1665,36 @@ case _ => MergeStrategy.first
     - Reste un bug lorsqu'on passe d'un monde à l'autre
       - Le player ne s'initialise pas correctement, empêchant de parcourir les opérations déjà enregistrées pour ce monde
 *** Planned
-**** TODO Retravailler l'UI
+**** DONE Retravailler l'UI
 - Page d'exercice
   - Faire en sorte qu'elle tienne sur un écran, qu'il n'y ait pas besoin de scroller
   - Rassembler vue du monde et mission
   - Déplacer la console en-dessous
   - Distinguer l'exécution sur les différents mondes et placer ce composant sous l'éditeur de code
+** Semaine du <2015-06-29 lun.> au <2015-07-03 ven.>
+*** Done
+- Retravailler l'UI
+  - Corriger bug changement de monde
+    - Modification de setCurrentWorld pour spécifier l'ID du monde et le type (*current* ou *answer*)
+    - Refactoring du reste du code pour prendre en compte ce changement
+*** Planned
+**** TODO Retravailler l'UI
+- Corriger bug changement de monde
+  - Lorsqu'on bascule d'un monde à l'autre, le player n'est pas correctement mis à jour
+  - Ceci est dû au fait qu'on repasse automatiquement sur le monde *World* au lieu de rester sur *Objective*
+- Nettoyer le code
+  - Donner des meilleurs noms aux directives
+  - Revoir le code de /navigation.service.js/
+  - Revoir le code de /exerciseslist.service.js/
+  - Revoir le code de /exercise.controller.js/
+**** TODO Tester le serveur local à TELECOM Nancy
+- Générer un .jar du serveur local standalone
+- Faire des essais sur les différentes machines de l'école (Windows, Linux...)
 **** TODO Corriger bug Welcome / LoopWhile
 - En blockly, le programme ne peut pas s'exécuter ni la démo
+**** TODO Séparer l'exécution par monde
+- Avec la nouvelle interface, exécuter le programme de l'utilisateur monde par monde permettrait de mieux indiquer sur quel monde s'est produit l'erreur
+- On a donc besoin d'un résultat par monde et non plus global
 **** TODO Améliorer le service d'authentification
 - [ ] Changer la page d'accueil
 - [X] Empêcher l'utilisateur d'accèder à la page de demande d'autorisation d'accès au compte sans être connecté
