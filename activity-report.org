@@ -1677,8 +1677,23 @@ case _ => MergeStrategy.first
   - Corriger bug changement de monde
     - Modification de setCurrentWorld pour spécifier l'ID du monde et le type (*current* ou *answer*)
     - Refactoring du reste du code pour prendre en compte ce changement
+  - Nettoyer le code
+    - Revoir le code de /navigation.service.js/
+      - Suppression de l'attribut *currentRootLectureID* qui n'était pas utilisé
+      - Remplacement de l'ID de la leçon et de l'ID de l'exercice par un booléen indiquant si l'utilisateur est dans une leçon
+    - Revoir le code de /exercise.controller.js/
+      - Suppression du code lié au modal permettant de sélectionner un exercice (retiré dans la nouvelle UI)
+    - Revoir le code de /exerciseslist.service.js/
+      - Refactoring de *isInLesson* pour utiliser un booléen plutôt que de consulter l'état d'une chaîne de caractère
+      - Suppression de *currentRootLectureID*
+        - Utilise plutôt /isCurrentExerciseAChild/ pour détecter le père d'un exercice
+    - Revoir le code de /exercise.html/
+      - Utilisation de classes au lieu de l'attribut /style/ pour le code redondant
+      - Ajout d'une directive /test-cases.directive/ pour générer le bloc contenant la liste des mondes et permettant de passer de l'un à l'autre
+  - Ajout d'une limite sur la taille du canvas: 400px
+  - Mise à jour des traductions
 *** Planned
-**** TODO Retravailler l'UI
+**** DONE Retravailler l'UI
 - Corriger bug changement de monde
   - Lorsqu'on bascule d'un monde à l'autre, le player n'est pas correctement mis à jour
   - Ceci est dû au fait qu'on repasse automatiquement sur le monde *World* au lieu de rester sur *Objective*
@@ -1687,9 +1702,14 @@ case _ => MergeStrategy.first
   - Revoir le code de /navigation.service.js/
   - Revoir le code de /exerciseslist.service.js/
   - Revoir le code de /exercise.controller.js/
+  - Utiliser des classes CSS plutôt que styliser les balises manuellement
+- Limiter la taille de la représentation du monde
 **** TODO Tester le serveur local à TELECOM Nancy
 - Générer un .jar du serveur local standalone
 - Faire des essais sur les différentes machines de l'école (Windows, Linux...)
+- Vérifier le fonctionnement de Mongo
+  - Une dépendance à installer par ailleurs?
+  - Besoin de merger rapidement le refactoring de la gestion des comptes utilisateurs?
 **** TODO Corriger bug Welcome / LoopWhile
 - En blockly, le programme ne peut pas s'exécuter ni la démo
 **** TODO Séparer l'exécution par monde
