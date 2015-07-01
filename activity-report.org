@@ -1704,6 +1704,13 @@ case _ => MergeStrategy.first
   - Revoir le code de /exercise.controller.js/
   - Utiliser des classes CSS plutôt que styliser les balises manuellement
 - Limiter la taille de la représentation du monde
+**** TODO Modifier l'UI en fonction des retours
+- Retirer la classe /panel/ qui englobe les consignes
+- Retirer le texte par défaut dans le bloc /Execution results/
+- Déplacer le choix de la langue et du langage de programmation dans la barre de menu
+- Limiter la taille de l'avatar
+- Mettre à jour le contenu du bouton qui sert à afficher/cacher l'API en fonction de l'état actuel
+- Débugger le modal de succès d'un exercice permettant de passer au suivant
 **** TODO Tester le serveur local à TELECOM Nancy
 - Générer un .jar du serveur local standalone
 - Faire des essais sur les différentes machines de l'école (Windows, Linux...)
