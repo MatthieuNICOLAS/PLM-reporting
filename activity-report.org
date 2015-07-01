@@ -1702,6 +1702,15 @@ case _ => MergeStrategy.first
   - Limiter la taille de l'avatar
     - La taille de l'avatar est dorénavant de 50x50
     - Amélioration de la gestion du layout: utilisation d'une flexbox
+  - Déplacer le choix de la langue et du langage de programmation
+    - Suppression des directives utilisés dans le menu latéral
+    - Création d'un mix entre top-bar et tab-bar
+    - Création de nouvelles directives utilisant des dropdowns pour permettre la sélection
+    - L'utilisation d'icônes pose encore quelques soucis
+  - Duplication du profil
+    - Ajout d'un composant permettant de se connecter, déconnecter, accéder à son profil dans la barre du haut
+      - Création d'une nouvelle directive
+      - Même chose que précédemment: l'utilisation d'icônes pose encore des problèmes
 *** Planned
 **** DONE Retravailler l'UI
 - Corriger bug changement de monde
@@ -1719,9 +1728,10 @@ case _ => MergeStrategy.first
   - Retirer la classe /panel/ qui englobe les consignes
   - Retirer le texte par défaut dans le bloc /Execution results/
   - Mettre à jour le contenu du bouton qui sert à afficher/cacher l'API en fonction de l'état actuel
-- Déplacer le choix de la langue et du langage de programmation dans la barre de menu
 - Limiter la taille de l'avatar
 - Débugger le modal de succès d'un exercice permettant de passer au suivant
+**** DONE Déplacer le choix de la langue et du langage de programmation
+- Placer ces éléments dans la barre de menu
 **** TODO Tester le serveur local à TELECOM Nancy
 - Générer un .jar du serveur local standalone
 - Faire des essais sur les différentes machines de l'école (Windows, Linux...)
@@ -1733,6 +1743,10 @@ case _ => MergeStrategy.first
 **** TODO Séparer l'exécution par monde
 - Avec la nouvelle interface, exécuter le programme de l'utilisateur monde par monde permettrait de mieux indiquer sur quel monde s'est produit l'erreur
 - On a donc besoin d'un résultat par monde et non plus global
+**** TODO Rediriger l'utilisateur à l'accueil à la fin d'une leçon
+- Lorsqu'on réussit un exercice, l'application nous invite à passer à l'exercice suivant
+- Si on réussit le dernier exercice d'une leçon, il faudrait plutôt rediriger l'utilisateur à l'accueil
+- Voir pour mettre en place un message particulier dans ce cas
 **** TODO Améliorer le service d'authentification
 - [ ] Changer la page d'accueil
 - [X] Empêcher l'utilisateur d'accèder à la page de demande d'autorisation d'accès au compte sans être connecté
