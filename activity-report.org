@@ -1747,7 +1747,15 @@ case _ => MergeStrategy.first
       - Se contente de modifier l'URL de la BDD Mongo
         - Forme l'URL via la variable d'environnement fournie par Docker
   - Commande pour lancer dans un container cette image tout en le liant au container mongo: docker run --name plm-accounts --link mongo:db_1 -p 3000:3000 -d plm-accounts-img
+  - Mise en place d'un Docker-compose
+    - Lancer l'application se fait avec *docker-compose up*
+- Faire une image Docker du service de profil
+  - Suppression de quelques fichiers inutiles
+    - Provider OAuth
+  - Même chose que pour le service d'authentification
 *** Planned
+**** DONE Faire une image Docker du service d'authentification
+**** TODO Faire une image Docker du service de profil
 **** TODO Tester le serveur local à TELECOM Nancy
 - Générer un .jar du serveur local standalone
 - Faire des essais sur les différentes machines de l'école (Windows, Linux...)
@@ -1787,8 +1795,6 @@ case _ => MergeStrategy.first
 **** TODO Rédiger la documentation expliquant comment traduire l'application
 - L'outil utilisé pour traduire webPLM n'est pas le même que PLM
 - Il est donc nécessaire de rédiger un tutoriel pour les contributeurs
-**** TODO Faire une image Docker du service d'authentification
-**** TODO Faire une image Docker du service de profil
 **** TODO Réalisation d'une interface admin
 - Retrouver l'id Git des utilisateurs enregistrés
 **** TODO Ajouter d'autres providers
