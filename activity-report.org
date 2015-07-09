@@ -1753,9 +1753,27 @@ case _ => MergeStrategy.first
   - Suppression de quelques fichiers inutiles
     - Provider OAuth
   - Même chose que pour le service d'authentification
+- Faire un docker-compose de l'application
+  - Pas possible de réutiliser directement les docker-compose du service d'authentification et de profil
+    - Docker-compose tente de démarrer plusieurs fois les conteneurs en commun (mongo)
+  - Ajout d'un docker-compose dans webPLM
+    - Démarre Mongo
+    - Démarre les services de comptes et de profiles et les lient au conteneur Mongo
+    - Démarre le conteneur de webPLM et le lie aux conteneurs des services
+    - Ajoute aussi les variables d'environnement nécessaires
+  - Modification du code de webPLM
+    - Génère les URLs en utilisant les variables d'environnement créées par les links entre conteneurs
 *** Planned
 **** DONE Faire une image Docker du service d'authentification
-**** TODO Faire une image Docker du service de profil
+**** DONE Faire une image Docker du service de profil
+**** DONE Faire un docker-compose de l'application
+- Docker-compose permet de déployer, configurer et linker plusieurs conteneurs en une commande
+- Ajouter un docker-compose pour l'ensemble de l'application
+- Modifier les applications pour prendre en compte les variables d'environnement fournies par docker-compose
+**** TODO Définir les CLIENT_IDs et CLIENT_SECRETs pour le fonctionnement en mode local
+- Suite aux dernières modifications, on ne peut plus utiliser les providers OAuth2 pour se connecter si le serveur est en mode local
+- Modifier la configuration de ces derniers pour s'adapter à ces changements
+- Voir comment distribuer l'application en mode local sans révéler les CLIENT_IDs et CLIENT_SECRETs utilisés
 **** TODO Tester le serveur local à TELECOM Nancy
 - Générer un .jar du serveur local standalone
 - Faire des essais sur les différentes machines de l'école (Windows, Linux...)
