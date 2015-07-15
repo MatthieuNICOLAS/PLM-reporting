@@ -1763,6 +1763,14 @@ case _ => MergeStrategy.first
     - Ajoute aussi les variables d'environnement nécessaires
   - Modification du code de webPLM
     - Génère les URLs en utilisant les variables d'environnement créées par les links entre conteneurs
+- Définir les CLIENT_IDs et CLIENT_SECRETs pour le fonctionnement en mode local
+  - On a décidé de rendre public ces données plutôt que de modifier l'ensemble de l'appli pour juste sécuriser le mode local
+- Déployer la nouvelle application à l'aide du docker-compose
+  - Plusieurs bugs détectés liés au code, voir entrée correspondante
+  - Bug dû à l'espace de stockage disponible sur la machine
+    - Mongo nécessite 3.4GB d'espace libre pour fonctionner
+    - La machine fournie par TELECOM Nancy n'en dispose actuellement que de 3.3GB
+    - Après la suppression de quelques dossiers inutiles, l'application a pu être lancé mais l'espace reste limité
 *** Planned
 **** DONE Faire une image Docker du service d'authentification
 **** DONE Faire une image Docker du service de profil
@@ -1770,18 +1778,50 @@ case _ => MergeStrategy.first
 - Docker-compose permet de déployer, configurer et linker plusieurs conteneurs en une commande
 - Ajouter un docker-compose pour l'ensemble de l'application
 - Modifier les applications pour prendre en compte les variables d'environnement fournies par docker-compose
-**** TODO Définir les CLIENT_IDs et CLIENT_SECRETs pour le fonctionnement en mode local
+**** DONE Définir les CLIENT_IDs et CLIENT_SECRETs pour le fonctionnement en mode local
 - Suite aux dernières modifications, on ne peut plus utiliser les providers OAuth2 pour se connecter si le serveur est en mode local
 - Modifier la configuration de ces derniers pour s'adapter à ces changements
 - Voir comment distribuer l'application en mode local sans révéler les CLIENT_IDs et CLIENT_SECRETs utilisés
+**** DONE Déployer la nouvelle application à l'aide du docker-compose
+** Semaine du <2015-07-15 mer.> au <2015-07-17 ven.>
+*** Done
+- Corriger les bugs détectés lors du déploiement
+  - PLMAccounts & PLMProfiles
+    - Installation de l'ensemble des dépendances en attendant de faire le tri plus précisement
+    - Ajout du paquet *bzip2* dans les images Docker
+  - PLMAccounts
+    - Ajout du module *passport-http-bearer* à l'application
+    - Modification de la méthode /clientByID/ pour utiliser le bon champ lors de la recherche
+*** Planned
+**** DONE Corriger les bugs détectés lors du déploiement
+- PLMAccounts & PLMProfiles
+  - Certaines dépendances notées comme uniquement nécessaire au développement sont en fait nécessaire au déploiement (*Grunt*)
+  - Il manque dans l'image Docker le paquet permettant de dézipper du .bz2
+- PLMAccounts
+  - Il manque la dépendance vers *passport-http-bearer* dans le package.json
+  - La méthode /clientById/ recherche un client par son *_id* dans la base de données au lieu de son *clientID*
+**** TODO Obtenir de l'espace de stockage supplémentaire pour la machine de TELECOM Nancy
 **** TODO Tester le serveur local à TELECOM Nancy
 - Générer un .jar du serveur local standalone
 - Faire des essais sur les différentes machines de l'école (Windows, Linux...)
 - Vérifier le fonctionnement de Mongo
   - Une dépendance à installer par ailleurs?
   - Besoin de merger rapidement le refactoring de la gestion des comptes utilisateurs?
+**** TODO Distinguer clientID et clientName
+- Actuellement, les deux sont confondus
+- Le nom d'application affiché lors de la demande d'autorisation d'accès au compte est donc le *clientID*
+- Corriger ça pour qu'on puisse afficher "PLM" et non "I8mYYmI9NRC5guz8aoXe"
 **** TODO Corriger bug Welcome / LoopWhile
 - En blockly, le programme ne peut pas s'exécuter ni la démo
+**** TODO Transférer les applications GitHub et Google
+- Pour pouvoir utiliser les services OAuth2 de GitHub et Google, il est nécessaire de créer une application chez eux.
+- Pour chacun de ces providers, deux applications sont nécessaires: une pour le mode local, une pour le mode centralisé
+- Transférer ces applications:
+  - GitHub -> A BuggleInc
+  - Google -> Créer un compte Google BuggleInc
+**** TODO Revoir les dependencies et devDependencies de PLMAccounts & PLMProfiles
+- Etudier le Gruntfile de ces 2 applications et comprendre les dépendances nécessaires à la tâche par défaut
+- Déplacer les dépendances nécessaires au lancement de l'application de *devDependencies* à *dependencies*
 **** TODO Séparer l'exécution par monde
 - Avec la nouvelle interface, exécuter le programme de l'utilisateur monde par monde permettrait de mieux indiquer sur quel monde s'est produit l'erreur
 - On a donc besoin d'un résultat par monde et non plus global
