@@ -1792,6 +1792,9 @@ case _ => MergeStrategy.first
   - PLMAccounts
     - Ajout du module *passport-http-bearer* à l'application
     - Modification de la méthode /clientByID/ pour utiliser le bon champ lors de la recherche
+- Distinguer clientID et clientName
+  - Ajout du champ clientName dans le modèle de Client
+  - Modification de l'UI pour afficher le clientName au lieu du clientID
 *** Planned
 **** DONE Corriger les bugs détectés lors du déploiement
 - PLMAccounts & PLMProfiles
@@ -1800,6 +1803,10 @@ case _ => MergeStrategy.first
 - PLMAccounts
   - Il manque la dépendance vers *passport-http-bearer* dans le package.json
   - La méthode /clientById/ recherche un client par son *_id* dans la base de données au lieu de son *clientID*
+**** DONE Distinguer clientID et clientName
+- Actuellement, les deux sont confondus
+- Le nom d'application affiché lors de la demande d'autorisation d'accès au compte est donc le *clientID*
+- Corriger ça pour qu'on puisse afficher "PLM" et non "I8mYYmI9NRC5guz8aoXe"
 **** TODO Obtenir de l'espace de stockage supplémentaire pour la machine de TELECOM Nancy
 **** TODO Tester le serveur local à TELECOM Nancy
 - Générer un .jar du serveur local standalone
@@ -1807,10 +1814,6 @@ case _ => MergeStrategy.first
 - Vérifier le fonctionnement de Mongo
   - Une dépendance à installer par ailleurs?
   - Besoin de merger rapidement le refactoring de la gestion des comptes utilisateurs?
-**** TODO Distinguer clientID et clientName
-- Actuellement, les deux sont confondus
-- Le nom d'application affiché lors de la demande d'autorisation d'accès au compte est donc le *clientID*
-- Corriger ça pour qu'on puisse afficher "PLM" et non "I8mYYmI9NRC5guz8aoXe"
 **** TODO Corriger bug Welcome / LoopWhile
 - En blockly, le programme ne peut pas s'exécuter ni la démo
 **** TODO Transférer les applications GitHub et Google
