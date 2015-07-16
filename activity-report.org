@@ -1795,6 +1795,23 @@ case _ => MergeStrategy.first
 - Distinguer clientID et clientName
   - Ajout du champ clientName dans le modèle de Client
   - Modification de l'UI pour afficher le clientName au lieu du clientID
+- Corriger bug d'authentification sur le serveur
+  - Le bug n'est présent que sur le serveur, il n'apparaît pas en local
+  - L'authentification échoue lorsque webPLM tente de contacter PLMProfiles
+  - Il s'avère que j'avais mal compris l'image plm-profiles
+  - Il s'agissait d'une image plm-accounts sous le nom plm-profiles
+  - Reconstruire l'image plm-profiles a permis de corriger le souci
+- Corriger bug de mise à jour de trackUser
+  - trackUser est ignoré lors de la conversion d'un objet User en JSON
+    - Ajout de ce champ dans les méthodes de lecture/écriture de/vers le JSON
+  - Ce champ n'existe pas dans le modèle d'un profil dans PLMProfiles
+    - Ajout du champ correspondant
+- Corriger bug d'authentification via PLMAccounts
+  - PLMAccounts n'arrivait pas à rediriger l'utilisateur vers PLM après l'authentification et l'autorisation d'accès au compte
+    - Je m'étais trompé en remplissant la base de données, en donnant des champs *redirectURL* aux clients au lieu de *redirectURI*
+  - Maintenant, PLMAccounts n'autorise plus le client
+    - Bug lors de la phase d'autorisation: /client.redirectURI !== redirectURI/
+    - Il s'avère que *redirectURI* (passé en paramètre de la requête) est *undefined*, ce qui fait échouer l'autorisation du client
 *** Planned
 **** DONE Corriger les bugs détectés lors du déploiement
 - PLMAccounts & PLMProfiles
@@ -1807,13 +1824,23 @@ case _ => MergeStrategy.first
 - Actuellement, les deux sont confondus
 - Le nom d'application affiché lors de la demande d'autorisation d'accès au compte est donc le *clientID*
 - Corriger ça pour qu'on puisse afficher "PLM" et non "I8mYYmI9NRC5guz8aoXe"
-**** TODO Obtenir de l'espace de stockage supplémentaire pour la machine de TELECOM Nancy
+**** DONE Obtenir de l'espace de stockage supplémentaire pour la machine de TELECOM Nancy
+**** DONE Corriger bug d'authentification sur le serveur
+- L'authentification via un provider échoue dans la version déployée sur le serveur
+**** DONE Corriger bug de mise à jour de trackUser
+- Par défaut, cet attribut n'est pas renseigné et les traces utilisateurs ne sont pas poussées sur GitHub
+- On peut changer cette valeur depuis la page de profil, mais la modification n'est pas prise en compte
+**** TODO Corriger bug d'authentification via PLMAccounts
+**** TODO Agrandir l'éditeur de code
 **** TODO Tester le serveur local à TELECOM Nancy
 - Générer un .jar du serveur local standalone
 - Faire des essais sur les différentes machines de l'école (Windows, Linux...)
 - Vérifier le fonctionnement de Mongo
   - Une dépendance à installer par ailleurs?
   - Besoin de merger rapidement le refactoring de la gestion des comptes utilisateurs?
+**** TODO Lancer docker-compose au démarrage de la machine
+- Lorsque la machine de TELECOM Nancy est redémarré, les différents conteneurs sont stoppés
+- Il faudrait qu'ils se relancent automatiquement au démarrage de la machine
 **** TODO Corriger bug Welcome / LoopWhile
 - En blockly, le programme ne peut pas s'exécuter ni la démo
 **** TODO Transférer les applications GitHub et Google
