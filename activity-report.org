@@ -1812,6 +1812,12 @@ case _ => MergeStrategy.first
   - Maintenant, PLMAccounts n'autorise plus le client
     - Bug lors de la phase d'autorisation: /client.redirectURI !== redirectURI/
     - Il s'avère que *redirectURI* (passé en paramètre de la requête) est *undefined*, ce qui fait échouer l'autorisation du client
+    - Correction de l'appel à la méthode d'autorisation, ajout de l'argument *redirectURI*
+  - Lorsque l'utilisateur accède à PLM via PLMAccounts, on lui demande d'autoriser PLM à accéder aux données de son compte
+  - Un bug oblige l'utilisateur à re-valider son choix à chaque connexion
+    - Dû à un bug empêchant de retrouver un token d'accès déjà existant pour cet utilisateur et ce client, le *clientID* étant manquant
+    - Lorsqu'on enregistre le token dans la base de données, on n'arrive pas à accéder au *clientID* de l'objet client que l'on vient de récupérer dans la base de données
+    - Dû à une faute de frappe dans le schéma Mongo de l'objet client: j'avais saisi *clientId* au lieu de *clientID*
 *** Planned
 **** DONE Corriger les bugs détectés lors du déploiement
 - PLMAccounts & PLMProfiles
@@ -1830,8 +1836,9 @@ case _ => MergeStrategy.first
 **** DONE Corriger bug de mise à jour de trackUser
 - Par défaut, cet attribut n'est pas renseigné et les traces utilisateurs ne sont pas poussées sur GitHub
 - On peut changer cette valeur depuis la page de profil, mais la modification n'est pas prise en compte
-**** TODO Corriger bug d'authentification via PLMAccounts
+**** DONE Corriger bug d'authentification via PLMAccounts
 **** TODO Agrandir l'éditeur de code
+**** TODO Mettre à jour le nom de l'utilisateur dans le menu lorsqu'il le modifie
 **** TODO Tester le serveur local à TELECOM Nancy
 - Générer un .jar du serveur local standalone
 - Faire des essais sur les différentes machines de l'école (Windows, Linux...)
