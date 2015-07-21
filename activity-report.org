@@ -1868,6 +1868,10 @@ case _ => MergeStrategy.first
   - Modification de /public/app/services/connexion.service.js/
     - Utilise le protocole *wss* pour se connecter si on est en HTTPS
     - Juste besoin de modifier le protocole utilisé, pas besoin de préciser le port utilisé
+- Mettre en place un reverse-proxy
+  - En s'inspirant largement de [[http://anandmanisankar.com/posts/docker-container-nginx-node-redis-example/][cet article]], j'ai créé [[https://github.com/BuggleInc/PLM-nginx/][un nouveau repo]].
+  - On se contente d'écouter sur le port 80 et de rediriger les requêtes entrantes vers l'*HTTPS*
+  - Modification du docker-compose pour lier *Nginx* au port 80 et non plus webPLM
 *** Planned
 **** DONE Tester le serveur local à TELECOM Nancy
 - Générer un .jar du serveur local standalone
@@ -1878,7 +1882,7 @@ case _ => MergeStrategy.first
 **** DONE Mettre en place le support de HTTPS
 - Permettrait de passer par le port 443 au lieu de 80, ce qui permettrait d'éviter le proxy
 - Activer HTTPS dans Play
-**** TODO Mettre en place un reverse-proxy
+**** DONE Mettre en place un reverse-proxy
 - Redirigerait toutes les requêtes reçues sur le port 80 sur le port 443
 - Risque pas de retrouver ce problème de proxy empêchant l'utilisation de webPLM depuis le réseau de l'école?
 - A moins de mettre explicitement la connexion sur la websocket sur le port 443
