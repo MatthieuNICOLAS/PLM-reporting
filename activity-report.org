@@ -1842,17 +1842,60 @@ case _ => MergeStrategy.first
 **** DONE Corriger bug d'authentification via PLMAccounts
 **** DONE Agrandir l'éditeur de code
 **** DONE Mettre à jour le nom de l'utilisateur dans le menu lorsqu'il le modifie
-**** TODO Tester le serveur local à TELECOM Nancy
+**** DONE Corriger bug Welcome / LoopWhile
+- En blockly, le programme ne peut pas s'exécuter ni la démo
+** Semaine du <2015-07-20 lun.> au <2015-07-24 ven.>
+*** Done
+- Tester le serveur local à TELECOM Nancy
+  - Génération d'un zip via /activator dist/
+  - J'ai pu tester que sous Windows, les machines Linux étant indisponibles
+    - Lorsqu'on démarre le serveur via le script .bat, un fichier RUNNING_PID est créé
+    - Si on ferme la console du serveur, le serveur est stoppé
+    - Mais il ne peut pas être relancé tant qu'on ne supprime pas le fichier RUNNING_PID
+  - Les images des leçons ne sont pas chargées, vérifier qu'elles sont dans l'archive
+  - Il manque les *CLIENT_SECRET* de Google & GitHub
+- Se connecter à webPLM depuis le réseau de l'école
+  - Une erreur survient lorsqu'on essaie de se connecter à http://plm.telecomnancy.univ-lorraine.fr
+  - En effet, un proxy sur le port 80 intercepte et modifie (si j'ai bien compris) la requête de création de la websocket
+  - La requête ayant été modifiée, cela fait échouer la création de la websocket
+  - L'ensemble de l'application ne fonctionne donc pas, puisque le protocole de communication entre le client et le serveur repose sur cette websocket
+- Mettre en place le support de HTTPS
+  - L'option au lancement *-Dhttps.port=9443* permet d'activer le support de HTTPS, tout en générant automatiquement un certificat auto-signé si besoin
+  - Mais comme il s'agit d'une option de lancement, je ne vois pas comment l'utiliser en mode serveur local
+  - Modification de la CMD du Dockerfile pour ajouter cette option
+  - Ajout de EXPOSE 9443 dans le Dockerfile
+  - Modification du docker-compose pour mapper le port 443 de la machine sur le port 9443 du docker webPLM
+  - Modification de /public/app/services/connexion.service.js/
+    - Utilise le protocole *wss* pour se connecter si on est en HTTPS
+    - Juste besoin de modifier le protocole utilisé, pas besoin de préciser le port utilisé
+*** Planned
+**** DONE Tester le serveur local à TELECOM Nancy
 - Générer un .jar du serveur local standalone
 - Faire des essais sur les différentes machines de l'école (Windows, Linux...)
 - Vérifier le fonctionnement de Mongo
   - Une dépendance à installer par ailleurs?
-  - Besoin de merger rapidement le refactoring de la gestion des comptes utilisateurs?
+  - Besoin de merger rapidement le refactoring de la gestion des comptes utilisateurs
+**** DONE Mettre en place le support de HTTPS
+- Permettrait de passer par le port 443 au lieu de 80, ce qui permettrait d'éviter le proxy
+- Activer HTTPS dans Play
+**** TODO Mettre en place un reverse-proxy
+- Redirigerait toutes les requêtes reçues sur le port 80 sur le port 443
+- Risque pas de retrouver ce problème de proxy empêchant l'utilisation de webPLM depuis le réseau de l'école?
+- A moins de mettre explicitement la connexion sur la websocket sur le port 443
+- Voir [[http://serverfault.com/questions/67316/in-nginx-how-can-i-rewrite-all-http-requests-to-https-while-maintaining-sub-dom][ce post]] sur comment faire
+**** TODO Corriger les problèmes & bugs détectés lors du test en mode local
+- Manque *CLIENT_SECRET* de Google & GitHub
+- Réduire l'espace entre la barre du haut et le contenu de la page
+- Images des leçons inaccessibles
+- Pas possible de récupérer son code en se connectant à son compte PLMAccounts
+- Ajouter un écran de chargement durant
+  - l'initialisation de PLM
+  - l'authentification
+  - la compilation du code de l'élève
+- Voir pour supprimer RUNNING_PID à la fermeture du serveur
 **** TODO Lancer docker-compose au démarrage de la machine
 - Lorsque la machine de TELECOM Nancy est redémarré, les différents conteneurs sont stoppés
 - Il faudrait qu'ils se relancent automatiquement au démarrage de la machine
-**** TODO Corriger bug Welcome / LoopWhile
-- En blockly, le programme ne peut pas s'exécuter ni la démo
 **** TODO Transférer les applications GitHub et Google
 - Pour pouvoir utiliser les services OAuth2 de GitHub et Google, il est nécessaire de créer une application chez eux.
 - Pour chacun de ces providers, deux applications sont nécessaires: une pour le mode local, une pour le mode centralisé
