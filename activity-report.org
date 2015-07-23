@@ -1872,6 +1872,23 @@ case _ => MergeStrategy.first
   - En s'inspirant largement de [[http://anandmanisankar.com/posts/docker-container-nginx-node-redis-example/][cet article]], j'ai créé [[https://github.com/BuggleInc/PLM-nginx/][un nouveau repo]].
   - On se contente d'écouter sur le port 80 et de rediriger les requêtes entrantes vers l'*HTTPS*
   - Modification du docker-compose pour lier *Nginx* au port 80 et non plus webPLM
+- Corriger les problèmes &  bugs détectés lors du test en mode local
+  - Réduire l'espace entre la barre du haut et le contenu de la page
+    - Suppression de margin-top et bottom du menu
+    - Suppression d'un <br> qui trainait
+- Débugger le système d'authentification
+  - Modification de l'URL de redirection auprès de Google, GitHub et PLMAccounts
+  - Modification de l'URL de redirection renseignée dans la configuration de Silhouette
+- Ajouter un bouton Accueil dans le menu du haut
+- Débugger l'API
+  - Le spy *ProgLangListener* n'envoye pas l'API lorsque le langage de programmation est modifié
+  - Ajout de méthodes pour récupérer l'API dans *PLM*
+  - Modification de *ProgLangListener* pour envoyer la nouvelle API lors d'un changement de langage de programmation
+  - Modification de *exerciseController* pour aussi mettre à jour l'API lorsque le *ProgLangListener* envoie un message
+- Débugger le dimensionnement du monde
+  - Ajout d'une méthode permettant d'afficher/de cacher l'API
+  - Redimensionne le canvas ensuite le canvas si la vue du monde est affichée
+  - Refactoring du code, utilisation d'une directive
 *** Planned
 **** DONE Tester le serveur local à TELECOM Nancy
 - Générer un .jar du serveur local standalone
@@ -1887,16 +1904,26 @@ case _ => MergeStrategy.first
 - Risque pas de retrouver ce problème de proxy empêchant l'utilisation de webPLM depuis le réseau de l'école?
 - A moins de mettre explicitement la connexion sur la websocket sur le port 443
 - Voir [[http://serverfault.com/questions/67316/in-nginx-how-can-i-rewrite-all-http-requests-to-https-while-maintaining-sub-dom][ce post]] sur comment faire
+**** DONE Débugger le système d'authentification
+- Le passage en HTTPS a cassé l'authentification via des services tiers, l'URL de redirection n'étant plus la même
+  - On est passé de http://plm.telecomnancy.univ-lorraine.fr à https://plm.telecomnancy.univ-lorraine.fr
+**** DONE Ajouter un bouton Accueil dans le menu du haut
+**** DONE Débugger l'API
+- Ne fonctionne plus dès qu'on change de langue
+**** DONE Débugger le dimensionnement du monde
+- La vue du monde est dimensionnée au démarrage de l'exercice en fonction de la taille de la <div> parente
+- Si la vue du monde est cachée au démarrage de l'exercice, la représentation du monde est ensuite minuscule
+**** TODO Ajouter la fonctionnalité permettant de signaler un bug
 **** TODO Corriger les problèmes & bugs détectés lors du test en mode local
-- Manque *CLIENT_SECRET* de Google & GitHub
-- Réduire l'espace entre la barre du haut et le contenu de la page
-- Images des leçons inaccessibles
-- Pas possible de récupérer son code en se connectant à son compte PLMAccounts
-- Ajouter un écran de chargement durant
+- [ ] Manque *CLIENT_SECRET* de Google & GitHub
+- [X] Réduire l'espace entre la barre du haut et le contenu de la page
+- [ ] Images des leçons inaccessibles
+- [ ] Pas possible de récupérer son code en se connectant à son compte PLMAccounts
+- [ ] Ajouter un écran de chargement durant
   - l'initialisation de PLM
   - l'authentification
   - la compilation du code de l'élève
-- Voir pour supprimer RUNNING_PID à la fermeture du serveur
+- [ ] Voir pour supprimer RUNNING_PID à la fermeture du serveur
 **** TODO Lancer docker-compose au démarrage de la machine
 - Lorsque la machine de TELECOM Nancy est redémarré, les différents conteneurs sont stoppés
 - Il faudrait qu'ils se relancent automatiquement au démarrage de la machine
