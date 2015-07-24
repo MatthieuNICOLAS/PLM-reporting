@@ -1876,6 +1876,7 @@ case _ => MergeStrategy.first
   - Réduire l'espace entre la barre du haut et le contenu de la page
     - Suppression de margin-top et bottom du menu
     - Suppression d'un <br> qui trainait
+  - Ajout des *client secrets* à conf/application.conf
 - Débugger le système d'authentification
   - Modification de l'URL de redirection auprès de Google, GitHub et PLMAccounts
   - Modification de l'URL de redirection renseignée dans la configuration de Silhouette
@@ -1889,6 +1890,26 @@ case _ => MergeStrategy.first
   - Ajout d'une méthode permettant d'afficher/de cacher l'API
   - Redimensionne le canvas ensuite le canvas si la vue du monde est affichée
   - Refactoring du code, utilisation d'une directive
+- Implémenter  un formulaire permettant de signaler un bug
+  - Partie cliente
+    - Ajout d'un service *BugReport*, exposant plusieurs variables *title*, *body* & *error* ainsi qu'une méthode /submit/
+    - /submit/ transmet au serveur *title* & *body* pour qu'il puisse créer l'issue sur GitHub
+    - Ajout d'un formulaire permettant de modifier *title* & *body* et de déclencher /submit/
+    - Ce formulaire observe aussi *error* pour savoir si l'issue a correctement été créée
+    - Dans le cas contraire, affiche un message d'erreur selon la valeur de *error*
+    - Ajout d'un toast remerciant l'utilisateur de son feedback et lui permettant d'accéder à la page de l'issue sur GitHub
+  - Partie serveur
+    - Reprise de ce [[https://github.com/BuggleInc/PLM/blob/master/src/plm/core/ui/FeedbackDialog.java#L128-L157][morceau de code]].
+    - Ajout d'un handler pour le message /submitBugReport/
+    - Vérifie que *title* & *body* sont présents dans le message reçu
+    - Vérifie que *title* n'est pas vide
+    - Upload l'issue sur GitHub et transmet l'URL au client
+- Indiquer dans le commit de démarrage/fin de PLM si on est sur la version web
+  - Ajout d'un ensemble de propriétés au constructeur de *Game*
+  - Ces propriétés sont récupérées et ajoutées depuis webPLM
+    - *webplm.version* indique la version de WebPLM
+    - *webplm.user-agent* indique le header User-Agent de l'utilisateur
+  - Ajout de ces propriétés dans le message de commit dans *GitSpy*
 *** Planned
 **** DONE Tester le serveur local à TELECOM Nancy
 - Générer un .jar du serveur local standalone
@@ -1913,9 +1934,11 @@ case _ => MergeStrategy.first
 **** DONE Débugger le dimensionnement du monde
 - La vue du monde est dimensionnée au démarrage de l'exercice en fonction de la taille de la <div> parente
 - Si la vue du monde est cachée au démarrage de l'exercice, la représentation du monde est ensuite minuscule
-**** TODO Ajouter la fonctionnalité permettant de signaler un bug
+**** DONE Ajouter la fonctionnalité permettant de signaler un bug
+**** DONE Indiquer dans le commit de démarrage/fin de PLM si on est sur la version web
+- Voir [[https://github.com/BuggleInc/webPLM/issues/33][cette issue]]
 **** TODO Corriger les problèmes & bugs détectés lors du test en mode local
-- [ ] Manque *CLIENT_SECRET* de Google & GitHub
+- [X] Manque *CLIENT_SECRET* de Google & GitHub
 - [X] Réduire l'espace entre la barre du haut et le contenu de la page
 - [ ] Images des leçons inaccessibles
 - [ ] Pas possible de récupérer son code en se connectant à son compte PLMAccounts
