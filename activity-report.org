@@ -1937,6 +1937,33 @@ case _ => MergeStrategy.first
 **** DONE Ajouter la fonctionnalité permettant de signaler un bug
 **** DONE Indiquer dans le commit de démarrage/fin de PLM si on est sur la version web
 - Voir [[https://github.com/BuggleInc/webPLM/issues/33][cette issue]]
+** Semaine du <2015-08-03 lun.> au <2015-08-07 ven.>
+*** Done
+- Débugger PLM-data
+  - Même l'ancienne version de PLM ne peut plus pusher sur PLM-data
+  - Pourtant, lors de la migration, on n'avait pas eu de problèmes
+  - Modification des données de PLMBugz?
+- Tester les PR de Pierric
+  - Un bug s'était glissé dans ses modifications: oubli d'une virgule dans *PancakeOperationToJson*
+  - Pas de bug détecté lors des tests utilisateurs
+- Retirer les tests sur les langages de programmation au lancement de PLM
+  - Suppression des méthodes /checkScala/, /checkPython/...
+  - Affectation en dur de *canScala*, *canPython* & *canBlockly*
+  - Je n'ai pas l'impression que cela a influé sur les performances au démarrage
+*** Planned
+**** DONE Tester les PR de Pierric
+- Pierric a détecté et résolu un bug dans le monde des Pancakes
+  - L'opération /flip/ ne possédait pas assez de données pour que le reverse soit correct
+- Tester ses modifications pour s'assurer du bon fonctionnement de l'opération
+**** DONE Retirer les tests sur les langages de programmation au lancement de PLM
+- Lors de l'instanciation de Game, on vérifie si on peut programmer en Scala, en Python, en C & en Blockly
+- Cela était nécessaire lorsque PLM était un client lourd, mais maintenant que l'exécution se déroule dans un docker, c'est inutile
+**** TODO Débugger PLM-data
+- Les commits ne sont pas pushés sur PLM-data
+- Corriger cela
+**** TODO Débugger Travis
+- Travis n'a plus l'air de réussir à build le projet et à exécuter les tests
+- Voir ce qui pose problème
 **** TODO Corriger les problèmes & bugs détectés lors du test en mode local
 - [X] Manque *CLIENT_SECRET* de Google & GitHub
 - [X] Réduire l'espace entre la barre du haut et le contenu de la page
