@@ -1950,6 +1950,16 @@ case _ => MergeStrategy.first
   - Suppression des méthodes /checkScala/, /checkPython/...
   - Affectation en dur de *canScala*, *canPython* & *canBlockly*
   - Je n'ai pas l'impression que cela a influé sur les performances au démarrage
+- Retirer le langage C des langages de programmation disponible
+- Rediriger l'utilisateur à l'accueil à la fin d'une leçon
+  - Modification du service /exerciseslist/ pour renvoyer '' si il n'y a de prochain exercice
+  - Modification de la directive /success-modal/ pour que le message change si on a atteint la fin d'une leçon
+    - Ajout d'un message expliquant à l'élève qu'il a fini la leçon
+    - Modification du bouton de redirection pour le rediriger vers la page d'accueil
+- Rédiger la documentation expliquant comment traduire l'application
+  - Ajout de la page [[https://github.com/BuggleInc/webPLM/wiki/Working-on-translations][Working on translations]] au wiki
+- Rédiger la documentation expliquant comment ajouter Blockly
+  - Ajout de la page [[https://github.com/BuggleInc/webPLM/wiki/Add-Blockly-to-an-exercise][Add Blockly to an exercise]] au wiki
 *** Planned
 **** DONE Tester les PR de Pierric
 - Pierric a détecté et résolu un bug dans le monde des Pancakes
@@ -1958,6 +1968,15 @@ case _ => MergeStrategy.first
 **** DONE Retirer les tests sur les langages de programmation au lancement de PLM
 - Lors de l'instanciation de Game, on vérifie si on peut programmer en Scala, en Python, en C & en Blockly
 - Cela était nécessaire lorsque PLM était un client lourd, mais maintenant que l'exécution se déroule dans un docker, c'est inutile
+**** DONE Retirer le langage C des langages de programmation disponible
+- Celui-ci ne fonctionnant pas actuellement, il faudrait mieux le retirer en attendant
+**** DONE Rediriger l'utilisateur à l'accueil à la fin d'une leçon
+- Lorsqu'on réussit un exercice, l'application nous invite à passer à l'exercice suivant
+- Si on réussit le dernier exercice d'une leçon, il faudrait plutôt rediriger l'utilisateur à l'accueil
+- Voir pour mettre en place un message particulier dans ce cas
+**** DONE Rédiger la documentation expliquant comment traduire l'application
+- L'outil utilisé pour traduire webPLM n'est pas le même que PLM
+- Il est donc nécessaire de rédiger un tutoriel pour les contributeurs
 **** TODO Débugger PLM-data
 - Les commits ne sont pas pushés sur PLM-data
 - Corriger cela
@@ -1989,10 +2008,6 @@ case _ => MergeStrategy.first
 **** TODO Séparer l'exécution par monde
 - Avec la nouvelle interface, exécuter le programme de l'utilisateur monde par monde permettrait de mieux indiquer sur quel monde s'est produit l'erreur
 - On a donc besoin d'un résultat par monde et non plus global
-**** TODO Rediriger l'utilisateur à l'accueil à la fin d'une leçon
-- Lorsqu'on réussit un exercice, l'application nous invite à passer à l'exercice suivant
-- Si on réussit le dernier exercice d'une leçon, il faudrait plutôt rediriger l'utilisateur à l'accueil
-- Voir pour mettre en place un message particulier dans ce cas
 **** TODO Améliorer le service d'authentification
 - [ ] Changer la page d'accueil
 - [X] Empêcher l'utilisateur d'accèder à la page de demande d'autorisation d'accès au compte sans être connecté
@@ -2014,9 +2029,6 @@ case _ => MergeStrategy.first
 **** TODO Documenter le service de profil
 - Rédiger README
 - Revoir LICENSE
-**** TODO Rédiger la documentation expliquant comment traduire l'application
-- L'outil utilisé pour traduire webPLM n'est pas le même que PLM
-- Il est donc nécessaire de rédiger un tutoriel pour les contributeurs
 **** TODO Réalisation d'une interface admin
 - Retrouver l'id Git des utilisateurs enregistrés
 **** TODO Ajouter d'autres providers
