@@ -1960,6 +1960,18 @@ case _ => MergeStrategy.first
   - Ajout de la page [[https://github.com/BuggleInc/webPLM/wiki/Working-on-translations][Working on translations]] au wiki
 - Rédiger la documentation expliquant comment ajouter Blockly
   - Ajout de la page [[https://github.com/BuggleInc/webPLM/wiki/Add-Blockly-to-an-exercise][Add Blockly to an exercise]] au wiki
+- Débugger PLM-data
+  - Problème même avec les anciennes versions de PLM (2.4, 2.5).
+  - Semble venir du token d'authentification de PLMBugz qui n'a plus l'air d'être valide, à confirmer.
+  - Autre problème sur le serveur: le répertoire .plm du serveur n'est pas mis à jour lorsqu'un utilisateur travaille sur webPLM.
+    - Le volume monté contenant le répertoire .plm n'était pas monté au bon endroit pour le docker
+    - Modification de docker-compose pour que le répertoire .plm se trouve bien à /root/.plm/
+    - Erreur dans le docker-compose, 2 parties *volumes:*
+    - La 1ère (contenant le volume pour git) était effacée par la seconde
+    - Fusion des 2 parties *volumes:*
+- Corriger les problèmes & bugs détectés lors du test en mode local
+  - Re-ajout du message indiquant à l'utilisateur que le monde n'est pas encore supporté
+  - Re-ajout du slider permettant de modifier la vitesse d'animation
 *** Planned
 **** DONE Tester les PR de Pierric
 - Pierric a détecté et résolu un bug dans le monde des Pancakes
@@ -1993,6 +2005,8 @@ case _ => MergeStrategy.first
   - l'authentification
   - la compilation du code de l'élève
 - [ ] Voir pour supprimer RUNNING_PID à la fermeture du serveur
+- [X] Le message indiquant que ce type de monde n'est pas encore supporté n'est plus affiché
+- [X] Le slider permettant de choisir la vitesse d'animation a été oublié lors du refactoring de l'UI
 **** TODO Lancer docker-compose au démarrage de la machine
 - Lorsque la machine de TELECOM Nancy est redémarré, les différents conteneurs sont stoppés
 - Il faudrait qu'ils se relancent automatiquement au démarrage de la machine
