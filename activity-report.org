@@ -1963,6 +1963,8 @@ case _ => MergeStrategy.first
 - Débugger PLM-data
   - Problème même avec les anciennes versions de PLM (2.4, 2.5).
   - Semble venir du token d'authentification de PLMBugz qui n'a plus l'air d'être valide, à confirmer.
+  - Le token était bien invalide dorénavant. On l'a remplacé par un nouveau.
+  - Mais les anciennes version de PLM ne peuvent *PLUS* publier leurs données du coup.
   - Autre problème sur le serveur: le répertoire .plm du serveur n'est pas mis à jour lorsqu'un utilisateur travaille sur webPLM.
     - Le volume monté contenant le répertoire .plm n'était pas monté au bon endroit pour le docker
     - Modification de docker-compose pour que le répertoire .plm se trouve bien à /root/.plm/
@@ -1989,9 +1991,13 @@ case _ => MergeStrategy.first
 **** DONE Rédiger la documentation expliquant comment traduire l'application
 - L'outil utilisé pour traduire webPLM n'est pas le même que PLM
 - Il est donc nécessaire de rédiger un tutoriel pour les contributeurs
-**** TODO Débugger PLM-data
+**** DONE Débugger PLM-data
 - Les commits ne sont pas pushés sur PLM-data
 - Corriger cela
+**** TODO Revoir le formulaire concernant la publication des traces
+- Actuellement, si on clique sur "Oui" ou sur "Non", ce choix est valide que pour cette session.
+- Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
+- C'est seulement s'il sélectionne "Décider plus tard" que la pop-up disparaît pendant plusieurs jours.
 **** TODO Débugger Travis
 - Travis n'a plus l'air de réussir à build le projet et à exécuter les tests
 - Voir ce qui pose problème
