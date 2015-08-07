@@ -1974,6 +1974,13 @@ case _ => MergeStrategy.first
 - Corriger les problèmes & bugs détectés lors du test en mode local
   - Re-ajout du message indiquant à l'utilisateur que le monde n'est pas encore supporté
   - Re-ajout du slider permettant de modifier la vitesse d'animation
+- Débugger Travis
+  - Correction des tests unitaires de webPLM
+    - Oubli d'une dépendance pour les tests unitaires de Jasmine
+    - Modification de l'appel au constructeur de Game pour prendre en compte les derniers changements
+  - Passage à la nouvelle infrastructure docker-isé de Travis
+    - Ajout de /sudo: false/ dans les /.travis.yml/
+    - Utilisation du système de cache pour ne pas télécharger les dépendances de *webPLM* à chaque build
 *** Planned
 **** DONE Tester les PR de Pierric
 - Pierric a détecté et résolu un bug dans le monde des Pancakes
@@ -1994,13 +2001,13 @@ case _ => MergeStrategy.first
 **** DONE Débugger PLM-data
 - Les commits ne sont pas pushés sur PLM-data
 - Corriger cela
+**** DONE Débugger Travis
+- Travis n'a plus l'air de réussir à build le projet et à exécuter les tests
+- Voir ce qui pose problème
 **** TODO Revoir le formulaire concernant la publication des traces
 - Actuellement, si on clique sur "Oui" ou sur "Non", ce choix est valide que pour cette session.
 - Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
 - C'est seulement s'il sélectionne "Décider plus tard" que la pop-up disparaît pendant plusieurs jours.
-**** TODO Débugger Travis
-- Travis n'a plus l'air de réussir à build le projet et à exécuter les tests
-- Voir ce qui pose problème
 **** TODO Corriger les problèmes & bugs détectés lors du test en mode local
 - [X] Manque *CLIENT_SECRET* de Google & GitHub
 - [X] Réduire l'espace entre la barre du haut et le contenu de la page
