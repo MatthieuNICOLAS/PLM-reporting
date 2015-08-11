@@ -2004,6 +2004,23 @@ case _ => MergeStrategy.first
 **** DONE Débugger Travis
 - Travis n'a plus l'air de réussir à build le projet et à exécuter les tests
 - Voir ce qui pose problème
+** Semaine du <2015-08-10 lun.> au <2015-08-14 ven.>
+*** Done
+- Ajouter un mécanisme de feedback pour le système d'indices d'Alex
+  - Ajout d'une directive AngularJS <error-feedback> dans la réponse du serveur si on a détecté une erreur commune
+  - Besoin d'interpréter cette directive
+    - $sce ne suffit pas (se contente de prendre en compte l'HTML, mais n'interprète pas la directive)
+    - Utilisation de $compile pour gérer correctement la directive reçue
+  - Problème: on doit pas attacher un indice à un *Execution Results* puisque ré-exécuter le programme le ferait disparaître
+  - Finalement, reworking de la gestion des indices
+    - Ajout de *commonErrorText* et *commonErrorID* au message /executionResult/
+    - Création d'un service pour gérer les erreurs communes rencontrées au cours d'un exercice pour chacun des mondes
+*** Planned
+**** TODO Ajouter un mécanisme de feedback pour le système d'indices d'Alex
+- Il faudrait demander à l'utilisateur si le message d'erreur obtenu est pertinent et l'a aidé à résoudre l'exercice
+- Ajouter un formulaire de feedback
+- Stocker les feedbacks reçus
+- Exploiter les feedbacks?
 **** TODO Revoir le formulaire concernant la publication des traces
 - Actuellement, si on clique sur "Oui" ou sur "Non", ce choix est valide que pour cette session.
 - Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
@@ -2106,3 +2123,4 @@ case _ => MergeStrategy.first
 - Documenter les composants et leurs méthodes
 - Documenter le protocole de communication de la websocket entre le client et le serveur
 - Documenter le système de traduction
+  
