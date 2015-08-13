@@ -2015,12 +2015,28 @@ case _ => MergeStrategy.first
   - Finalement, reworking de la gestion des indices
     - Ajout de *commonErrorText* et *commonErrorID* au message /executionResult/
     - Création d'un service pour gérer les erreurs communes rencontrées au cours d'un exercice pour chacun des mondes
+    - Modification de la directive /execution-result/ pour afficher les *commonErrorText* reçus
+  - Ajout d'un formulaire permettant de faire un feedback
+    - Interagit avec le nouveau service *commonErrorsFeedback*
+    - Permet de spécifier la /précision/ de la détection du problème, /l'aide/ apportée et de laisser un commentaire si besoin
+- Amélioration de la disposition des /Test cases/
+- Bufferiser le streaming d'opérations
+  - Ajout d'un accumulateur d'opérations dans *ExecutionSpy*
+  - N'envoie plus qu'une fois par seconde maximum
+  - Lorsque *ExecutionResultListener* détecte la fin de l'exécution du programme, il en informe *PLMActor*
+  - *PLMActor* demande alors aux *ExecutionSpy* d'envoyer les opérations encore présentes dans l'accumulateur
 *** Planned
+**** DONE Bufferiser le streaming d'opérations
+- Permettrait d'éviter de surcharger le navigateur lors de certains exercices produisant un grand nombre d'opérations (les turmites?)
 **** TODO Ajouter un mécanisme de feedback pour le système d'indices d'Alex
 - Il faudrait demander à l'utilisateur si le message d'erreur obtenu est pertinent et l'a aidé à résoudre l'exercice
 - Ajouter un formulaire de feedback
 - Stocker les feedbacks reçus
 - Exploiter les feedbacks?
+**** TODO Résoudre bug concernant la taille du canvas
+- Il est possible, en passant d'un monde à l'autre, de réduire la taille du canvas jusqu'à ce que celui-ci ne soit plus lisible.
+- Ceci est dû au recalcul de la taille du canvas à chaque changement de monde pour définir la taille à avoir pour respecter les proportions du monde.
+- Voir pour résoudre ce problème
 **** TODO Revoir le formulaire concernant la publication des traces
 - Actuellement, si on clique sur "Oui" ou sur "Non", ce choix est valide que pour cette session.
 - Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
