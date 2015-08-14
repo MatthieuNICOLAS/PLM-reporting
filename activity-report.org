@@ -2019,24 +2019,45 @@ case _ => MergeStrategy.first
   - Ajout d'un formulaire permettant de faire un feedback
     - Interagit avec le nouveau service *commonErrorsFeedback*
     - Permet de spécifier la /précision/ de la détection du problème, /l'aide/ apportée et de laisser un commentaire si besoin
+  - Ajout d'un nouveau type d'evénèment Git: /commonErrorFeedback/
+    - Contient /accuracy/, /help/, /comment/, /commonErrorID/, /exoID/
+    - Ajoute aussi 2 fichiers:
+      - le code générant le monde de la commonError concernée
+      - le message d'erreur customisé affiché
+    - Exemple ici: https://github.com/BuggleInc/PLM-data/commit/80d583f8dd40c0b5dc327d475526e5a88f82b2ec
 - Amélioration de la disposition des /Test cases/
 - Bufferiser le streaming d'opérations
   - Ajout d'un accumulateur d'opérations dans *ExecutionSpy*
   - N'envoie plus qu'une fois par seconde maximum
   - Lorsque *ExecutionResultListener* détecte la fin de l'exécution du programme, il en informe *PLMActor*
   - *PLMActor* demande alors aux *ExecutionSpy* d'envoyer les opérations encore présentes dans l'accumulateur
+- Corriger bug websocket avec IE/Edge
+  - Mise en place d'une détection du navigateur à la connexion
+  - Si IE/Edge, mise en place d'un ping toutes les 15s
 *** Planned
 **** DONE Bufferiser le streaming d'opérations
 - Permettrait d'éviter de surcharger le navigateur lors de certains exercices produisant un grand nombre d'opérations (les turmites?)
-**** TODO Ajouter un mécanisme de feedback pour le système d'indices d'Alex
+**** DONE Ajouter un mécanisme de feedback pour le système d'indices d'Alex
 - Il faudrait demander à l'utilisateur si le message d'erreur obtenu est pertinent et l'a aidé à résoudre l'exercice
 - Ajouter un formulaire de feedback
 - Stocker les feedbacks reçus
 - Exploiter les feedbacks?
+**** DONE Corriger bug websocket avec IE/Edge
+- Il semblerait que si la websocket n'est pas utilisée pendant un certain temps, elle est automatiquement fermée par IE/Edge
+- Voir si comment résoudre ce problème
+  - Envoyer un ping périodiquement?
+  - Tenter de re-ouvrir la websocket?
+**** TODO Déployer la version avec les juges
+- Merger PRs de Tanguy
+- Générer une branche prod-judge pour webPLM
 **** TODO Résoudre bug concernant la taille du canvas
 - Il est possible, en passant d'un monde à l'autre, de réduire la taille du canvas jusqu'à ce que celui-ci ne soit plus lisible.
 - Ceci est dû au recalcul de la taille du canvas à chaque changement de monde pour définir la taille à avoir pour respecter les proportions du monde.
 - Voir pour résoudre ce problème
+**** TODO Revoir Blockly
+- Les toolboxs pour chaque exercice ne semble pas avoir été récupérées lors du merge
+- Voir pour les ajouter
+- Voir pour ajouter les entités .blockly des BDR
 **** TODO Revoir le formulaire concernant la publication des traces
 - Actuellement, si on clique sur "Oui" ou sur "Non", ce choix est valide que pour cette session.
 - Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
