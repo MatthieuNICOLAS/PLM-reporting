@@ -2047,9 +2047,57 @@ case _ => MergeStrategy.first
 - Voir si comment résoudre ce problème
   - Envoyer un ping périodiquement?
   - Tenter de re-ouvrir la websocket?
-**** TODO Déployer la version avec les juges
+** Semaine du <2015-08-17 lun.> au <2015-08-21 ven.>
+*** Done
+- Déployer la version avec les juges
+  - WebPLM:
+    - Création d'une branche prod-judge
+    - Branche utilisant les juges mais avec la configuration du serveur de prod
+  - PLM:
+    - Création d'une branche webplm-split
+      - Branche destinée à générer le jar pour webPLM prod-judge
+    - Création d'une branche judge
+      - Branche destinée à générer le jar pour PLM-judge
+  - Version déployée mais vite tombée
+    - Gravement tombée puisque le service SSH ne répond plus, empêchant de redémarrer l'application
+- Amélioration des juges
+  - Suppression d'un listener inutile
+    - Apparition d'une NullPointerException dans /Game.worldHasChanged/
+    - /selectedWorld == null/ (puisqu'on a jamais appelé /Game.getSelectedWorld/)
+    - Utilisation de /getSelectedWorld/ au lieu de manipuler directement /selectedWorld/
+    - *ConcurrentModificationException* levée dans /World.notifyEntityUpdateListeners/
+    - Dû semblerait au fait de modifier la liste parcourue par l'itérateur en parallèle de l'exécution de l'itérateur
+    - Mais bug n'apparaît que sur le 1er exo de chaque leçon
+    - Bug disparaît si on n'appelle pas /Game.switchExercise/ si on souhaite accéder au 1er exo de la leçon
+    - Le bug proviendrait de /Game.switchExercise/ qui remet à *null* /selectedWorld/
+    - Du coup, le prochain appel à /Game.getSelectedWorld/ mettra à jour la liste des *entitiesUpdateListeners*
+    - Manque de chance, le prochain appel provient de /Game.worldHasChanged/ (suite à la modification faite pour éviter la *NullPointerException*)
+    - Correction de /Game.switchExercise/ pour que cette fonction appelle /Game.getSelectedWorld/ ensuite
+  - Suppression des warnings présents dans le code
+  - Bug: les opérations n'arrivent pas dans le bon ordre au client
+    - Modification du buffer des opérations pour ne pas envoyer la 1ère séparément
+    - Le problème semble résolu pour le moment
+  - Suppression de la boucle infinie gardant les juges en vie
+- Débugger System.out.println
+  - Bug car j'ai retiré /listener.send/
+  - Le listener sert en effet à envoyer les messages écrits sur la sortie standard
+  - Re-ajout de /listener.send/
+- Limiter la consommation en ressource des juges
+  - Voir [[https://docs.docker.com/reference/run/#runtime-constraints-on-resources][cette page]]
+*** Planned
+**** DONE Déployer la version avec les juges
 - Merger PRs de Tanguy
 - Générer une branche prod-judge pour webPLM
+**** DONE Débugger System.out.println
+- Dans les juges, System.out n'est pas correctement redirigé vers le client
+**** TODO Limiter la consommation en ressource des juges
+- Il faudrait que lancer une boucle infinie dans un juge n'impacte pas l'ensemble de l'application
+- Limiter les ressources des juges:
+  - RAM
+  - Vitesse de calcul
+**** TODO Ajouter un SecurityManager sur les juges
+- Empêcher de faire des requêtes HTTP (problème avec la queue de message?)
+- Empêcher d'écrire des fichiers
 **** TODO Résoudre bug concernant la taille du canvas
 - Il est possible, en passant d'un monde à l'autre, de réduire la taille du canvas jusqu'à ce que celui-ci ne soit plus lisible.
 - Ceci est dû au recalcul de la taille du canvas à chaque changement de monde pour définir la taille à avoir pour respecter les proportions du monde.
