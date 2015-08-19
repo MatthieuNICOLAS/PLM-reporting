@@ -2078,23 +2078,37 @@ case _ => MergeStrategy.first
     - Modification du buffer des opérations pour ne pas envoyer la 1ère séparément
     - Le problème semble résolu pour le moment
   - Suppression de la boucle infinie gardant les juges en vie
+    - Les juges ne se stoppaient pas pour autant, certains threads étant toujours lancés
+    - Ajout de /System.exit(0)/ à la fin du Main pour régler ce souci
+  - Réduction de la durée de vie des juges et de leurs messages
+    - L'exécution ne dure plus que 8 secondes
+    - Les messages expirent au bout de 3 secondes
 - Débugger System.out.println
   - Bug car j'ai retiré /listener.send/
   - Le listener sert en effet à envoyer les messages écrits sur la sortie standard
   - Re-ajout de /listener.send/
 - Limiter la consommation en ressource des juges
   - Voir [[https://docs.docker.com/reference/run/#runtime-constraints-on-resources][cette page]]
+  - *cpu-period* et *cpu-quota* ne semblent pas disponibles dans docker-compose
+  - *cpuset* est utilisable par contre: permet de limiter le nombre de coeurs disponibles pour les juges
+- Augmenter la RAM disponible pour webPLM
+  - Modification du Dockerfile pour lancer l'application avec l'option: /-mem <insert-value-here> -J-server/
 *** Planned
 **** DONE Déployer la version avec les juges
 - Merger PRs de Tanguy
 - Générer une branche prod-judge pour webPLM
 **** DONE Débugger System.out.println
 - Dans les juges, System.out n'est pas correctement redirigé vers le client
+**** DONE Augmenter la RAM disponible pour webPLM
+- Si plusieurs boucles infinies sont exécutés au même moment, webPLM plante suite à un dépassement de la pile
+- Voir pour dépasser la limite de RAM de la JVM par défaut
 **** TODO Limiter la consommation en ressource des juges
 - Il faudrait que lancer une boucle infinie dans un juge n'impacte pas l'ensemble de l'application
 - Limiter les ressources des juges:
   - RAM
   - Vitesse de calcul
+**** TODO Déployer la version avec le contrôle des ressources
+- Déployer la nouvelle version limitant la capacité 
 **** TODO Ajouter un SecurityManager sur les juges
 - Empêcher de faire des requêtes HTTP (problème avec la queue de message?)
 - Empêcher d'écrire des fichiers
