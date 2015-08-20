@@ -2093,6 +2093,13 @@ case _ => MergeStrategy.first
   - *cpuset* est utilisable par contre: permet de limiter le nombre de coeurs disponibles pour les juges
 - Augmenter la RAM disponible pour webPLM
   - Modification du Dockerfile pour lancer l'application avec l'option: /-mem <insert-value-here> -J-server/
+- Ajouter un SecurityManager sur les juges
+  - Ajout du fichier ∕conf.txt/ dans PLM-judge
+  - Modification de la commande du Dockerfile pour le prendre en compte
+- Factoriser les connexions aux queues de messages dans webPLM
+  - Factoriser la connexion marche correctement
+  - Par contre, ouvrir les channels à la connexion de l'utilisateur et les garder ouvert durant toute la session semble poser problème
+  - La queue de message génère le message d'erreur /{amqp_error,precondition_failed,"unknown delivery tag 1",'basic.nack'}/ lorsque le *Tribunal* ACK le 1er message
 *** Planned
 **** DONE Déployer la version avec les juges
 - Merger PRs de Tanguy
@@ -2102,6 +2109,14 @@ case _ => MergeStrategy.first
 **** DONE Augmenter la RAM disponible pour webPLM
 - Si plusieurs boucles infinies sont exécutés au même moment, webPLM plante suite à un dépassement de la pile
 - Voir pour dépasser la limite de RAM de la JVM par défaut
+**** DONE Ajouter un SecurityManager sur les juges
+- Empêcher de faire des requêtes HTTP (problème avec la queue de message?)
+- Empêcher d'écrire des fichiers
+**** DONE Factoriser les connexions aux queues de messages dans webPLM
+- Actuellement, on créé une connexion à chaque queue de message par utilisateur
+- Factoriser la connexion pour n'en utiliser qu'une, globale
+- Seuls les channels sont des variables d'instance
+- Fermer les channels à l'arrêt de PLMActor
 **** TODO Limiter la consommation en ressource des juges
 - Il faudrait que lancer une boucle infinie dans un juge n'impacte pas l'ensemble de l'application
 - Limiter les ressources des juges:
@@ -2109,9 +2124,11 @@ case _ => MergeStrategy.first
   - Vitesse de calcul
 **** TODO Déployer la version avec le contrôle des ressources
 - Déployer la nouvelle version limitant la capacité 
-**** TODO Ajouter un SecurityManager sur les juges
-- Empêcher de faire des requêtes HTTP (problème avec la queue de message?)
-- Empêcher d'écrire des fichiers
+**** TODO Générer le commit concernant l'exécution dans webPLM
+- Actuellement, le message de commit est généré dans le juge puis transmis à webPLM
+- Mais si le juge plante, aucun commit n'est effectué
+- Ajouter un commit stipulant que l'exécution a échoué
+- Déplacer la génération du message de commit dans webPLM tant qu'à faire
 **** TODO Résoudre bug concernant la taille du canvas
 - Il est possible, en passant d'un monde à l'autre, de réduire la taille du canvas jusqu'à ce que celui-ci ne soit plus lisible.
 - Ceci est dû au recalcul de la taille du canvas à chaque changement de monde pour définir la taille à avoir pour respecter les proportions du monde.
