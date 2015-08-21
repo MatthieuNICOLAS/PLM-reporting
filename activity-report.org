@@ -2100,6 +2100,12 @@ case _ => MergeStrategy.first
   - Factoriser la connexion marche correctement
   - Par contre, ouvrir les channels à la connexion de l'utilisateur et les garder ouvert durant toute la session semble poser problème
   - La queue de message génère le message d'erreur /{amqp_error,precondition_failed,"unknown delivery tag 1",'basic.nack'}/ lorsque le *Tribunal* ACK le 1er message
+- Déployer la version avec le contrôle des ressources
+  - On a testé cette version qui était hébergée sur ma machine
+  - Le serveur n'a pas planté!
+  - Mais il mettait du temps à répondre par moment
+  - Certaines sessions ont été interrompues
+  - Le goulot d'étranglement semble être webPLM maintenant
 *** Planned
 **** DONE Déployer la version avec les juges
 - Merger PRs de Tanguy
@@ -2117,12 +2123,12 @@ case _ => MergeStrategy.first
 - Factoriser la connexion pour n'en utiliser qu'une, globale
 - Seuls les channels sont des variables d'instance
 - Fermer les channels à l'arrêt de PLMActor
-**** TODO Limiter la consommation en ressource des juges
+**** DONE Limiter la consommation en ressource des juges
 - Il faudrait que lancer une boucle infinie dans un juge n'impacte pas l'ensemble de l'application
 - Limiter les ressources des juges:
   - RAM
   - Vitesse de calcul
-**** TODO Déployer la version avec le contrôle des ressources
+**** DONE Déployer la version avec le contrôle des ressources
 - Déployer la nouvelle version limitant la capacité 
 **** TODO Générer le commit concernant l'exécution dans webPLM
 - Actuellement, le message de commit est généré dans le juge puis transmis à webPLM
