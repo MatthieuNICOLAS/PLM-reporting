@@ -2190,6 +2190,17 @@ case _ => MergeStrategy.first
 - Certaines consignes font référence à l'UI
 - D'autres permettent de consulter des indices
 - Voir pour adapter ça
+**** TODO Préparer le déploiement sur plusieurs machines
+- Export des juges
+  - Exposer la queue de message au monde extérieur
+  - Créer une image BuggleInc/plm-judge hébergée sur DockerHub
+  - Créer un docker-compose lançant plusieurs BuggleInc/plm-judge:latest
+- Réplication de webPLM
+  - Exposer le service de profil au monde extérieur
+  - Créer une image BuggleInc/webPLM hébergée sur DockerHub
+  - Modifier webPLM pour prendre le nom de domaine en tant que variable d'environnement (si besoin)
+  - Modifier la configuration de nginx pour faire du load-balancing
+  - Voir comment se comporte le load-balancing avec les websockets
 **** TODO Ajouter d'autres providers
 - Twitter?
 - Facebook?
