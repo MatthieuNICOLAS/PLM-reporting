@@ -2186,6 +2186,10 @@ case _ => MergeStrategy.first
 - Actuellement, si on clique sur "Oui" ou sur "Non", ce choix est valide que pour cette session.
 - Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
 - C'est seulement s'il sélectionne "Décider plus tard" que la pop-up disparaît pendant plusieurs jours.
+**** TODO Adapter les consignes à la nouvelle interface
+- Certaines consignes font référence à l'UI
+- D'autres permettent de consulter des indices
+- Voir pour adapter ça
 **** TODO Ajouter d'autres providers
 - Twitter?
 - Facebook?
