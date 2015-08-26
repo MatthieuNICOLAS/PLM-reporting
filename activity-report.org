@@ -2143,30 +2143,29 @@ case _ => MergeStrategy.first
   - Le juge récupère le corrélation ID et créé un channel pour la queue de message avec ce nom
   - Le tribunal lit les messages arrivant sur cette queue
   - Modification du constructeur pour que la queue se détruise après l'exécution
+- Générer le commit concernant l'exécution dans webPLM
+  - Modification du juge pour se contenter d'envoyer les informations pertinentes à la fin de l'exécution du code
+  - Modification du Tribunal
+    - Refactoring de la génération du message de commit indiquant le résultat d'une exécution
+    - Déclenche ce commit aussi lorsque l'exécution timeout avec pour outcome *timeout*
+    - Déclenche ce commit aussi lorsque l'exécution est stoppé par l'utilisateur avec pour outcome *stop*
+    - Le Tribunal est maintenant threadé pour correctement gérer l'interruption de l'exécution par l'utilisateur
+- Corriger l'évènement IDLE
+  - Pour écrire le message de commit, j'utilise /GitSpy.writeCommitMessage()/
+  - Cette méthode ajoute les champs par défaut aux messages, plus certains champs additionnels
+  - Ces champs dépendent de *lastResult*, qui est à *null* maintenant qu'on exécute le code de l'élève dans les juges
+  - On essaie d'ajouter ces champs uniquement si *lastResult* est initialisé
 *** Planned
 **** DONE Utiliser une queue de message par exécution
 - Utiliser le corrélation ID pour filtrer les messages reçues pour ne garder que ceux qui nous intéresse ne semble pas efficace
 - Utiliser plutôt le corrélation ID pour spécifier dans quelle queue de message répondre, permettant ainsi de séparer les résultats par exécution
-**** TODO Profiler l'application
-- Voir les performances en RAM de l'application
-- Voir les performances en CPU de l'application
-**** TODO Générer le commit concernant l'exécution dans webPLM
+**** DONE Générer le commit concernant l'exécution dans webPLM
 - Actuellement, le message de commit est généré dans le juge puis transmis à webPLM
 - Mais si le juge plante, aucun commit n'est effectué
 - Ajouter un commit stipulant que l'exécution a échoué
 - Déplacer la génération du message de commit dans webPLM tant qu'à faire
-**** TODO Résoudre bug concernant la taille du canvas
-- Il est possible, en passant d'un monde à l'autre, de réduire la taille du canvas jusqu'à ce que celui-ci ne soit plus lisible.
-- Ceci est dû au recalcul de la taille du canvas à chaque changement de monde pour définir la taille à avoir pour respecter les proportions du monde.
-- Voir pour résoudre ce problème
-**** TODO Revoir Blockly
-- Les toolboxs pour chaque exercice ne semble pas avoir été récupérées lors du merge
-- Voir pour les ajouter
-- Voir pour ajouter les entités .blockly des BDR
-**** TODO Revoir le formulaire concernant la publication des traces
-- Actuellement, si on clique sur "Oui" ou sur "Non", ce choix est valide que pour cette session.
-- Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
-- C'est seulement s'il sélectionne "Décider plus tard" que la pop-up disparaît pendant plusieurs jours.
+**** DONE Corriger l'évènement IDLE
+- Lors de l'enregistrement dans Git de l'évènement IDLE, une NullPointerException est levée
 **** TODO Corriger les problèmes & bugs détectés lors du test en mode local
 - [X] Manque *CLIENT_SECRET* de Google & GitHub
 - [X] Réduire l'espace entre la barre du haut et le contenu de la page
@@ -2179,6 +2178,26 @@ case _ => MergeStrategy.first
 - [ ] Voir pour supprimer RUNNING_PID à la fermeture du serveur
 - [X] Le message indiquant que ce type de monde n'est pas encore supporté n'est plus affiché
 - [X] Le slider permettant de choisir la vitesse d'animation a été oublié lors du refactoring de l'UI
+**** TODO Résoudre bug concernant la taille du canvas
+- Il est possible, en passant d'un monde à l'autre, de réduire la taille du canvas jusqu'à ce que celui-ci ne soit plus lisible.
+- Ceci est dû au recalcul de la taille du canvas à chaque changement de monde pour définir la taille à avoir pour respecter les proportions du monde.
+- Voir pour résoudre ce problème
+**** TODO Revoir le formulaire concernant la publication des traces
+- Actuellement, si on clique sur "Oui" ou sur "Non", ce choix est valide que pour cette session.
+- Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
+- C'est seulement s'il sélectionne "Décider plus tard" que la pop-up disparaît pendant plusieurs jours.
+**** TODO Ajouter d'autres providers
+- Twitter?
+- Facebook?
+**** TODO Adapter TurtleWorld pour webPLM
+- Implémenter la vue du monde
+**** TODO Profiler l'application
+- Voir les performances en RAM de l'application
+- Voir les performances en CPU de l'application
+**** TODO Revoir Blockly
+- Les toolboxs pour chaque exercice ne semble pas avoir été récupérées lors du merge
+- Voir pour les ajouter
+- Voir pour ajouter les entités .blockly des BDR
 **** TODO Lancer docker-compose au démarrage de la machine
 - Lorsque la machine de TELECOM Nancy est redémarré, les différents conteneurs sont stoppés
 - Il faudrait qu'ils se relancent automatiquement au démarrage de la machine
@@ -2217,9 +2236,6 @@ case _ => MergeStrategy.first
 - Revoir LICENSE
 **** TODO Réalisation d'une interface admin
 - Retrouver l'id Git des utilisateurs enregistrés
-**** TODO Ajouter d'autres providers
-- Twitter?
-- Facebook?
 **** TODO Rédiger un README pour PLM-data
 - Lorsqu'on demande à l'utilisateur s'il souhaite rendre ses données d'utilisation publique, un lien lui permet d'accéder [[https://github.com/mquinson/PLM-data][au repo]]
 - Un README expliquant les données stockées et leur format aurait plusieurs utilités:
@@ -2251,8 +2267,6 @@ case _ => MergeStrategy.first
 **** TODO Refactorer les Program Steps
 - Lorsqu'on bascule d'un monde à l'autre, *AngularJS* met à jour le DOM en retirant les étapes du programmes présentes et en ajoutant celle du nouveau monde
 - Lorsque le monde en possède plusieurs centaines, un ralentissement se fait sentir.
-**** TODO Adapter TurtleWorld pour webPLM
-- Implémenter la vue du monde
 **** TODO Améliorer l'interaction directives/controllers
 - Certaines actions du controller interagissant avec des directives sont exécutés avant que ces dernières ne soient chargées...
 - Cela peut aller jusqu'à faire rendre inutilisable l'application tant que l'utilisateur n'a pas rechargé la page
