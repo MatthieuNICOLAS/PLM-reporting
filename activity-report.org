@@ -2178,6 +2178,12 @@ case _ => MergeStrategy.first
     - Passe en variables d'environnement les données pour contacter RabbitMQ
       - MESSAGEQ_PORT_5672_TCP_ADDR
       - MESSAGEQ_PORT_5672_TCP_PORT
+  - Création d'une image Docker hébergée sur DockerHub buggleinc/webplm
+  - Création d'une image Docker hébergée sur DockerHub buggleinc/plm-judge
+  - Mise en place du load-balancing
+    - Voir [[https://github.com/BuggleInc/PLM-nginx/blob/load-balancing/nginx.conf][la nouvelle configuration de nginx]]
+    - Voir [[https://www.digitalocean.com/community/tutorials/how-to-create-an-ssl-certificate-on-nginx-for-ubuntu-14-04][cette page]] pour générer les certificats ssl
+  - Manque plus que les ports d'ouvert sur la machine de TN
 - Résoudre bug concernant la taille du canvas
   - Ajout des variables *defaultHeight* et *defaultWidth*
   - Ces variables sont mises à jour à l'initialisation du service de dessin et au redimensionnement de la fenêtre
@@ -2190,6 +2196,7 @@ case _ => MergeStrategy.first
     - Déclenche aussi un message à destination de webPLM pour que l'évènement /readTip/ soit déclenché
   - Consignes
     - Explication de l'interface dans l'exercice *Environment*
+    - Adaptation des consignes jusqu'à *Variables* (compris)
 *** Planned
 **** DONE Utiliser une queue de message par exécution
 - Utiliser le corrélation ID pour filtrer les messages reçues pour ne garder que ceux qui nous intéresse ne semble pas efficace
@@ -2205,6 +2212,17 @@ case _ => MergeStrategy.first
 - Il est possible, en passant d'un monde à l'autre, de réduire la taille du canvas jusqu'à ce que celui-ci ne soit plus lisible.
 - Ceci est dû au recalcul de la taille du canvas à chaque changement de monde pour définir la taille à avoir pour respecter les proportions du monde.
 - Voir pour résoudre ce problème
+**** DONE Préparer le déploiement sur plusieurs machines
+- Export des juges
+  - Exposer la queue de message au monde extérieur
+  - Créer une image BuggleInc/plm-judge hébergée sur DockerHub
+  - Créer un docker-compose lançant plusieurs BuggleInc/plm-judge:latest
+- Réplication de webPLM
+  - Exposer le service de profil au monde extérieur
+  - Créer une image BuggleInc/webPLM hébergée sur DockerHub
+  - Modifier webPLM pour prendre le nom de domaine en tant que variable d'environnement (si besoin)
+  - Modifier la configuration de nginx pour faire du load-balancing
+  - Voir comment se comporte le load-balancing avec les websockets
 **** TODO Corriger les problèmes & bugs détectés lors du test en mode local
 - [X] Manque *CLIENT_SECRET* de Google & GitHub
 - [X] Réduire l'espace entre la barre du haut et le contenu de la page
@@ -2225,17 +2243,6 @@ case _ => MergeStrategy.first
 - Certaines consignes font référence à l'UI
 - D'autres permettent de consulter des indices
 - Voir pour adapter ça
-**** TODO Préparer le déploiement sur plusieurs machines
-- Export des juges
-  - Exposer la queue de message au monde extérieur
-  - Créer une image BuggleInc/plm-judge hébergée sur DockerHub
-  - Créer un docker-compose lançant plusieurs BuggleInc/plm-judge:latest
-- Réplication de webPLM
-  - Exposer le service de profil au monde extérieur
-  - Créer une image BuggleInc/webPLM hébergée sur DockerHub
-  - Modifier webPLM pour prendre le nom de domaine en tant que variable d'environnement (si besoin)
-  - Modifier la configuration de nginx pour faire du load-balancing
-  - Voir comment se comporte le load-balancing avec les websockets
 **** TODO Ajouter d'autres providers
 - Twitter?
 - Facebook?
