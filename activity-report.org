@@ -2155,6 +2155,41 @@ case _ => MergeStrategy.first
   - Cette méthode ajoute les champs par défaut aux messages, plus certains champs additionnels
   - Ces champs dépendent de *lastResult*, qui est à *null* maintenant qu'on exécute le code de l'élève dans les juges
   - On essaie d'ajouter ces champs uniquement si *lastResult* est initialisé
+- Préparer le déploiement sur plusieurs machines
+  - Configuration de nginx
+    - Ecoute sur le port 80 et redirige sur lui-même en HTTPS toute connexion entrante
+    - Ecoute sur le port 443 et fait du load-balancing
+      - Définition d'un groupe de serveurs à qui rediriger les requêtes
+      - Les requêtes sont transmises à ce groupe en faisant du load-balancing au passage (Round-Robin pour le moment)
+      - Vu qu'on manque de nom de domaine pour le moment, les instances de webPLM devraient plutôt écouter sur le port 9443 (pour laisser le port 443 à nginx)
+  - Configuration de docker-compose pour la machine principale
+    - Lance PLM-nginx (ports 80 et 443)
+    - Lance PLMProfiles (ports 8080)
+    - Lance RabbitMQ (port 5672)
+    - Lance PLMAccounts (port 9000)
+    - Lance webPLM (9443 puisque 443 est déjà pris)
+  - Configuration de docker-compose pour les machines secondaires
+    - Lance webPLM (9443 pour correspondre à la machine principale)
+    - Passe en variables d'environnement les données pour contacter RabbitMQ
+      - MESSAGEQ_PORT_5672_TCP_ADDR
+      - MESSAGEQ_PORT_5672_TCP_PORT
+  - Configuration de docker-compose pour les machines juges
+    - Lance PLM-judge (pas besoin de port particulier)
+    - Passe en variables d'environnement les données pour contacter RabbitMQ
+      - MESSAGEQ_PORT_5672_TCP_ADDR
+      - MESSAGEQ_PORT_5672_TCP_PORT
+- Résoudre bug concernant la taille du canvas
+  - Ajout des variables *defaultHeight* et *defaultWidth*
+  - Ces variables sont mises à jour à l'initialisation du service de dessin et au redimensionnement de la fenêtre
+  - Avant que l'on dessine la vue, on remet la taille du canvas aux dimensions par défaut
+- Adapter les consignes à la nouvelle interface
+  - Les indices
+    - Intègre des morceaux d'AngularJS dans les consignes pour afficher l'indice sous forme de modal
+    - Besoin de revoir les traductions car elles ne sont plus reconnues
+    - Ajout de méthodes côté client pour compiler les directives AngularJS présentes dans la consigne
+    - Déclenche aussi un message à destination de webPLM pour que l'évènement /readTip/ soit déclenché
+  - Consignes
+    - Explication de l'interface dans l'exercice *Environment*
 *** Planned
 **** DONE Utiliser une queue de message par exécution
 - Utiliser le corrélation ID pour filtrer les messages reçues pour ne garder que ceux qui nous intéresse ne semble pas efficace
@@ -2166,6 +2201,10 @@ case _ => MergeStrategy.first
 - Déplacer la génération du message de commit dans webPLM tant qu'à faire
 **** DONE Corriger l'évènement IDLE
 - Lors de l'enregistrement dans Git de l'évènement IDLE, une NullPointerException est levée
+**** DONE Résoudre bug concernant la taille du canvas
+- Il est possible, en passant d'un monde à l'autre, de réduire la taille du canvas jusqu'à ce que celui-ci ne soit plus lisible.
+- Ceci est dû au recalcul de la taille du canvas à chaque changement de monde pour définir la taille à avoir pour respecter les proportions du monde.
+- Voir pour résoudre ce problème
 **** TODO Corriger les problèmes & bugs détectés lors du test en mode local
 - [X] Manque *CLIENT_SECRET* de Google & GitHub
 - [X] Réduire l'espace entre la barre du haut et le contenu de la page
@@ -2178,10 +2217,6 @@ case _ => MergeStrategy.first
 - [ ] Voir pour supprimer RUNNING_PID à la fermeture du serveur
 - [X] Le message indiquant que ce type de monde n'est pas encore supporté n'est plus affiché
 - [X] Le slider permettant de choisir la vitesse d'animation a été oublié lors du refactoring de l'UI
-**** TODO Résoudre bug concernant la taille du canvas
-- Il est possible, en passant d'un monde à l'autre, de réduire la taille du canvas jusqu'à ce que celui-ci ne soit plus lisible.
-- Ceci est dû au recalcul de la taille du canvas à chaque changement de monde pour définir la taille à avoir pour respecter les proportions du monde.
-- Voir pour résoudre ce problème
 **** TODO Revoir le formulaire concernant la publication des traces
 - Actuellement, si on clique sur "Oui" ou sur "Non", ce choix est valide que pour cette session.
 - Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
