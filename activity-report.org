@@ -2236,8 +2236,16 @@ case _ => MergeStrategy.first
     - penny
   - Installation de *openssh-server*
   - Ajout de la clé publique pour s'authentifier sur chacune des machines via le bastion
+- Tester l'application à l'école
+  - Aucun problème de connexion décelé lors des tests sur le serveur centralisé
+  - Le mode local lève une exception en se bindant au localhost mais fonctionne quand même
+  - Le code entre le mode local et le mode centralisé n'est pas partagé
+  - Les suggestions n'apparaissent plus en mode centralisé
 *** Planned
 **** DONE Configurer les machines faisant tourner les juges pour pouvoir y accéder par SSH depuis l'extérieur
+**** DONE Tester l'application à l'école
+- Vérifier que le proxy de l'école ne fasse plus des siennes
+- Vérifier que le mode serveur local fonctionne correctement dans les salles linux
 **** TODO Vérifier que les ports sont ouverts sur le serveur de TELECOM Nancy
 - Besoin surtout que le port 5672 soit ouvert pour déployer les juges sur d'autres machines
 **** TODO Partage de code entre mode local et décentralisé ne fonctionne plus
@@ -2254,7 +2262,7 @@ case _ => MergeStrategy.first
 **** TODO Corriger les problèmes & bugs détectés lors du test en mode local
 - [X] Manque *CLIENT_SECRET* de Google & GitHub
 - [X] Réduire l'espace entre la barre du haut et le contenu de la page
-- [ ] Images des leçons inaccessibles
+- [X] Images des leçons inaccessibles
 - [ ] Pas possible de récupérer son code en se connectant à son compte PLMAccounts
 - [ ] Ajouter un écran de chargement durant
   - l'initialisation de PLM
