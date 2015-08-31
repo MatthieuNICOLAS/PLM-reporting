@@ -2223,6 +2223,34 @@ case _ => MergeStrategy.first
   - Modifier webPLM pour prendre le nom de domaine en tant que variable d'environnement (si besoin)
   - Modifier la configuration de nginx pour faire du load-balancing
   - Voir comment se comporte le load-balancing avec les websockets
+** Semaine du <2015-08-31 lun.> au <2015-09-04 ven.>
+*** Done
+- Vérifier que les ports sont ouverts sur le serveur de TELECOM Nancy
+  - Le port 5672 n'est toujours pas ouvert
+  - Cyril ne revient que mardi matin
+- Configurer les machines faisant tourner les juges pour pouvoir y accéder par SSH depuis l'extérieur
+  - Liste des machines:
+    - coast-dev1
+    - coast-dev2
+    - corosif
+    - penny
+  - Installation de *openssh-server*
+  - Ajout de la clé publique pour s'authentifier sur chacune des machines via le bastion
+*** Planned
+**** DONE Configurer les machines faisant tourner les juges pour pouvoir y accéder par SSH depuis l'extérieur
+**** TODO Vérifier que les ports sont ouverts sur le serveur de TELECOM Nancy
+- Besoin surtout que le port 5672 soit ouvert pour déployer les juges sur d'autres machines
+**** TODO Partage de code entre mode local et décentralisé ne fonctionne plus
+- Le code est bien pushé sur GitHub
+- Mais le pull & merge ne se fait pas lors de la connexion de l'utilisateur
+- Vérifier ça
+**** TODO Suggestions ne sont plus supportées
+- Il semblerait que les suggestions ne soient plus transmises à l'utilisateur
+- Voir si c'est pas en retravaillant le message de résultat du judge que j'ai cassé ça
+**** TODO Remettre le bouton "Revert"
+- Les élèves ayant tendance à supprimer le code par défaut de l'éditeur de code, il faudrait qu'ils puissent réinitialiser l'exercice pour le retrouver
+- Le bouton "Revert" sert à cela mais il a disparu au cours de la refonte de l'UI
+- Le remettre et retester son bon fonctionnement
 **** TODO Corriger les problèmes & bugs détectés lors du test en mode local
 - [X] Manque *CLIENT_SECRET* de Google & GitHub
 - [X] Réduire l'espace entre la barre du haut et le contenu de la page
