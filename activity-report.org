@@ -2241,20 +2241,33 @@ case _ => MergeStrategy.first
   - Le mode local lève une exception en se bindant au localhost mais fonctionne quand même
   - Le code entre le mode local et le mode centralisé n'est pas partagé
   - Les suggestions n'apparaissent plus en mode centralisé
+- Partage de code entre mode local et décentralisé ne fonctionne plus
+  - Scénario:
+    - Un utilisateur démarre le serveur local, s'identifie, effectue une session de travail et ferme l'onglet.
+    - Ensuite, il se connecte sur le serveur centralisé et s'identifie.
+    - Son code n'est pas récupéré.
+  - Après tests, semblerait qu'il suffise de recharger la page une fois pour que le serveur mette à jour correctement son repo local et récupère la session de l'utilisateur.
+  - Lors du login, on ne doit pas essayer de récupérer sa session
+    - A vérifier
+- Ajout d'icônes à l'interface pour la rendre plus claire
+- Suggestions ne sont plus supportées
+  - J'avais effectivement oublié les champs /commonErrorID/ et /commonErrorText/ du message de résultat généré par le juge au cours du refactoring
+  - Re-ajout de ces champs au message résultat
+  - Re-ajout de ces champs lors du transfert de webPLM au client
 *** Planned
 **** DONE Configurer les machines faisant tourner les juges pour pouvoir y accéder par SSH depuis l'extérieur
 **** DONE Tester l'application à l'école
 - Vérifier que le proxy de l'école ne fasse plus des siennes
 - Vérifier que le mode serveur local fonctionne correctement dans les salles linux
+**** DONE Suggestions ne sont plus supportées
+- Il semblerait que les suggestions ne soient plus transmises à l'utilisateur
+- Voir si c'est pas en retravaillant le message de résultat du judge que j'ai cassé ça
 **** TODO Vérifier que les ports sont ouverts sur le serveur de TELECOM Nancy
 - Besoin surtout que le port 5672 soit ouvert pour déployer les juges sur d'autres machines
 **** TODO Partage de code entre mode local et décentralisé ne fonctionne plus
 - Le code est bien pushé sur GitHub
 - Mais le pull & merge ne se fait pas lors de la connexion de l'utilisateur
 - Vérifier ça
-**** TODO Suggestions ne sont plus supportées
-- Il semblerait que les suggestions ne soient plus transmises à l'utilisateur
-- Voir si c'est pas en retravaillant le message de résultat du judge que j'ai cassé ça
 **** TODO Remettre le bouton "Revert"
 - Les élèves ayant tendance à supprimer le code par défaut de l'éditeur de code, il faudrait qu'ils puissent réinitialiser l'exercice pour le retrouver
 - Le bouton "Revert" sert à cela mais il a disparu au cours de la refonte de l'UI
