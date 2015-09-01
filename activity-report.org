@@ -2228,6 +2228,7 @@ case _ => MergeStrategy.first
 - Vérifier que les ports sont ouverts sur le serveur de TELECOM Nancy
   - Le port 5672 n'est toujours pas ouvert
   - Cyril ne revient que mardi matin
+  - Les ports sont ouverts \o/
 - Configurer les machines faisant tourner les juges pour pouvoir y accéder par SSH depuis l'extérieur
   - Liste des machines:
     - coast-dev1
@@ -2241,6 +2242,7 @@ case _ => MergeStrategy.first
   - Le mode local lève une exception en se bindant au localhost mais fonctionne quand même
   - Le code entre le mode local et le mode centralisé n'est pas partagé
   - Les suggestions n'apparaissent plus en mode centralisé
+  - J'y ai pas touché mais les images des leçons apparaissent correctement
 - Partage de code entre mode local et décentralisé ne fonctionne plus
   - Scénario:
     - Un utilisateur démarre le serveur local, s'identifie, effectue une session de travail et ferme l'onglet.
@@ -2254,6 +2256,14 @@ case _ => MergeStrategy.first
   - J'avais effectivement oublié les champs /commonErrorID/ et /commonErrorText/ du message de résultat généré par le juge au cours du refactoring
   - Re-ajout de ces champs au message résultat
   - Re-ajout de ces champs lors du transfert de webPLM au client
+- Corriger les System.out.println
+  - Les /System.out.println/ sont ajoutés en tant qu'opérations au buffer du *BasicListener* original
+  - Celui-ci n'envoie son buffer qu'à la fin de l'exécution, puisqu'il espionne le monde initial qui ne bouge pas
+  - Maintenant les /System.out.println/ sont ajoutés au buffer du *BasicListener* du 1er monde, ce qui devrait couvrir la majorité des cas
+- Retirer Java du build de PLM
+  - Vu qu'on contrôle les juges maintenant, on peut se permettre de retirer Java du build de PLM
+  - Ca permet d'éviter les messages d'erreurs provenant de la version du compilateur Java
+  - Suppression de la ligne dans le fichier de build ajoutant /tools.jar/ à l'archive
 *** Planned
 **** DONE Configurer les machines faisant tourner les juges pour pouvoir y accéder par SSH depuis l'extérieur
 **** DONE Tester l'application à l'école
@@ -2262,7 +2272,12 @@ case _ => MergeStrategy.first
 **** DONE Suggestions ne sont plus supportées
 - Il semblerait que les suggestions ne soient plus transmises à l'utilisateur
 - Voir si c'est pas en retravaillant le message de résultat du judge que j'ai cassé ça
-**** TODO Vérifier que les ports sont ouverts sur le serveur de TELECOM Nancy
+**** DONE Corriger les System.out.println
+- Les /System.out.println/ ne sont pas streamés au fur et à mesure de l'exécution
+- Ils sont envoyés qu'à la fin de l'exécution
+- Si le judge timeout, alors aucun /System.out.println/ n'est reçu
+- Corriger ça
+**** DONE Vérifier que les ports sont ouverts sur le serveur de TELECOM Nancy
 - Besoin surtout que le port 5672 soit ouvert pour déployer les juges sur d'autres machines
 **** TODO Partage de code entre mode local et décentralisé ne fonctionne plus
 - Le code est bien pushé sur GitHub
