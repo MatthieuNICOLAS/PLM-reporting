@@ -2264,6 +2264,9 @@ case _ => MergeStrategy.first
   - Vu qu'on contrôle les juges maintenant, on peut se permettre de retirer Java du build de PLM
   - Ca permet d'éviter les messages d'erreurs provenant de la version du compilateur Java
   - Suppression de la ligne dans le fichier de build ajoutant /tools.jar/ à l'archive
+- Ajouter Facebook en tant que provider
+  - Création d'une app Facebook pour le mode local
+  - Création d'une app Facebook pour le mode centralisé
 *** Planned
 **** DONE Configurer les machines faisant tourner les juges pour pouvoir y accéder par SSH depuis l'extérieur
 **** DONE Tester l'application à l'école
