@@ -2267,6 +2267,21 @@ case _ => MergeStrategy.first
 - Ajouter Facebook en tant que provider
   - Création d'une app Facebook pour le mode local
   - Création d'une app Facebook pour le mode centralisé
+- Corriger les bugs liés aux traces utilisateurs
+  - Ajout de la virgule manquante
+  - Modification de la valeur de *exoID*: /lastExo/ -> /lastExo.getId()/
+    - Ceci semble corriger le bug
+  - Les fichiers semblent ne pas être créés au bon endroit
+    - Lors qu'un utilisateur se connecte, un repo lui est attribué
+    - Lorsqu'il s'authentifie, on lui re-attribue son repo d'origine
+    - Mais les fichiers ont l'air d'être encore créés dans le 1er repo qui lui avait été affecté
+    - Modification du code pour récupérer le bon repo au moment de créer les fichiers
+- Conserver le langage de programmation sélectionné
+  - Ajout de *lastProgLang* dans les données communiquées au service de profil
+  - Ce champ est utilisé pour initialiser PLM lorsqu'on se reconnecte
+- Partage de code entre mode local et décentralisé ne fonctionne plus
+  - Ce bug correspondait au fait que les fichiers de code manquaient des traces utilisateurs
+  - Il a donc été résolu en même temps que les traces ont été corrigées
 *** Planned
 **** DONE Configurer les machines faisant tourner les juges pour pouvoir y accéder par SSH depuis l'extérieur
 **** DONE Tester l'application à l'école
@@ -2282,7 +2297,14 @@ case _ => MergeStrategy.first
 - Corriger ça
 **** DONE Vérifier que les ports sont ouverts sur le serveur de TELECOM Nancy
 - Besoin surtout que le port 5672 soit ouvert pour déployer les juges sur d'autres machines
-**** TODO Partage de code entre mode local et décentralisé ne fonctionne plus
+**** DONE Corriger les bugs liés aux traces utilisateurs
+- [X] Une virgule est manquante dans les messages de type *executed*, faisant échouer le parsing du JSON
+- [X] Des quotes sont manquantes autour du *exoID* dans les messages de type *commonErrorFeedback*, faisant échouer le parsing du JSON
+- [X] Les fichiers contenant le code, l'erreur de l'élève, la mission et la correction ne sont pas ajoutés au repo Git
+**** DONE Conserver le langage de programmation sélectionné
+- Quand l'utilisateur se reconnecte, il ne repasse dans son langage de programmation de prédilection
+- A la place, c'est Java qui est automatiquement sélectionné
+**** DONE Partage de code entre mode local et décentralisé ne fonctionne plus
 - Le code est bien pushé sur GitHub
 - Mais le pull & merge ne se fait pas lors de la connexion de l'utilisateur
 - Vérifier ça
@@ -2294,7 +2316,7 @@ case _ => MergeStrategy.first
 - [X] Manque *CLIENT_SECRET* de Google & GitHub
 - [X] Réduire l'espace entre la barre du haut et le contenu de la page
 - [X] Images des leçons inaccessibles
-- [ ] Pas possible de récupérer son code en se connectant à son compte PLMAccounts
+- [X] Pas possible de récupérer son code en se connectant à son compte PLMAccounts
 - [ ] Ajouter un écran de chargement durant
   - l'initialisation de PLM
   - l'authentification
