@@ -2287,6 +2287,9 @@ case _ => MergeStrategy.first
   - L'indentation automatique est déjà disponible avec /shift+tab/ en sélectionnant le texte
   - Ajout de l'addon pour CodeMirror *active-line* pour faire ressortir la ligne actuellement selectionnée
   - Ajout de l'addon pour CodeMirror *foldgutter* pour permettre de replier les blocs de code
+- Trier la liste des leçons
+  - Plutôt que de récupérer uniquement les leçons dans webPLM, on récupère la Map nom -> leçon
+  - Utilise /Game.lessonsName/ pour former dans l'ordre la liste des leçons envoyée aux élèves
 *** Planned
 **** DONE Configurer les machines faisant tourner les juges pour pouvoir y accéder par SSH depuis l'extérieur
 **** DONE Tester l'application à l'école
@@ -2316,7 +2319,7 @@ case _ => MergeStrategy.first
 **** DONE Améliorer l'éditeur de code
 - L'éditeur n'affiche pas si les parenthèses et accolades qui correspondent à celle que l'on a selectionné
 - Une méthode d'indentation automatique serait aussi utile
-**** TODO Trier la liste des leçons
+**** DONE Trier la liste des leçons
 - L'ordre des leçons est actuellement incorrect, ce qui peut dérouter les utilisateurs
 - Voir pour trier la liste pour respecter l'ordre souhaité
 **** TODO Remettre le bouton "Revert"
