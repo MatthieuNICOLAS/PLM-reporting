@@ -2282,6 +2282,11 @@ case _ => MergeStrategy.first
 - Partage de code entre mode local et décentralisé ne fonctionne plus
   - Ce bug correspondait au fait que les fichiers de code manquaient des traces utilisateurs
   - Il a donc été résolu en même temps que les traces ont été corrigées
+- Améliorer l'éditeur de code
+  - Ajout de l'addon pour CodeMirror *matchbrackets* qui permet d'ajouter du style aux parenthèses et accolades si elles sont bien fermées ou au contraire
+  - L'indentation automatique est déjà disponible avec /shift+tab/ en sélectionnant le texte
+  - Ajout de l'addon pour CodeMirror *active-line* pour faire ressortir la ligne actuellement selectionnée
+  - Ajout de l'addon pour CodeMirror *foldgutter* pour permettre de replier les blocs de code
 *** Planned
 **** DONE Configurer les machines faisant tourner les juges pour pouvoir y accéder par SSH depuis l'extérieur
 **** DONE Tester l'application à l'école
@@ -2308,6 +2313,12 @@ case _ => MergeStrategy.first
 - Le code est bien pushé sur GitHub
 - Mais le pull & merge ne se fait pas lors de la connexion de l'utilisateur
 - Vérifier ça
+**** DONE Améliorer l'éditeur de code
+- L'éditeur n'affiche pas si les parenthèses et accolades qui correspondent à celle que l'on a selectionné
+- Une méthode d'indentation automatique serait aussi utile
+**** TODO Trier la liste des leçons
+- L'ordre des leçons est actuellement incorrect, ce qui peut dérouter les utilisateurs
+- Voir pour trier la liste pour respecter l'ordre souhaité
 **** TODO Remettre le bouton "Revert"
 - Les élèves ayant tendance à supprimer le code par défaut de l'éditeur de code, il faudrait qu'ils puissent réinitialiser l'exercice pour le retrouver
 - Le bouton "Revert" sert à cela mais il a disparu au cours de la refonte de l'UI
