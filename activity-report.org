@@ -2322,22 +2322,34 @@ case _ => MergeStrategy.first
 **** DONE Trier la liste des leçons
 - L'ordre des leçons est actuellement incorrect, ce qui peut dérouter les utilisateurs
 - Voir pour trier la liste pour respecter l'ordre souhaité
+** Semaine du <2015-09-07 lun.> au <2015-09-11 ven.>
+*** Done
+- Revoir la gestion des channels
+  - Re-écriture du Tribunal pour mettre les channels en tant que variables d'instances.
+  - Bug: les réponses du juge ne sont pas tous traités
+  - Bug dû au fait qu'on démarre un *consumer* par exécution, qui ne sont pas fermés et qui continue de *manger* les messages les exécutions suivantes
+  - Passage du *consumer* en variable d'instance.
+- Ajouter les messages de ACK
+  - Met l'attribut *autoAck* à true lors de l'initialisation du *consumer* pour que les messages soient ACK dès leur réception par un juge ou par le tribunal 
+- Corriger le formulaire de report de bug
+  - Le token d'authentification de GitHub n'avait pas été mis à jour lors de son récent changement
+*** Planned
+**** DONE Revoir la gestion des channels
+- D'après ce [[https://dzone.com/articles/rabbitmq-amqp-channel-best][post]], il faudrait maintenir les channels plutôt que de les créer/détruire à chaque exécution.
+- Retravailler le Tribunal
+**** DONE Ajouter les messages de ACK
+- D'après ce [[https://www.rabbitmq.com/tutorials/tutorial-two-java.html][tuto]], les messages sont passés de juge en juge jusqu'à qu'un juge déclenche un /basicAck/ ou que le message atteigne sa durée de vie
+- Actuellement, aucun /basicAck/ n'est déclenché
 **** TODO Remettre le bouton "Revert"
 - Les élèves ayant tendance à supprimer le code par défaut de l'éditeur de code, il faudrait qu'ils puissent réinitialiser l'exercice pour le retrouver
 - Le bouton "Revert" sert à cela mais il a disparu au cours de la refonte de l'UI
 - Le remettre et retester son bon fonctionnement
-**** TODO Corriger les problèmes & bugs détectés lors du test en mode local
-- [X] Manque *CLIENT_SECRET* de Google & GitHub
-- [X] Réduire l'espace entre la barre du haut et le contenu de la page
-- [X] Images des leçons inaccessibles
-- [X] Pas possible de récupérer son code en se connectant à son compte PLMAccounts
-- [ ] Ajouter un écran de chargement durant
-  - l'initialisation de PLM
-  - l'authentification
-  - la compilation du code de l'élève
-- [ ] Voir pour supprimer RUNNING_PID à la fermeture du serveur
-- [X] Le message indiquant que ce type de monde n'est pas encore supporté n'est plus affiché
-- [X] Le slider permettant de choisir la vitesse d'animation a été oublié lors du refactoring de l'UI
+**** TODO Ajouter un écran de chargement
+- L'application met parfois du temps à répondre lors de
+  - L'initialisation
+  - L'authentification
+  - L'exécution du code élève
+- Mettre un écran de chargement indiquerait à l'utilisateur qu'il faut patienter
 **** TODO Revoir le formulaire concernant la publication des traces
 - Actuellement, si on clique sur "Oui" ou sur "Non", ce choix est valide que pour cette session.
 - Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
@@ -2348,7 +2360,6 @@ case _ => MergeStrategy.first
 - Voir pour adapter ça
 **** TODO Ajouter d'autres providers
 - Twitter?
-- Facebook?
 **** TODO Adapter TurtleWorld pour webPLM
 - Implémenter la vue du monde
 **** TODO Profiler l'application
