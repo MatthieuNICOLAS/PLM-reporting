@@ -2333,6 +2333,14 @@ case _ => MergeStrategy.first
   - Met l'attribut *autoAck* à true lors de l'initialisation du *consumer* pour que les messages soient ACK dès leur réception par un juge ou par le tribunal 
 - Corriger le formulaire de report de bug
   - Le token d'authentification de GitHub n'avait pas été mis à jour lors de son récent changement
+- Corriger bug des messages s'empilant dans la queue de réponse
+  - /purgeQueue/ est proposée par *RabbitMQ* mais
+    - Quid des performances?
+    - Cela ne supprime que les messages déjà ACK ou n'en attendant pas, ce dont je suis pas sûr que ça soit notre cas
+  - Mise en place d'un état /Purging/
+    - Stopper l'exécution fait passer dans cet état
+    - On continue de consommer les messages jusqu'à rencontré un *timeout*
+    - On ne traite par contre pas les messages consommés
 *** Planned
 **** DONE Revoir la gestion des channels
 - D'après ce [[https://dzone.com/articles/rabbitmq-amqp-channel-best][post]], il faudrait maintenir les channels plutôt que de les créer/détruire à chaque exécution.
@@ -2340,6 +2348,27 @@ case _ => MergeStrategy.first
 **** DONE Ajouter les messages de ACK
 - D'après ce [[https://www.rabbitmq.com/tutorials/tutorial-two-java.html][tuto]], les messages sont passés de juge en juge jusqu'à qu'un juge déclenche un /basicAck/ ou que le message atteigne sa durée de vie
 - Actuellement, aucun /basicAck/ n'est déclenché
+**** DONE Corriger bug des messages s'empilant dans la queue de réponse
+- Lorsqu'un utilisateur appuie sur *Stop*, on se contente d'arrêter d'écouter les messages arrivant sur la queue de réponse
+- Auparavant, cela ne posait pas de problème puisqu'on générer une nouvelle queue par exécution
+- Maintenant que les queues de messages ont pour durée de vie la session de l'utilisateur, un problème est apparu
+- Après un *stop*, les prochaines exécutions vont consommer les messages présents dans la queue jusqu'au 1er /executionResult/ rencontré
+- Pour l'utilisateur, ceci a pour effet de décaler ses exécutions et les résultats obtenus de 1 par *stop*
+**** TODO Afficher les indications dans les labyrinthes
+- Dans un exercice des labyrinthes, on doit trouver le plus court chemin
+- Pour cela, on note et propage une indication au sol depuis la sortie
+- L'indication n'apparaît pas, ce qui rend difficile le debugging du code de l'élève
+**** TODO Créer une image RabbitMQ avec les modules de monitoring
+- Des plugins sont disponibles pour monitorer la queue de message
+- /rabbitmq-plugins enable rabbitmq_management/ permet de les activer
+- Générer une image Docker toute prête
+**** TODO Créer un service fournissant le token d'authentification Github
+- Puisque Github ne souhaite pas qu'on mette en public notre token d'authentification
+- Mettre le token d'authentification en variable d'environnement du serveur
+- Ajouter et exposer une méthode fournissant ce token
+- Modifier le comportement du serveur local pour
+  - Qu'il récupère le token en interrogeant le serveur central
+  - Modifie les attributs de *GitUtils* pour utiliser cette valeur
 **** TODO Remettre le bouton "Revert"
 - Les élèves ayant tendance à supprimer le code par défaut de l'éditeur de code, il faudrait qu'ils puissent réinitialiser l'exercice pour le retrouver
 - Le bouton "Revert" sert à cela mais il a disparu au cours de la refonte de l'UI
