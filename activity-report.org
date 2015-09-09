@@ -2341,6 +2341,16 @@ case _ => MergeStrategy.first
     - Stopper l'exécution fait passer dans cet état
     - On continue de consommer les messages jusqu'à rencontré un *timeout*
     - On ne traite par contre pas les messages consommés
+- Créer une image RabbitMQ avec les modules de monitoring
+  - En fait, ça existe déjà
+  - Nom de l'image: *rabbitmq:3-management*
+  - Modification du /docker-compose.yml/ en conséquence
+- Purger la queue de réponse
+  - Modification du code pour, en cas de stop, se contenter de consommer les messages sans les traiter
+    - Mais un run/stop/run rapide relance en parallèle le traitement des messages, ce qui produit des comportements chaotiques
+  - Même problème rencontré si on se contente de purger la queue avant de lancer l'exécution
+    - Les messages de la 1ère exécution ne sont pas encore tous arrivés lors de la purge
+  - Repassage à l'architecture d'une queue par exécution
 *** Planned
 **** DONE Revoir la gestion des channels
 - D'après ce [[https://dzone.com/articles/rabbitmq-amqp-channel-best][post]], il faudrait maintenir les channels plutôt que de les créer/détruire à chaque exécution.
@@ -2354,14 +2364,18 @@ case _ => MergeStrategy.first
 - Maintenant que les queues de messages ont pour durée de vie la session de l'utilisateur, un problème est apparu
 - Après un *stop*, les prochaines exécutions vont consommer les messages présents dans la queue jusqu'au 1er /executionResult/ rencontré
 - Pour l'utilisateur, ceci a pour effet de décaler ses exécutions et les résultats obtenus de 1 par *stop*
+**** DONE Créer une image RabbitMQ avec les modules de monitoring
+- Des plugins sont disponibles pour monitorer la queue de message
+- /rabbitmq-plugins enable rabbitmq_management/ permet de les activer
+- Générer une image Docker toute prête
+**** DONE Purger la queue de réponse
+- Lorsque l'utilisateur stop l'exécution, webPLM se contente d'arrêter de lui streamer les messages envoyés par le juge
+- Mais lors de la prochaine exécution, webPLM récuperera ces messages restés en attente au lieu des messages correspondant à cette nouvelle exécution
+- Purger la queue de réponse
 **** TODO Afficher les indications dans les labyrinthes
 - Dans un exercice des labyrinthes, on doit trouver le plus court chemin
 - Pour cela, on note et propage une indication au sol depuis la sortie
 - L'indication n'apparaît pas, ce qui rend difficile le debugging du code de l'élève
-**** TODO Créer une image RabbitMQ avec les modules de monitoring
-- Des plugins sont disponibles pour monitorer la queue de message
-- /rabbitmq-plugins enable rabbitmq_management/ permet de les activer
-- Générer une image Docker toute prête
 **** TODO Créer un service fournissant le token d'authentification Github
 - Puisque Github ne souhaite pas qu'on mette en public notre token d'authentification
 - Mettre le token d'authentification en variable d'environnement du serveur
