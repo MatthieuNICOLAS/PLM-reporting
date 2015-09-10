@@ -2351,6 +2351,12 @@ case _ => MergeStrategy.first
   - Même problème rencontré si on se contente de purger la queue avant de lancer l'exécution
     - Les messages de la 1ère exécution ne sont pas encore tous arrivés lors de la purge
   - Repassage à l'architecture d'une queue par exécution
+- Afficher les indications
+  - Bug dû au fait qu'on utilise pas /writeMessage/ mais /setIndication/
+  - Les opérations ne sont donc pas générées
+  - Ajout d'une méthode permettant de générer les opérations correspondant à l'écriture d'un message dans *AbstractBuggle*
+  - Appel de cette méthode dans /setIndication/
+  - Mise à jour de webPLM-Local, webPLM-Prod et de PLM-judge
 *** Planned
 **** DONE Revoir la gestion des channels
 - D'après ce [[https://dzone.com/articles/rabbitmq-amqp-channel-best][post]], il faudrait maintenir les channels plutôt que de les créer/détruire à chaque exécution.
@@ -2372,7 +2378,7 @@ case _ => MergeStrategy.first
 - Lorsque l'utilisateur stop l'exécution, webPLM se contente d'arrêter de lui streamer les messages envoyés par le juge
 - Mais lors de la prochaine exécution, webPLM récuperera ces messages restés en attente au lieu des messages correspondant à cette nouvelle exécution
 - Purger la queue de réponse
-**** TODO Afficher les indications dans les labyrinthes
+**** DONE Afficher les indications dans les labyrinthes
 - Dans un exercice des labyrinthes, on doit trouver le plus court chemin
 - Pour cela, on note et propage une indication au sol depuis la sortie
 - L'indication n'apparaît pas, ce qui rend difficile le debugging du code de l'élève
