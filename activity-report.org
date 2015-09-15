@@ -2382,6 +2382,35 @@ case _ => MergeStrategy.first
 - Dans un exercice des labyrinthes, on doit trouver le plus court chemin
 - Pour cela, on note et propage une indication au sol depuis la sortie
 - L'indication n'apparaît pas, ce qui rend difficile le debugging du code de l'élève
+** Semaine du <2015-09-15 mar.> au <2015-09-18 ven.>
+*** Done
+- Débugger /setIndication/ de *ShortestPathMaze* en Python
+  - /generateOperationsChangeCellContent/ n'étant pas redéfini dans /setupBindings/ de *BuggleWorld*, on doit écrire /entity.generateOperationsChangeCellContent/ pour l'appeler
+  - Quelques erreurs de syntaxe s'étaient aussi glissées dans l'appel
+- Corriger les tests unitaires
+  - webPLM, branche master
+    - Il manquait juste une dépendance de *Jasmine*
+  - webPLM, branche prod-juge
+    - Mise à jour des tests pour correspondre aux dernières modifications du code (suppression des spies sur les mondes)
+    - Certains objets dépendent de l'application *Play Framework* courante, notamment pour accéder à des variables de configuration
+      - Ajout de /new WithApplication/ aux tests pour simuler une application *Play Framework* courante
+    - Instancier *PLM* instancie un *Tribunal*, qui n'arrive pas à se créer car il ne trouve pas de queue de message
+      - [ ] Modification de l'architecture de webPLM pour séparer l'instanciation de *PLM* et de *Tribunal*
+  - PLM, branche library
+    - La liste des leçons à tester dans *LessonTest* et *ExoTest* n'était pas synchronisée avec la liste des leçons disponibles dans *Game*
+      - Utilisation de la liste des leçons de *Game* dans tous les cas
+*** Planned
+**** DONE Débugger setIndication de ShortestPathMaze en Python
+- /setIndication/ appelle /generateOperationsChangeCellContent/, qui n'est pas connu en Python
+- Résoudre ce problème
+**** TODO Corriger les tests unitaires
+- Les tests unitaires de PLM & de webPLM échouent depuis quelques temps maintenant
+- Enfin les corriger
+**** TODO Adapter TurtleWorld pour webPLM
+- Etudier le travail déjà effectué
+  - Reprendre la branche?
+  - Recommencer vu l'ensemble des modifications effectuées depuis?
+- Implémenter la vue du monde
 **** TODO Créer un service fournissant le token d'authentification Github
 - Puisque Github ne souhaite pas qu'on mette en public notre token d'authentification
 - Mettre le token d'authentification en variable d'environnement du serveur
@@ -2409,8 +2438,6 @@ case _ => MergeStrategy.first
 - Voir pour adapter ça
 **** TODO Ajouter d'autres providers
 - Twitter?
-**** TODO Adapter TurtleWorld pour webPLM
-- Implémenter la vue du monde
 **** TODO Profiler l'application
 - Voir les performances en RAM de l'application
 - Voir les performances en CPU de l'application
