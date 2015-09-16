@@ -2395,10 +2395,16 @@ case _ => MergeStrategy.first
     - Certains objets dépendent de l'application *Play Framework* courante, notamment pour accéder à des variables de configuration
       - Ajout de /new WithApplication/ aux tests pour simuler une application *Play Framework* courante
     - Instancier *PLM* instancie un *Tribunal*, qui n'arrive pas à se créer car il ne trouve pas de queue de message
-      - [ ] Modification de l'architecture de webPLM pour séparer l'instanciation de *PLM* et de *Tribunal*
+      - Modification de l'architecture de webPLM pour séparer l'instanciation de *PLM* et de *Tribunal*
+      - *Tribunal* est instancié par *PLMActor* et passé en tant que paramètre au constructeur de *PLM*
+      - Modification des tests pour utiliser un mock d'une instance de *Tribunal*
+    - Instanciation de *GitUtils* échoue car aucune variable d'environnement existe
+      - Modification du code pour fournir une valeur par défaut si la variable d'environnement n'a pas été définie
   - PLM, branche library
     - La liste des leçons à tester dans *LessonTest* et *ExoTest* n'était pas synchronisée avec la liste des leçons disponibles dans *Game*
       - Utilisation de la liste des leçons de *Game* dans tous les cas
+  - PLM, branche webPLM-split
+    - Les tests unitaires exécutant du Java et du Scala échouent pour une raison que j'ignore
 *** Planned
 **** DONE Débugger setIndication de ShortestPathMaze en Python
 - /setIndication/ appelle /generateOperationsChangeCellContent/, qui n'est pas connu en Python
@@ -2422,6 +2428,16 @@ case _ => MergeStrategy.first
 - Les élèves ayant tendance à supprimer le code par défaut de l'éditeur de code, il faudrait qu'ils puissent réinitialiser l'exercice pour le retrouver
 - Le bouton "Revert" sert à cela mais il a disparu au cours de la refonte de l'UI
 - Le remettre et retester son bon fonctionnement
+**** TODO Ajouter un service de configuration
+- A de nombreux endroits du code de webPLM, on récupère des valeurs de configuration
+- Celles-ci sont contenues dans /conf/application.conf/
+- Pour les récupérer, on doit passer par la fonction /Play.configuration.getString/ qui nécessite une application Play courante pour fonctionner
+- Mettre en place un service de configuration regroupant ces valeurs permettrait de faciliter l'accès à ces valeurs
+- Cela permettrait aussi de simplifier les tests en se contentant de mocker ce service
+**** TODO Générer une erreur si l'application est mal configurée
+- Actuellement, des valeurs par défaut sont passées si l'application est mal configurée (variables d'environnements manquantes par exemple)
+- Il faudrait mieux interrompre le démarrage de l'application & générer une erreur indiquant à l'admin/au développeur qu'il faut revoir la configuration
+**** TODO Obtenir un certificat valide pour HTTPS
 **** TODO Ajouter un écran de chargement
 - L'application met parfois du temps à répondre lors de
   - L'initialisation
