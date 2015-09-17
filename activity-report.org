@@ -2405,10 +2405,17 @@ case _ => MergeStrategy.first
       - Utilisation de la liste des leçons de *Game* dans tous les cas
   - PLM, branche webPLM-split
     - Les tests unitaires exécutant du Java et du Scala échouent pour une raison que j'ignore
+- Gérer la couleur des buggles
+  - Modification du code de *BuggleWorldView* pour changer la couleur affichée de la buggle si elle de la même couleur que la cellule sur laquelle elle se trouve
+  - Ajout de l'opération *changeBuggleBodyColor*, générée lors d'un appel à /setBodyColor/
+  - Gestion de cette nouvelle opération dans le modèle JS
 *** Planned
 **** DONE Débugger setIndication de ShortestPathMaze en Python
 - /setIndication/ appelle /generateOperationsChangeCellContent/, qui n'est pas connu en Python
 - Résoudre ce problème
+**** DONE Gérer la couleur des buggles
+- Lorsqu'on affiche une buggle, on ne vérifie pas sa couleur, ce qui peut poser des problèmes [[https://github.com/BuggleInc/PLM/issues/466][par moments]]
+- L'opération permettant de changer la couleur d'une buggle n'est pas non plus implémentée
 **** TODO Corriger les tests unitaires
 - Les tests unitaires de PLM & de webPLM échouent depuis quelques temps maintenant
 - Enfin les corriger
@@ -2438,6 +2445,7 @@ case _ => MergeStrategy.first
 - Actuellement, des valeurs par défaut sont passées si l'application est mal configurée (variables d'environnements manquantes par exemple)
 - Il faudrait mieux interrompre le démarrage de l'application & générer une erreur indiquant à l'admin/au développeur qu'il faut revoir la configuration
 **** TODO Obtenir un certificat valide pour HTTPS
+- P-e voir [[https://www.eff.org/deeplinks/2015/09/one-small-certificate-web-one-giant-certificate-authority-web-encryption][ici]] pour l'obtenir
 **** TODO Ajouter un écran de chargement
 - L'application met parfois du temps à répondre lors de
   - L'initialisation
