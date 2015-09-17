@@ -2409,6 +2409,15 @@ case _ => MergeStrategy.first
   - Modification du code de *BuggleWorldView* pour changer la couleur affichée de la buggle si elle de la même couleur que la cellule sur laquelle elle se trouve
   - Ajout de l'opération *changeBuggleBodyColor*, générée lors d'un appel à /setBodyColor/
   - Gestion de cette nouvelle opération dans le modèle JS
+- Adapter TurtleWorld pour webPLM
+  - Je préfère repartir de zéro
+  - [X] Implémentation du modèle JS
+  - [X] Implémentation des méthodes de conversion du modèle Java
+  - [X] Implémentation de la représentation du monde
+    - Manque juste l'affichage des indices pour la taille des segments
+    - Reste aussi à vérifier les proportions
+  - [ ] Ajout des opérations représentant l'évolution du monde
+  - [ ] Implémentation de la gestion de ces opérations côté client
 *** Planned
 **** DONE Débugger setIndication de ShortestPathMaze en Python
 - /setIndication/ appelle /generateOperationsChangeCellContent/, qui n'est pas connu en Python
