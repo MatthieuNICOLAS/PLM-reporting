@@ -2416,8 +2416,8 @@ case _ => MergeStrategy.first
   - [X] Implémentation de la représentation du monde
     - Manque juste l'affichage des indices pour la taille des segments
     - Reste aussi à vérifier les proportions
-  - [ ] Ajout des opérations représentant l'évolution du monde
-  - [ ] Implémentation de la gestion de ces opérations côté client
+  - [X] Ajout des opérations représentant l'évolution du monde
+  - [X] Implémentation de la gestion de ces opérations côté client
 *** Planned
 **** DONE Débugger setIndication de ShortestPathMaze en Python
 - /setIndication/ appelle /generateOperationsChangeCellContent/, qui n'est pas connu en Python
@@ -2425,14 +2425,21 @@ case _ => MergeStrategy.first
 **** DONE Gérer la couleur des buggles
 - Lorsqu'on affiche une buggle, on ne vérifie pas sa couleur, ce qui peut poser des problèmes [[https://github.com/BuggleInc/PLM/issues/466][par moments]]
 - L'opération permettant de changer la couleur d'une buggle n'est pas non plus implémentée
-**** TODO Corriger les tests unitaires
-- Les tests unitaires de PLM & de webPLM échouent depuis quelques temps maintenant
-- Enfin les corriger
-**** TODO Adapter TurtleWorld pour webPLM
+**** DONE Adapter TurtleWorld pour webPLM
 - Etudier le travail déjà effectué
   - Reprendre la branche?
   - Recommencer vu l'ensemble des modifications effectuées depuis?
 - Implémenter la vue du monde
+**** TODO Uniformiser TurtleArt
+- La leçon TurtleArt et ses exercices semblent être gérée de façon différente des autres leçons
+- Voir pour uniformiser tout ça
+- Ecrire des consignes pour ses exercices au passage?
+**** TODO Désactiver la démo pour TurtleArt
+- [[https://github.com/BuggleInc/webPLM/issues/2][Cette issue]] est d'autant plus vraie pour la leçon *TurtleArt*
+- Voir pour désactiver la démo pour cette leçon
+**** TODO Corriger les tests unitaires
+- Les tests unitaires de PLM & de webPLM échouent depuis quelques temps maintenant
+- Enfin les corriger
 **** TODO Créer un service fournissant le token d'authentification Github
 - Puisque Github ne souhaite pas qu'on mette en public notre token d'authentification
 - Mettre le token d'authentification en variable d'environnement du serveur
