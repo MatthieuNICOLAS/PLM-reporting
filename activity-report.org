@@ -2430,6 +2430,15 @@ case _ => MergeStrategy.first
   - Reprendre la branche?
   - Recommencer vu l'ensemble des modifications effectuées depuis?
 - Implémenter la vue du monde
+** Semaine du <2015-09-22 mar.> au <2015-09-25 ven.>
+*** Done
+- Mettre à disposition la leçon Logo
+  - Ajout de la leçon dans *Game.lessonsName*
+  - Renommage des packages de la leçon
+*** Planned
+**** DONE Mettre à disposition la leçon Logo
+- Ajouter cette leçon à la liste des leçons disponibles
+- En profiter pour la renommer correctement (lego -> logo)
 **** TODO Uniformiser TurtleArt
 - La leçon TurtleArt et ses exercices semblent être gérée de façon différente des autres leçons
 - Voir pour uniformiser tout ça
