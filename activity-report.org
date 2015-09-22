@@ -2435,10 +2435,39 @@ case _ => MergeStrategy.first
 - Mettre à disposition la leçon Logo
   - Ajout de la leçon dans *Game.lessonsName*
   - Renommage des packages de la leçon
+- Déployer version de webPLM avec les tortues
+  - [X] Merger les modifications de PLM dans la branche library
+  - [X] Merger les modifications de webPLM dans master
+  - [X] Faire une release du mode local
+  - [X] Mettre à jour les branches de PLM pour la version centralisée de webPLM et les juges
+  - [X] Mettre à jour la version centralisée de webPLM
+    - [X] Mise à jour du jar de PLM dans webPLM
+    - [X] Ajouter les démos de *TurtleArt* & *Recursion.logo*
+  - [X] Mettre à jour les juges
+    - [X] Mise à jour du jar de PLM dans les juges
+    - [X] Ecrire les méthodes de conversion Java -> JSON pour *TurtleWorld* et les *TurtleOperations*
+  - [ ] Re-déployer l'application
+    - [ ] Mettre à jour l'image docker *buggleinc/webplm*
+    - [ ] Mettre à jour l'image docker *buggleinc/plm-judge*
+    - [ ] Mettre à jour les /docker-compose/ de l'application
+- Corriger les tests d'intégration
+  - Avec OpenJDK8 & Scala 2.10.5, les tests passent en local pour la leçon Logo
 *** Planned
 **** DONE Mettre à disposition la leçon Logo
 - Ajouter cette leçon à la liste des leçons disponibles
 - En profiter pour la renommer correctement (lego -> logo)
+**** TODO Corriger les tests d'intégration
+- Les tests d'intégration de PLM échouent depuis l'ajout de la leçon Logo
+- Ils échouent aussi dans la branche webPLM-split
+- Voir d'où proviennent les erreurs
+**** TODO Déployer version de webPLM avec les tortues
+- Merger les modifications de PLM dans la branche library
+- Merger les modifications de webPLM dans master
+- Faire une release du mode local
+- Mettre à jour les branches de PLM pour la version centralisée de webPLM et les juges
+- Mettre à jour la version centralisée de webPLM
+- Mettre à jour les juges
+- Re-déployer l'application
 **** TODO Uniformiser TurtleArt
 - La leçon TurtleArt et ses exercices semblent être gérée de façon différente des autres leçons
 - Voir pour uniformiser tout ça
@@ -2449,9 +2478,6 @@ case _ => MergeStrategy.first
 **** TODO Complèter le monde de Hanoï
 - Dans certains exercices, les disques des tours de Hanoï sont de couleurs différentes
 - Supporter les différentes couleurs dans la version web
-**** TODO Corriger les tests unitaires
-- Les tests unitaires de PLM & de webPLM échouent depuis quelques temps maintenant
-- Enfin les corriger
 **** TODO Créer un service fournissant le token d'authentification Github
 - Puisque Github ne souhaite pas qu'on mette en public notre token d'authentification
 - Mettre le token d'authentification en variable d'environnement du serveur
@@ -2512,6 +2538,11 @@ case _ => MergeStrategy.first
 **** TODO Séparer l'exécution par monde
 - Avec la nouvelle interface, exécuter le programme de l'utilisateur monde par monde permettrait de mieux indiquer sur quel monde s'est produit l'erreur
 - On a donc besoin d'un résultat par monde et non plus global
+**** TODO Utiliser webGL pour représenter les mondes
+- Actuellement, canvas est majoritairement utilisé pour représenter les mondes
+- Mais des signes de faiblesses apparaissent dans certains exercices possédant de nombreuses étapes, notamment en utilisant Firefox
+- Passer à webGL pourrait permettre de résoudre ces problèmes de performances
+- Voir pour utiliser [[http://www.pixijs.com/][pixi.js]] qui se vante d'être le moteur de rendering le plus rapide
 **** TODO Améliorer le service d'authentification
 - [ ] Changer la page d'accueil
 - [X] Empêcher l'utilisateur d'accèder à la page de demande d'autorisation d'accès au compte sans être connecté
