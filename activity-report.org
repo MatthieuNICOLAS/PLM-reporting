@@ -2446,21 +2446,22 @@ case _ => MergeStrategy.first
   - [X] Mettre à jour les juges
     - [X] Mise à jour du jar de PLM dans les juges
     - [X] Ecrire les méthodes de conversion Java -> JSON pour *TurtleWorld* et les *TurtleOperations*
-  - [ ] Re-déployer l'application
+  - [X] Re-déployer l'application
     - [X] Mettre à jour l'image docker *buggleinc/webplm*
     - [X] Mettre à jour l'image docker *buggleinc/plm-judge*
-    - [ ] Mettre à jour les /docker-compose/ de l'application
+    - [X] Mettre à jour les /docker-compose/ de l'application
 - Corriger les tests d'intégration
   - Avec OpenJDK8 & Scala 2.10.5, les tests passent en local pour la leçon Logo
+- Retravailler le workflow de déploiement des dockers
+  - Création [[https://github.com/BuggleInc/plm-dockers/tree/rework-workflow][d'une nouvelle branche]] mettant à disposition les fichiers *docker-compose.yml* pour webPLM & PLM-judge
+  - Y ajouter un *Makefile* ajoutant des raccourcis ? Pour:
+    - Mettre à jour les images utilisées et relancer l'environnement
+    - Stopper l'environnement déployé et supprimer les conteneurs utilisés
 *** Planned
 **** DONE Mettre à disposition la leçon Logo
 - Ajouter cette leçon à la liste des leçons disponibles
 - En profiter pour la renommer correctement (lego -> logo)
-**** TODO Corriger les tests d'intégration
-- Les tests d'intégration de PLM échouent depuis l'ajout de la leçon Logo
-- Ils échouent aussi dans la branche webPLM-split
-- Voir d'où proviennent les erreurs
-**** TODO Déployer version de webPLM avec les tortues
+**** DONE Déployer version de webPLM avec les tortues
 - Merger les modifications de PLM dans la branche library
 - Merger les modifications de webPLM dans master
 - Faire une release du mode local
@@ -2468,6 +2469,13 @@ case _ => MergeStrategy.first
 - Mettre à jour la version centralisée de webPLM
 - Mettre à jour les juges
 - Re-déployer l'application
+**** TODO Corriger le monde des tortues
+- Déclencher /stepUI()/ après /setHeading/
+- L'API n'est pas formatée correctement
+**** TODO Corriger les tests d'intégration
+- Les tests d'intégration de PLM échouent depuis l'ajout de la leçon Logo
+- Ils échouent aussi dans la branche webPLM-split
+- Voir d'où proviennent les erreurs
 **** TODO Retravailler le workflow de déploiement des dockers
 - Actuellement, pour déployer une nouvelle version des dockers (webPLM et PLM-judge), il faut
   - Pour chaque machine concernée
@@ -2479,6 +2487,7 @@ case _ => MergeStrategy.first
 - Pusher les dernières versions des images docker de webPLM & PLM-judge permettrait de ramener le workflow à
   - Pour chaque machine concernée
     - Se connecter dessus
+    - Lancer /docker-compose pull/
     - Lancer /docker-compose up/
 - Que faire des *docker-compose.yml*?
   - Les machines de productions n'ont besoin seulement que des *docker-compose.yml* des applications à déployer
