@@ -2447,8 +2447,8 @@ case _ => MergeStrategy.first
     - [X] Mise à jour du jar de PLM dans les juges
     - [X] Ecrire les méthodes de conversion Java -> JSON pour *TurtleWorld* et les *TurtleOperations*
   - [ ] Re-déployer l'application
-    - [ ] Mettre à jour l'image docker *buggleinc/webplm*
-    - [ ] Mettre à jour l'image docker *buggleinc/plm-judge*
+    - [X] Mettre à jour l'image docker *buggleinc/webplm*
+    - [X] Mettre à jour l'image docker *buggleinc/plm-judge*
     - [ ] Mettre à jour les /docker-compose/ de l'application
 - Corriger les tests d'intégration
   - Avec OpenJDK8 & Scala 2.10.5, les tests passent en local pour la leçon Logo
@@ -2468,6 +2468,22 @@ case _ => MergeStrategy.first
 - Mettre à jour la version centralisée de webPLM
 - Mettre à jour les juges
 - Re-déployer l'application
+**** TODO Retravailler le workflow de déploiement des dockers
+- Actuellement, pour déployer une nouvelle version des dockers (webPLM et PLM-judge), il faut
+  - Pour chaque machine concernée
+    - Se connecter dessus
+    - Puller la dernière version du répo
+    - (Pour webPLM uniquement) Regénérer le binaire de l'application
+    - Lancer /docker build/ pour regénérer l'image docker
+    - Lancer /docker-compose up/
+- Pusher les dernières versions des images docker de webPLM & PLM-judge permettrait de ramener le workflow à
+  - Pour chaque machine concernée
+    - Se connecter dessus
+    - Lancer /docker-compose up/
+- Que faire des *docker-compose.yml*?
+  - Les machines de productions n'ont besoin seulement que des *docker-compose.yml* des applications à déployer
+  - Les mettre dans un repo différent? ([[https://github.com/BuggleInc/plm-dockers][PLM-dockers?]])
+  - Garder cependant les *docker-compose.yml* dans repo du projet pour faciliter le test de l'application en mode développement?
 **** TODO Uniformiser TurtleArt
 - La leçon TurtleArt et ses exercices semblent être gérée de façon différente des autres leçons
 - Voir pour uniformiser tout ça
