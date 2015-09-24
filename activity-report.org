@@ -2457,6 +2457,11 @@ case _ => MergeStrategy.first
   - Y ajouter un *Makefile* ajoutant des raccourcis ? Pour:
     - Mettre à jour les images utilisées et relancer l'environnement
     - Stopper l'environnement déployé et supprimer les conteneurs utilisés
+- Corriger le monde des tortues
+  - Ajout de /stepUI()/ après /setHeading()/
+  - Correction du format de l'API pour l'anglais et le français
+  - Mise à jour de la version locale
+  - Mise à jour de la version centralisée
 *** Planned
 **** DONE Mettre à disposition la leçon Logo
 - Ajouter cette leçon à la liste des leçons disponibles
@@ -2469,8 +2474,8 @@ case _ => MergeStrategy.first
 - Mettre à jour la version centralisée de webPLM
 - Mettre à jour les juges
 - Re-déployer l'application
-**** TODO Corriger le monde des tortues
-- Déclencher /stepUI()/ après /setHeading/
+**** DONE Corriger le monde des tortues
+- Déclencher /stepUI()/ après /setHeading()/
 - L'API n'est pas formatée correctement
 **** TODO Corriger les tests d'intégration
 - Les tests d'intégration de PLM échouent depuis l'ajout de la leçon Logo
@@ -2525,6 +2530,11 @@ case _ => MergeStrategy.first
 - Il faudrait mieux interrompre le démarrage de l'application & générer une erreur indiquant à l'admin/au développeur qu'il faut revoir la configuration
 **** TODO Obtenir un certificat valide pour HTTPS
 - P-e voir [[https://www.eff.org/deeplinks/2015/09/one-small-certificate-web-one-giant-certificate-authority-web-encryption][ici]] pour l'obtenir
+**** TODO Déployer un DockerHub local
+- DockerHub offre des performances pas terribles:
+  - La vitesse de téléchargement et d'upload des images diminue très fortement au cours de l'opération
+- Déployer notre propre registre d'image dockers pourrait être résoude ces problèmes de performances
+  - Voir [[https://docs.docker.com/registry/deploying/][cette page]] pour voir comment faire et récupérer la configuration du *docker-compose.yml*
 **** TODO Ajouter un écran de chargement
 - L'application met parfois du temps à répondre lors de
   - L'initialisation
