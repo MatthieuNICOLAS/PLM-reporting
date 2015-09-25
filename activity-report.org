@@ -2462,6 +2462,22 @@ case _ => MergeStrategy.first
   - Correction du format de l'API pour l'anglais et le français
   - Mise à jour de la version locale
   - Mise à jour de la version centralisée
+- Créer un service fournissant le token d'authentification Github
+  - Création du service *getGitHubAccessToken* exposant le token d'authenfication
+  - Où placer la requête de ce service au lancement du serveur local?
+    - Peut pas le faire dans *Global*: semblerait que *WSClient* ait besoin que *Global* soit instancié pour fonctionner
+    - Pour le moment, création d'un objet *PLM* interrogeant le service et le fournissant aux instances de *PLM* des utilisateurs
+      - C'est donc à la connexion du 1er utilisateur que l'on récupère le token, et non au lancement du serveur
+  - Difficultés à interroger ce service
+    - *WSClient* n'arrive pas à interroger ce web-service à cause du certificat SSL
+    - Celui-ci n'étant pas signé, *WSClient* refuse d'effectuer la requête (mais pas de message d'erreur?)
+    - J'ai tenté, en suivant [[https://www.playframework.com/documentation/2.3.x/WSQuickStart][cette doc]], de forcer *WSClient* à effectuer la requête en ajoutant le certificat SSL dans la liste des sites autorisés, sans résultat
+  - Utilisation de *scalaj*
+    - [[https://github.com/scalaj/scalaj-http][scalaj]] est une librairie permettant d'effectuer facilement des requêtes HTTP en Scala de façon synchrone
+    - Une option proposée par *scalaj* permet de ne pas tenir compte de la validité du certificat SSL: /HttpOptions.allowUnsafeSSL/
+    - J'ai ainsi pu récupérer l'*accessToken* facilement dans *Global*
+- Obtenir un certificat valide pour HTTPS
+  - Inscription à la bêta de [[https://letsencrypt.org/]] effectuée
 *** Planned
 **** DONE Mettre à disposition la leçon Logo
 - Ajouter cette leçon à la liste des leçons disponibles
