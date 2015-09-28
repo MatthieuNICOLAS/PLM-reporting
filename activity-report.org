@@ -2493,11 +2493,7 @@ case _ => MergeStrategy.first
 **** DONE Corriger le monde des tortues
 - Déclencher /stepUI()/ après /setHeading()/
 - L'API n'est pas formatée correctement
-**** TODO Corriger les tests d'intégration
-- Les tests d'intégration de PLM échouent depuis l'ajout de la leçon Logo
-- Ils échouent aussi dans la branche webPLM-split
-- Voir d'où proviennent les erreurs
-**** TODO Retravailler le workflow de déploiement des dockers
+**** DONE Retravailler le workflow de déploiement des dockers
 - Actuellement, pour déployer une nouvelle version des dockers (webPLM et PLM-judge), il faut
   - Pour chaque machine concernée
     - Se connecter dessus
@@ -2510,6 +2506,41 @@ case _ => MergeStrategy.first
     - Se connecter dessus
     - Lancer /docker-compose pull/
     - Lancer /docker-compose up/
+**** DONE Créer un service fournissant le token d'authentification Github
+- Puisque Github ne souhaite pas qu'on mette en public notre token d'authentification
+- Mettre le token d'authentification en variable d'environnement du serveur
+- Ajouter et exposer une méthode fournissant ce token
+** Semaine du <2015-09-28 lun.> au <2015-10-02 ven.>
+*** Done
+- Créer un service fournissant le token d'authentification Github
+  - Passage du token à GitUtils & à GitHubIssueManager
+  - La série de tests *unit-tests* de PLM a échoué sur Travis
+    - Elle passe pourtant en local (3 essais sur 3)
+    - La relancer a permis de corriger ce résultat
+  - La série de tests serveur de webPLM a échoué sur Travis
+    - Oubli de changer l'URL du webservice
+    - A modifié l'URL pour https://plm.telecomnancy.univ-lorraine.fr/getGitHubAccessToken
+    - A besoin de déployer la nouvelle version du serveur centralisé pour tester
+  - Déployer la nouvelle version du serveur centralisé
+    - [X] Générer l'image docker correspondante
+    - [X] Pusher la nouvelle image
+    - [X] Relancer l'application
+  - Les tests unitaires passent maintenant que la nouvelle version du serveur central est déployée
+  - Le serveur local arrive bien à récupérer le token et à pusher sur GitHub
+*** Planned
+**** DONE Créer un service fournissant le token d'authentification Github
+- Modifier le comportement du serveur local pour
+  - Qu'il récupère le token en interrogeant le serveur central
+  - Modifie les attributs de *GitUtils* pour utiliser cette valeur
+**** TODO Corriger les tests d'intégration
+- Les tests d'intégration de PLM échouent depuis l'ajout de la leçon Logo
+- Ils échouent aussi dans la branche webPLM-split
+- Voir d'où proviennent les erreurs
+**** TODO Découper les tests d'intégration des leçons
+- Actuellement, il existe une série de tests visant à vérifier la validité des solutions pour chaque exercice de chaque leçon
+- Cette série de tests échoue de temps en temps car elle met trop de temps à s'exécuter
+- Découper leçon par leçon cette série de test permettrait d'éviter ce faux-positif et de localiser plus finement où les erreurs se produisent
+**** TODO Retravailler le workflow de déploiement des dockers
 - Que faire des *docker-compose.yml*?
   - Les machines de productions n'ont besoin seulement que des *docker-compose.yml* des applications à déployer
   - Les mettre dans un repo différent? ([[https://github.com/BuggleInc/plm-dockers][PLM-dockers?]])
@@ -2524,17 +2555,13 @@ case _ => MergeStrategy.first
 **** TODO Complèter le monde de Hanoï
 - Dans certains exercices, les disques des tours de Hanoï sont de couleurs différentes
 - Supporter les différentes couleurs dans la version web
-**** TODO Créer un service fournissant le token d'authentification Github
-- Puisque Github ne souhaite pas qu'on mette en public notre token d'authentification
-- Mettre le token d'authentification en variable d'environnement du serveur
-- Ajouter et exposer une méthode fournissant ce token
-- Modifier le comportement du serveur local pour
-  - Qu'il récupère le token en interrogeant le serveur central
-  - Modifie les attributs de *GitUtils* pour utiliser cette valeur
 **** TODO Remettre le bouton "Revert"
 - Les élèves ayant tendance à supprimer le code par défaut de l'éditeur de code, il faudrait qu'ils puissent réinitialiser l'exercice pour le retrouver
 - Le bouton "Revert" sert à cela mais il a disparu au cours de la refonte de l'UI
 - Le remettre et retester son bon fonctionnement
+**** TODO Refactorer GitUtils & GitSpy pour mieux gérer les dépendances
+- Permettrait de sortir l'instanciation de GitUtils de PLM facilement
+- Faciliterait l'écriture et le maintien des tests unitaires sur la partie Git
 **** TODO Ajouter un service de configuration
 - A de nombreux endroits du code de webPLM, on récupère des valeurs de configuration
 - Celles-ci sont contenues dans /conf/application.conf/
