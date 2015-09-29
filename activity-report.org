@@ -2527,11 +2527,29 @@ case _ => MergeStrategy.first
     - [X] Relancer l'application
   - Les tests unitaires passent maintenant que la nouvelle version du serveur central est déployée
   - Le serveur local arrive bien à récupérer le token et à pusher sur GitHub
+- Compléter le monde de Hanoï
+  - Refactoring du modèle Java
+    - *HanoiWorld* possède deux listes
+      - une liste de listes d'entiers permettant de représenter la taille des disques
+      - une liste de listes de couleurs permettant d'indiquer leur couleur
+    - Refactoring de la classe pour n'en garder qu'une
+      - une liste de listes de *HanoiDisk*
+    - Une instance de *HanoiDisk* comporte sa taille et sa couleur
+    - Modification du code de *HanoiWorld* pour utiliser cette nouvelle structure
+    - Ajout de méthodes permettant de générer facilement la configuration initiale d'un monde
+    - Portage des exercices pour utiliser ce nouveau modèle de données
+  - Refactoring du modèle Javascript
+    - Ajout du modèle *HanoiDisk*
+    - Modification du constructeur de *HanoiWorld* pour générer correctement des instances de *HanoiDisk*
+    - Modification de la représentation du monde pour gérer correctement ce nouveau modèle de données
 *** Planned
 **** DONE Créer un service fournissant le token d'authentification Github
 - Modifier le comportement du serveur local pour
   - Qu'il récupère le token en interrogeant le serveur central
   - Modifie les attributs de *GitUtils* pour utiliser cette valeur
+**** DONE Complèter le monde de Hanoï
+- Dans certains exercices, les disques des tours de Hanoï sont de couleurs différentes
+- Supporter les différentes couleurs dans la version web
 **** TODO Corriger les tests d'intégration
 - Les tests d'intégration de PLM échouent depuis l'ajout de la leçon Logo
 - Ils échouent aussi dans la branche webPLM-split
@@ -2552,9 +2570,6 @@ case _ => MergeStrategy.first
 **** TODO Désactiver la démo pour TurtleArt
 - [[https://github.com/BuggleInc/webPLM/issues/2][Cette issue]] est d'autant plus vraie pour la leçon *TurtleArt*
 - Voir pour désactiver la démo pour cette leçon
-**** TODO Complèter le monde de Hanoï
-- Dans certains exercices, les disques des tours de Hanoï sont de couleurs différentes
-- Supporter les différentes couleurs dans la version web
 **** TODO Remettre le bouton "Revert"
 - Les élèves ayant tendance à supprimer le code par défaut de l'éditeur de code, il faudrait qu'ils puissent réinitialiser l'exercice pour le retrouver
 - Le bouton "Revert" sert à cela mais il a disparu au cours de la refonte de l'UI
