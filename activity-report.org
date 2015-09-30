@@ -2546,6 +2546,8 @@ case _ => MergeStrategy.first
   - La directive *resetExercise* était toujours présente dans l'application, juste plus utilisée
   - Ajout de *resetExercise* sur la page d'exercice
   - Correction de la traduction française
+- Refactorer PLMActor
+  - Division de /receive()/ en une fonction pour quasi chaque cas
 *** Planned
 **** DONE Créer un service fournissant le token d'authentification Github
 - Modifier le comportement du serveur local pour
@@ -2560,6 +2562,7 @@ case _ => MergeStrategy.first
 - Le remettre et retester son bon fonctionnement
 **** TODO Refactorer PLMActor
 - Eclater en méthodes les différents cas de /receive/
+- D'autres améliorations à apporter?
 **** TODO Refactorer la partie authentification
 - Mettre à jour la version de Silhouette
 - Voir pour mieux gérer les *Future* dans *UserDAORestImpl*
@@ -2596,6 +2599,13 @@ case _ => MergeStrategy.first
   - Les machines de productions n'ont besoin seulement que des *docker-compose.yml* des applications à déployer
   - Les mettre dans un repo différent? ([[https://github.com/BuggleInc/plm-dockers][PLM-dockers?]])
   - Garder cependant les *docker-compose.yml* dans repo du projet pour faciliter le test de l'application en mode développement?
+**** TODO Reprendre les tests de charges
+- L'application ne tenant pas la charge en utilisation réelle, il faut déterminer d'où provient le (les?) problème
+- Il faudrait pour ça reprendre et continuer [[https://github.com/BuggleInc/PLM-Protractor][le travail de Pierric]]
+  - Corriger les bugs qu'il a détecté dans ses tests
+    - Menu latéral faisant bugger les tests
+    - Websocket posant problème pour détecter quand l'interaction avec le serveur est finie
+  - Distribuer les tests pour simuler le comportement de plusieurs utilisateurs
 **** TODO Uniformiser TurtleArt
 - La leçon TurtleArt et ses exercices semblent être gérée de façon différente des autres leçons
 - Voir pour uniformiser tout ça
