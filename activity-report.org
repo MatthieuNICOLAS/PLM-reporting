@@ -2558,6 +2558,27 @@ case _ => MergeStrategy.first
 - Les élèves ayant tendance à supprimer le code par défaut de l'éditeur de code, il faudrait qu'ils puissent réinitialiser l'exercice pour le retrouver
 - Le bouton "Revert" sert à cela mais il a disparu au cours de la refonte de l'UI
 - Le remettre et retester son bon fonctionnement
+**** TODO Refactorer PLMActor
+- Eclater en méthodes les différents cas de /receive/
+**** TODO Refactorer la partie authentification
+- Mettre à jour la version de Silhouette
+- Voir pour mieux gérer les *Future* dans *UserDAORestImpl*
+- Trouver une alternative au mapping gitID -> acteur
+**** TODO Ajouter un service de configuration
+- A de nombreux endroits du code de webPLM, on récupère des valeurs de configuration
+- Celles-ci sont contenues dans /conf/application.conf/
+- Pour les récupérer, on doit passer par la fonction /Play.configuration.getString/ qui nécessite une application Play courante pour fonctionner
+- Mettre en place un service de configuration regroupant ces valeurs permettrait de faciliter l'accès à ces valeurs
+- Cela permettrait aussi de simplifier les tests en permettant de mocker ce service
+**** TODO Utiliser l'injection de dépendance
+- Voir si ça permettrait de nettoyer et clarifier le code avec
+  - Un injecteur global permettant de récupérer la configuration du serveur, les objets de Silhouette...
+  - Un injecteur par utilisateur permettant de récupérer son profil et ses instances
+- Certains articles de blog ([[http://www.michaelpollmeier.com/2014/06/29/simple-dependency-injection-scala/][ici]] et [[http://loicdescotte.github.io/posts/scala-di/][là]]) expliquent cependant qu'on peut se passer de l'injection de dépendances en Scala
+  - Voir aussi [[http://aloiscochard.blogspot.fr/2014/12/the-cake-is-lie.html][cet article]] et [[http://di-in-scala.github.io/][cette page]] pour plus d'informations
+**** TODO Refactorer la conversion des objets de PLM en JSON
+- Actuellement, c'est webPLM et PLM-judge qui explorent les instances fournies par PLM pour créer le JSON correspondant
+- Se contenter d'ajouter une interface fournissant une méthode /toJSON()/ aux objets concernés permettrait de simplifier le code et d'en éviter la duplication
 **** TODO Release la nouvelle version
 - Récupère le token d'authentification de GitHub via un webservice
 - Refactoring de *HanoiWorld* et support de tous ses exercices
@@ -2585,12 +2606,6 @@ case _ => MergeStrategy.first
 **** TODO Refactorer GitUtils & GitSpy pour mieux gérer les dépendances
 - Permettrait de sortir l'instanciation de GitUtils de PLM facilement
 - Faciliterait l'écriture et le maintien des tests unitaires sur la partie Git
-**** TODO Ajouter un service de configuration
-- A de nombreux endroits du code de webPLM, on récupère des valeurs de configuration
-- Celles-ci sont contenues dans /conf/application.conf/
-- Pour les récupérer, on doit passer par la fonction /Play.configuration.getString/ qui nécessite une application Play courante pour fonctionner
-- Mettre en place un service de configuration regroupant ces valeurs permettrait de faciliter l'accès à ces valeurs
-- Cela permettrait aussi de simplifier les tests en se contentant de mocker ce service
 **** TODO Générer une erreur si l'application est mal configurée
 - Actuellement, des valeurs par défaut sont passées si l'application est mal configurée (variables d'environnements manquantes par exemple)
 - Il faudrait mieux interrompre le démarrage de l'application & générer une erreur indiquant à l'admin/au développeur qu'il faut revoir la configuration
