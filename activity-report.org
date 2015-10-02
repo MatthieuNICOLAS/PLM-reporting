@@ -2548,6 +2548,30 @@ case _ => MergeStrategy.first
   - Correction de la traduction française
 - Refactorer PLMActor
   - Division de /receive()/ en une fonction pour quasi chaque cas
+  - Déléguer certaines de ces fonctions à de nouveaux acteurs peut être une amélioration
+    - Revoir quand utiliser un service et quand utiliser un acteur
+    - D'après [[http://doc.akka.io/docs/akka/2.4.0/AkkaScala.pdf][la doc de Akka]], les acteurs peuvent être utiliser pour implémenter des services
+      - Tribunal?
+      - GitHubIssueManager?
+      - UserDAORestImpl?
+- Ajouter un service de configuration
+  - Dans la version 2.3 de *PlayFramework*, tenter d'accéder à la configuration de l'application depuis l'objet *Global* n'est pas possible par défaut
+  - Tandis que dans la version 2.4, on peut facilement configurer *PlayFramework*  pour démarrer l'application en ayant chargé la configuration
+    - Voir [[https://www.playframework.com/documentation/2.4.x/ScalaDependencyInjection#Advanced:-Extending-the-GuiceApplicationLoader][doc]]
+  - Ceci permettrait de binder au démarrage de l'application le service de configuration au système d'injection de dépendance
+- Passer en version 2.4 de PlayFramework
+  - La doc concernant la migration de version se trouve [[https://www.playframework.com/documentation/2.4.x/Migration24][ici]]
+  - Modification du code impacté par cette nouvelle version
+    - Suppression de l'objet Global
+    - Modification des objets y accédant pour récupérer le token d'authentification pour GitHub
+  - Des modifications apportées par la 2.4 font que *Silhouette* n'est plus fonctionnel
+  - Migration de la version de *Silhouette* : 2.0.0 -> 3.0.4
+    - Modification de *SilhouetteModule*, des *Controller* et de *PLMAccountsProvider*
+  - Correction des tests unitaires
+    - Plus possible de générer un mock dans une fonction stubbée à la volée
+    - Créer le mock de retour au préalable a suffit pour corriger ce bug
+- Refactorer la partie authentification
+  - *Silhouette* a été mis à jour en même temps que *PlayFramework*
 *** Planned
 **** DONE Créer un service fournissant le token d'authentification Github
 - Modifier le comportement du serveur local pour
@@ -2560,6 +2584,7 @@ case _ => MergeStrategy.first
 - Les élèves ayant tendance à supprimer le code par défaut de l'éditeur de code, il faudrait qu'ils puissent réinitialiser l'exercice pour le retrouver
 - Le bouton "Revert" sert à cela mais il a disparu au cours de la refonte de l'UI
 - Le remettre et retester son bon fonctionnement
+**** DONE Passer en version 2.4 de PlayFramework
 **** TODO Refactorer PLMActor
 - Eclater en méthodes les différents cas de /receive/
 - D'autres améliorations à apporter?
@@ -2606,6 +2631,7 @@ case _ => MergeStrategy.first
     - Menu latéral faisant bugger les tests
     - Websocket posant problème pour détecter quand l'interaction avec le serveur est finie
   - Distribuer les tests pour simuler le comportement de plusieurs utilisateurs
+- Voir si besoin [[http://zombie.js.org/][Zombie.js]]
 **** TODO Uniformiser TurtleArt
 - La leçon TurtleArt et ses exercices semblent être gérée de façon différente des autres leçons
 - Voir pour uniformiser tout ça
