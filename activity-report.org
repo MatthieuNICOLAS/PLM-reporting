@@ -2613,6 +2613,20 @@ case _ => MergeStrategy.first
   - Voir comment injecter des acteurs avec Guice
     - [[http://www.typesafe.com/activator/template/activator-akka-scala-guice][Un tutoriel]] explique comment faire
     - Voir si ce dernier est toujours valide
+    - [[https://www.playframework.com/documentation/2.4.x/ScalaAkka][La documentation]] de PlayFramework semble être assez complète sur le sujet mais présenter une autre méthode
+- Obtenir un certificat valide pour HTTPS
+  - [[http://wiki.korben.info/auto-signer_son_certificat_ssl][Cet article]] liste quelques autorités de certifications chez qui on pourrait obtenir un certificat (payant)
+  - Mail envoyé à Benjamin pour savoir si INRIA peut nous fournir un
+    - Sa réponse:
+      - 1/ pour les domaines inria.fr/loria.fr : tu as digitcert (cf https://wiki.inria.fr/support/Demander_un_certificat_serveur)... mais vu ton url cela ne va pas convenir.
+      - 2/ certificats gratuits avec StartCom/CACert, ... mais ils sont peu reconnus par les navigateurs
+      - 3/ certificats payants avec Verisign, GlobalSign... mais c'est payant
+      - 4/ Let's Encrypt (https://letsencrypt.org/) ... mais c'est "arriving Q4 2015" 
+  - Mail envoyé à Cyril pour savoir si TNCY peut nous fournir un 
+- Refactorer PLMActor
+  - [[http://doc.akka.io/docs/akka/snapshot/AkkaScala.pdf][Dans la documentation d'Akka]], partie 3.1.10, ils expliquent que l'on peut modifier la fonction /receive/ d'un acteur en cours d'exécution
+  - Cela permet d'implémenter une machine à états
+  - Modifier /receive/ en cours d'exécution permettrait de rendre l'application plus robuste 
 *** Planned
 **** DONE Ajouter un service de configuration
 - A de nombreux endroits du code de webPLM, on récupère des valeurs de configuration
