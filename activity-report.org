@@ -2633,6 +2633,14 @@ case _ => MergeStrategy.first
 - Mettre à jour la version de Silhouette
 - Voir pour mieux gérer les *Future* dans *UserDAORestImpl*
 - Trouver une alternative au mapping gitID -> acteur
+**** TODO Obtenir un certificat valide pour HTTPS
+- P-e voir [[https://www.eff.org/deeplinks/2015/09/one-small-certificate-web-one-giant-certificate-authority-web-encryption][ici]] pour l'obtenir
+- Voir sinon avec Inria ou TNCY
+**** TODO Revoir le formulaire concernant la publication des traces
+- Actuellement, si on clique sur "Oui" ou sur "Non", ce choix est valide que pour cette session.
+- Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
+- C'est seulement s'il sélectionne "Décider plus tard" que la pop-up disparaît pendant plusieurs jours.
+- Voir pour n'afficher la pop-up qu'après un certain nombre d'exécution
 **** TODO Refactorer la conversion des objets de PLM en JSON
 - Actuellement, c'est webPLM et PLM-judge qui explorent les instances fournies par PLM pour créer le JSON correspondant
 - Se contenter d'ajouter une interface fournissant une méthode /toJSON()/ aux objets concernés permettrait de simplifier le code et d'en éviter la duplication
@@ -2674,8 +2682,6 @@ case _ => MergeStrategy.first
 **** TODO Générer une erreur si l'application est mal configurée
 - Actuellement, des valeurs par défaut sont passées si l'application est mal configurée (variables d'environnements manquantes par exemple)
 - Il faudrait mieux interrompre le démarrage de l'application & générer une erreur indiquant à l'admin/au développeur qu'il faut revoir la configuration
-**** TODO Obtenir un certificat valide pour HTTPS
-- P-e voir [[https://www.eff.org/deeplinks/2015/09/one-small-certificate-web-one-giant-certificate-authority-web-encryption][ici]] pour l'obtenir
 **** TODO Déployer un DockerHub local
 - DockerHub offre des performances pas terribles:
   - La vitesse de téléchargement et d'upload des images diminue très fortement au cours de l'opération
@@ -2687,10 +2693,6 @@ case _ => MergeStrategy.first
   - L'authentification
   - L'exécution du code élève
 - Mettre un écran de chargement indiquerait à l'utilisateur qu'il faut patienter
-**** TODO Revoir le formulaire concernant la publication des traces
-- Actuellement, si on clique sur "Oui" ou sur "Non", ce choix est valide que pour cette session.
-- Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
-- C'est seulement s'il sélectionne "Décider plus tard" que la pop-up disparaît pendant plusieurs jours.
 **** TODO Adapter les consignes à la nouvelle interface
 - Certaines consignes font référence à l'UI
 - D'autres permettent de consulter des indices
