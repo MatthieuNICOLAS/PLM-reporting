@@ -2585,14 +2585,36 @@ case _ => MergeStrategy.first
 - Le bouton "Revert" sert à cela mais il a disparu au cours de la refonte de l'UI
 - Le remettre et retester son bon fonctionnement
 **** DONE Passer en version 2.4 de PlayFramework
-**** TODO Refactorer PLMActor
-- Eclater en méthodes les différents cas de /receive/
-- D'autres améliorations à apporter?
-**** TODO Refactorer la partie authentification
-- Mettre à jour la version de Silhouette
-- Voir pour mieux gérer les *Future* dans *UserDAORestImpl*
-- Trouver une alternative au mapping gitID -> acteur
-**** TODO Ajouter un service de configuration
+** Semaine du <2015-10-05 lun.> au <2015-10-09 ven.>
+*** Done
+- Ajouter un service de configuration
+  - Depuis la version 2.4 de PlayFramework, il existe un objet *Configuration* qui correspond au service de configuration voulu
+  - Cependant pour le récupérer, il faut utiliser l'injection de dépendance
+  - Une fois l'objet récupéré, il suffit d'utiliser le code suivant pour récupérer une valeur: /configuration.getString("key")/
+- Utiliser l'injection de dépendance
+  - Un injecteur global est créé au démarrage du serveur
+    - Il fournit la configuration du serveur et les objets globaux
+  - Mais pour chaque utilisateur, il faut instancier de nouveaux objets
+    - Guice propose la notion de [[https://github.com/google/guice/wiki/Scopes][Scopes]] pour gérer ce genre de cas
+    - Mais à part *Singleton*, ils ne sont pas supportés par Play ([[http://stackoverflow.com/questions/25626264/how-to-use-play-frameworks-request-and-session-scope-in-goole-guice][voir ce thread]])
+      - La notion de Session n'existe pas dans PlayFramework de base
+      - PlayFramework n'utilise pas de servlets, qui semblent être nécessaire pour utiliser RequestScoped 
+  - Puisqu'on peut pas utiliser les Scopes, il faut trouver une alternative
+    - Les injecteurs fils sont peut-être la solution
+      - Ils sont générés à partir d'un injecteur parent
+        - Dans notre cas, l'injecteur global
+      - On peut ensuite surcharger certains bindings ainsi qu'en ajouter de nouveaux
+      - Cela permettrait d'ajouter pour chaque utilisateur les objets qui représente sa session
+	- Son instance de *User*
+	- Les éventuels acteurs
+	- Le logger permettant d'envoyer des messages au client
+      - Il faudrait donc en instancier un à chaque connexion d'un utilisateur
+      - Gérer les déconnexions/connexions
+  - Voir comment injecter des acteurs avec Guice
+    - [[http://www.typesafe.com/activator/template/activator-akka-scala-guice][Un tutoriel]] explique comment faire
+    - Voir si ce dernier est toujours valide
+*** Planned
+**** DONE Ajouter un service de configuration
 - A de nombreux endroits du code de webPLM, on récupère des valeurs de configuration
 - Celles-ci sont contenues dans /conf/application.conf/
 - Pour les récupérer, on doit passer par la fonction /Play.configuration.getString/ qui nécessite une application Play courante pour fonctionner
@@ -2600,10 +2622,17 @@ case _ => MergeStrategy.first
 - Cela permettrait aussi de simplifier les tests en permettant de mocker ce service
 **** TODO Utiliser l'injection de dépendance
 - Voir si ça permettrait de nettoyer et clarifier le code avec
-  - Un injecteur global permettant de récupérer la configuration du serveur, les objets de Silhouette...
+  - Un injecteur global permettant de récupérer la configuration du serveur, les objets de Silhouette
   - Un injecteur par utilisateur permettant de récupérer son profil et ses instances
 - Certains articles de blog ([[http://www.michaelpollmeier.com/2014/06/29/simple-dependency-injection-scala/][ici]] et [[http://loicdescotte.github.io/posts/scala-di/][là]]) expliquent cependant qu'on peut se passer de l'injection de dépendances en Scala
   - Voir aussi [[http://aloiscochard.blogspot.fr/2014/12/the-cake-is-lie.html][cet article]] et [[http://di-in-scala.github.io/][cette page]] pour plus d'informations
+**** TODO Refactorer PLMActor
+- Eclater en méthodes les différents cas de /receive/
+- D'autres améliorations à apporter?
+**** TODO Refactorer la partie authentification
+- Mettre à jour la version de Silhouette
+- Voir pour mieux gérer les *Future* dans *UserDAORestImpl*
+- Trouver une alternative au mapping gitID -> acteur
 **** TODO Refactorer la conversion des objets de PLM en JSON
 - Actuellement, c'est webPLM et PLM-judge qui explorent les instances fournies par PLM pour créer le JSON correspondant
 - Se contenter d'ajouter une interface fournissant une méthode /toJSON()/ aux objets concernés permettrait de simplifier le code et d'en éviter la duplication
