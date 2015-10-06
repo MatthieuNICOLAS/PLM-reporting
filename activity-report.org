@@ -2634,6 +2634,19 @@ case _ => MergeStrategy.first
 - Pour les récupérer, on doit passer par la fonction /Play.configuration.getString/ qui nécessite une application Play courante pour fonctionner
 - Mettre en place un service de configuration regroupant ces valeurs permettrait de faciliter l'accès à ces valeurs
 - Cela permettrait aussi de simplifier les tests en permettant de mocker ce service
+**** TODO Merger les branches master et prod-judge
+- Pour assurer la maintainabilité du projet, il serait plus simple de garder qu'une seule branche
+- Celle-ci devrait pouvoir fonctionner en mode serveur local ou en mode serveur centralisé en fonction des variables d'environnements
+- [ ] Ajouter un niveau d'abstraction pour l'exécution du code de l'élève
+  - Deux objets en découleront
+    - Le *Tribunal* actuellement utilisé pour communiquer avec les juges
+    - Un nouvel objet communiquant avec le *Game* local pour exécuter le code
+- [ ] Injecter le bon *ExecutionManager*
+  - En fonction de la configuration de l'application, on utilisera un de ces deux objets
+- [ ] Merger les fichiers de configuration
+  - La configuration doit pouvoir fonctionner de façon équivalent dans les deux cas
+  - Ajouter un clé indiquant le mode de fonctionnement de l'application
+- Vérifier si d'autres modifications sont à apporter?
 **** TODO Utiliser l'injection de dépendance
 - Voir si ça permettrait de nettoyer et clarifier le code avec
   - Un injecteur global permettant de récupérer la configuration du serveur, les objets de Silhouette
