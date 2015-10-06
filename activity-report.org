@@ -2637,6 +2637,8 @@ case _ => MergeStrategy.first
 **** TODO Merger les branches master et prod-judge
 - Pour assurer la maintainabilité du projet, il serait plus simple de garder qu'une seule branche
 - Celle-ci devrait pouvoir fonctionner en mode serveur local ou en mode serveur centralisé en fonction des variables d'environnements
+- [ ] Fusionner les branches de PLM *library* et *webplm-split*
+- [ ] Fusionner les branches de webPLM *master* et *prod-judge*
 - [ ] Ajouter un niveau d'abstraction pour l'exécution du code de l'élève
   - Deux objets en découleront
     - Le *Tribunal* actuellement utilisé pour communiquer avec les juges
