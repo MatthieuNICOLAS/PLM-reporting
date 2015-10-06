@@ -2649,6 +2649,17 @@ case _ => MergeStrategy.first
   - La configuration doit pouvoir fonctionner de façon équivalent dans les deux cas
   - Ajouter un clé indiquant le mode de fonctionnement de l'application
 - Vérifier si d'autres modifications sont à apporter?
+**** TODO Gérer les leçons et exercices dans webPLM
+- Pour mettre en place un éditeur d'exercice dans webPLM, il faudrait sortir la gestion des leçons de PLM
+- [ ] Déplacer la composante compilation et exécution de *Exercise* à *LessonRunner*/*DemoRunner*
+  - Ceci nous permettrait de ne conserver que le modèle de *Exercise*
+- On passe ensuite à l'implémentation du gestionnaire des leçons dans webPLM
+- [ ] Refactorer les leçons pour les représenter au format JSON
+- [ ] Refactorer les exercices pour les représenter au format JSON
+- [ ] Implémenter un acteur exposant une API permettant de
+  - Récupérer la liste des leçons
+  - Récupérer la liste des exercices d'une leçon
+  - Récupérer un exercice
 **** TODO Utiliser l'injection de dépendance
 - Voir si ça permettrait de nettoyer et clarifier le code avec
   - Un injecteur global permettant de récupérer la configuration du serveur, les objets de Silhouette
