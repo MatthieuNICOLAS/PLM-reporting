@@ -2641,6 +2641,11 @@ case _ => MergeStrategy.first
   - Fusionner les branches de PLM *library* et *webplm-split*
     - Correction des conflits
     - Les tests unitaires échouent cependant
+    - Problème avec les mondes
+      - Les solutions n'ont plus l'air de s'exécuter, faussant tous les exercices
+      - J'avais supprimé /computeAnswer/ de /setupWorlds/ dans la version *webplm-split* de PLM
+      - Re-ajout des appels à /computeAnswer/ et /computeError/
+    - Ceci à corriger les tests unitaires
   - Fusionner les branches de webPLM *master* et *prod-judge*
     - Correction des conflits
     - Problème avec les OAUTH_CLIENT_ID
@@ -2653,9 +2658,10 @@ case _ => MergeStrategy.first
       - C'est cette dernière qui a été choisie
     - Re-ajout de *ExecutionSpy* & de *ExecutionResultListener*
     - Pour le moment, désactivation du *Tribunal*
-    - Problème avec les opérations
+    - Problème avec les opérations dans /exercise.controller.js/
       - Le format des opérations provenant du *Tribunal* et du *ExecutionSpy* sont différents
-      - Celles provenant du *Tribunal* en besoin d'être parser par le client avant d'être traitées
+      - Celles provenant du *Tribunal* ont besoin d'être parser par le client avant d'être traitées
+      - Pour le moment, utilisation du format des opérations de *ExecutionSpy*
 *** Planned
 **** DONE Ajouter un service de configuration
 - A de nombreux endroits du code de webPLM, on récupère des valeurs de configuration
@@ -2676,8 +2682,8 @@ case _ => MergeStrategy.first
 **** TODO Merger les branches master et prod-judge
 - Pour assurer la maintainabilité du projet, il serait plus simple de garder qu'une seule branche
 - Celle-ci devrait pouvoir fonctionner en mode serveur local ou en mode serveur centralisé en fonction des variables d'environnements
-- [ ] Fusionner les branches de PLM *library* et *webplm-split*
-- [ ] Fusionner les branches de webPLM *master* et *prod-judge*
+- [X] Fusionner les branches de PLM *library* et *webplm-split*
+- [X] Fusionner les branches de webPLM *master* et *prod-judge*
 - [ ] Ajouter un niveau d'abstraction pour l'exécution du code de l'élève
   - Deux objets en découleront
     - Le *Tribunal* actuellement utilisé pour communiquer avec les juges
