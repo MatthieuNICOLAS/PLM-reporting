@@ -2622,11 +2622,40 @@ case _ => MergeStrategy.first
       - 2/ certificats gratuits avec StartCom/CACert, ... mais ils sont peu reconnus par les navigateurs
       - 3/ certificats payants avec Verisign, GlobalSign... mais c'est payant
       - 4/ Let's Encrypt (https://letsencrypt.org/) ... mais c'est "arriving Q4 2015" 
-  - Mail envoyé à Cyril pour savoir si TNCY peut nous fournir un 
+  - Mail envoyé à Cyril pour savoir si TNCY peut nous fournir un
+    - L'université de Lorraine nous a fourni un certificat signé, reste à le déployer
+- Déployer version avec certificat SSL valide
+  - Modifier la configuration de nginx
+    - Ajout du certificat SSL
+    - Sert de reverse-proxy pour webPLM
+    - Timeout de la websocket
+      - Par défaut, nginx ferme la websocket après 30s d'inactivité
+      - Ajout de /proxy_read_timeout 1h;/ pour rallonger cette durée
+  - Modifier la configuration de docker-compose
+    - Modification de la configuration des ports pour que nginx puisse servir de reverse-proxy
 - Refactorer PLMActor
   - [[http://doc.akka.io/docs/akka/snapshot/AkkaScala.pdf][Dans la documentation d'Akka]], partie 3.1.10, ils expliquent que l'on peut modifier la fonction /receive/ d'un acteur en cours d'exécution
   - Cela permet d'implémenter une machine à états
   - Modifier /receive/ en cours d'exécution permettrait de rendre l'application plus robuste 
+- Merger les branches master et prod-judge
+  - Fusionner les branches de PLM *library* et *webplm-split*
+    - Correction des conflits
+    - Les tests unitaires échouent cependant
+  - Fusionner les branches de webPLM *master* et *prod-judge*
+    - Correction des conflits
+    - Problème avec les OAUTH_CLIENT_ID
+      - Pour chaque provider (Google, GitHub, Facebook), j'ai enregistré deux applications
+        - PLM et PLM-local
+	- Le serveur centralisé et le serveur local utilisaient le triplet (clientID, clientSecret, redirectURL) correspondant
+	- On pourrait en utiliser plus qu'une, mais GitHub n'accepte qu'une URL de redirection par application
+      - Doit implémenter un service permettant au serveur de fournir le triplet (clientID, clientSecret, redirectURL) à utiliser au client
+      - Autre option plus simple: utiliser une variable fournie par le template
+      - C'est cette dernière qui a été choisie
+    - Re-ajout de *ExecutionSpy* & de *ExecutionResultListener*
+    - Pour le moment, désactivation du *Tribunal*
+    - Problème avec les opérations
+      - Le format des opérations provenant du *Tribunal* et du *ExecutionSpy* sont différents
+      - Celles provenant du *Tribunal* en besoin d'être parser par le client avant d'être traitées
 *** Planned
 **** DONE Ajouter un service de configuration
 - A de nombreux endroits du code de webPLM, on récupère des valeurs de configuration
@@ -2634,6 +2663,16 @@ case _ => MergeStrategy.first
 - Pour les récupérer, on doit passer par la fonction /Play.configuration.getString/ qui nécessite une application Play courante pour fonctionner
 - Mettre en place un service de configuration regroupant ces valeurs permettrait de faciliter l'accès à ces valeurs
 - Cela permettrait aussi de simplifier les tests en permettant de mocker ce service
+**** DONE Obtenir un certificat valide pour HTTPS
+- P-e voir [[https://www.eff.org/deeplinks/2015/09/one-small-certificate-web-one-giant-certificate-authority-web-encryption][ici]] pour l'obtenir
+- Voir sinon avec Inria ou TNCY
+**** DONE Déployer version avec certificat SSL valide
+- [X] Modifier la configuration de nginx
+  - La configuration doit inclure le certificat signé
+  - Les requêtes sur le port 443 doivent être transférées à webPLM sur le port 9443
+- [X] Modifier la configuration de docker-compose
+  - Nginx doit écouter sur le port 443
+  - webPLM doit être accessible sur le port 9443
 **** TODO Merger les branches master et prod-judge
 - Pour assurer la maintainabilité du projet, il serait plus simple de garder qu'une seule branche
 - Celle-ci devrait pouvoir fonctionner en mode serveur local ou en mode serveur centralisé en fonction des variables d'environnements
@@ -2673,9 +2712,6 @@ case _ => MergeStrategy.first
 - Mettre à jour la version de Silhouette
 - Voir pour mieux gérer les *Future* dans *UserDAORestImpl*
 - Trouver une alternative au mapping gitID -> acteur
-**** TODO Obtenir un certificat valide pour HTTPS
-- P-e voir [[https://www.eff.org/deeplinks/2015/09/one-small-certificate-web-one-giant-certificate-authority-web-encryption][ici]] pour l'obtenir
-- Voir sinon avec Inria ou TNCY
 **** TODO Revoir le formulaire concernant la publication des traces
 - Actuellement, si on clique sur "Oui" ou sur "Non", ce choix est valide que pour cette session.
 - Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
