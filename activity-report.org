@@ -2662,6 +2662,26 @@ case _ => MergeStrategy.first
       - Le format des opérations provenant du *Tribunal* et du *ExecutionSpy* sont différents
       - Celles provenant du *Tribunal* ont besoin d'être parser par le client avant d'être traitées
       - Pour le moment, utilisation du format des opérations de *ExecutionSpy*
+  - Ajouter un niveau d'abstraction pour l'exécution du code de l'élève
+    - Ajout du trait *ExecutionManager* proposant /startExecution/ & /stopExecution/ comme méthodes
+    - Modification de *Tribunal* pour implémenter ce trait
+    - Ajout de la classe *LocalExecution* implémentant ce trait et permettant d'exécuter le code de l'utilisateur en local
+    - Modification de *PLMActor* et *PLM* pour faire référence à ce trait
+    - Pour le moment, instancie dans tous les cas un *LocalExecution
+  - Injecter le bon *ExecutionManager*
+    - Pas possible d'injecter proprement des acteurs en réponse à l'ouverture d'une websocket d'après [[https://groups.google.com/forum/#!searchin/play-framework/websocket|sort:date/play-framework/QzCHWAB1nQM/khKCJR-mj6sJ][ce thread]].
+- Déployer une version d'alecsia
+  - Génération d'un Dockerfile
+    - Permet d'automatiser le déploiement de l'application
+    - De mieux controller l'environnement d'exécution
+    - Et de ne pas installer toutes les dépendances sur ma machine
+  - Erreur rencontrée lors de la configuration de l'application
+    - Certains fichiers ne semble accessible que par *localhost*
+    - *Docker* n'apparaît pas comme *localhost* et se voit donc refuser l'accès
+    - Modification de ces fichiers pour ne pas tenir compte de l'IP utilisée pour accéder au fichier
+  - Erreur rencontrée lors de création de la BDD
+    - Un fichier nécessaire à l'initialisation de la BDD est manquant: /app/bootstrap.php
+    - Celui-ci est référencé dans .gitignore, ce qui explique pourquoi il manque à l'appel
 *** Planned
 **** DONE Ajouter un service de configuration
 - A de nombreux endroits du code de webPLM, on récupère des valeurs de configuration
@@ -2684,7 +2704,7 @@ case _ => MergeStrategy.first
 - Celle-ci devrait pouvoir fonctionner en mode serveur local ou en mode serveur centralisé en fonction des variables d'environnements
 - [X] Fusionner les branches de PLM *library* et *webplm-split*
 - [X] Fusionner les branches de webPLM *master* et *prod-judge*
-- [ ] Ajouter un niveau d'abstraction pour l'exécution du code de l'élève
+- [X] Ajouter un niveau d'abstraction pour l'exécution du code de l'élève
   - Deux objets en découleront
     - Le *Tribunal* actuellement utilisé pour communiquer avec les juges
     - Un nouvel objet communiquant avec le *Game* local pour exécuter le code
@@ -2694,6 +2714,10 @@ case _ => MergeStrategy.first
   - La configuration doit pouvoir fonctionner de façon équivalent dans les deux cas
   - Ajouter un clé indiquant le mode de fonctionnement de l'application
 - Vérifier si d'autres modifications sont à apporter?
+**** TODO Déployer une version d'alecsia
+- [[http://www.lifl.fr/~salson/alecsia/][alecsia]] est un outil en ligne permettant aux enseignants de simplifier la correction de TPs
+- Certaines fonctionnalités pourraient s'avérer intéressantes dans PLM
+- Déployer une version de test de l'application pour étudier son fonctionnement et les fonctionnalités qu'elle propose
 **** TODO Gérer les leçons et exercices dans webPLM
 - Pour mettre en place un éditeur d'exercice dans webPLM, il faudrait sortir la gestion des leçons de PLM
 - [ ] Déplacer la composante compilation et exécution de *Exercise* à *LessonRunner*/*DemoRunner*
