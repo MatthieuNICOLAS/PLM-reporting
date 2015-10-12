@@ -2690,6 +2690,10 @@ case _ => MergeStrategy.first
     - Un fichier nécessaire à l'initialisation de la BDD est manquant: /app/bootstrap.php
     - Celui-ci est référencé dans .gitignore, ce qui explique pourquoi il manque à l'appel
   - Tâche annulée du coup
+- Corriger les exceptions levées au démarrage de la leçon welcome
+  - L'erreur provient de *MoriaCommonErr0*
+  - Dans cette erreur, on essaie de porter plusieurs biscuits à la fois
+  - Modification du code pour se contenter d'avancer jusqu'au mur
 *** Planned
 **** DONE Ajouter un service de configuration
 - A de nombreux endroits du code de webPLM, on récupère des valeurs de configuration
@@ -2726,10 +2730,21 @@ case _ => MergeStrategy.first
   - La configuration doit pouvoir fonctionner de façon équivalent dans les deux cas
   - Ajouter un clé indiquant le mode de fonctionnement de l'application
 - Vérifier si d'autres modifications sont à apporter?
-**** TODO Corriger les exceptions levées au démarrage de la leçon welcome
+**** DONE Corriger les exceptions levées au démarrage de la leçon welcome
 - L'exécution des codes menant aux erreurs communes lèvent des exceptions au démarrage de la leçon welcome
 - Corriger ces programmes
-**** TODO Refactorer ExecutionSpy & ExecutionResultListener
+** Semaine du <2015-10-12 lun.> au <2015-10-16 ven.>
+*** Done
+- Refactorer ExecutionSpy & ExecutionResultListener
+  - Déplacement de l'instanciation des *ExecutionSpy* de *PLMActor* à *LocalExecution*
+  - Modification de *LocalExecution* pour hériter de *GameStateListener*
+  - Disparition de *ExecutionResultListener* au profit de *LocalExecution*
+  - Refactoring du trait *ExecutionManager*
+    - Ajout des attributs /plmActor/ et /game/
+    - Ajout des méthodes /setPLMActor/ et /setGame/
+    - Modification de la signature de /startExecution/ pour ne plus passer en paramètre /plmActor/ et /game/ à chaque fois
+*** Planned
+**** DONE Refactorer ExecutionSpy & ExecutionResultListener
 - Actuellement, ils sont gérés par *PLMActor*
 - Ils devraient plutôt être gérés par *LocalExecution*
 - Fusionner *LocalExecution* et *ExecutionResultListener*?
