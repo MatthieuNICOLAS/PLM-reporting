@@ -2743,6 +2743,13 @@ case _ => MergeStrategy.first
     - Ajout des attributs /plmActor/ et /game/
     - Ajout des méthodes /setPLMActor/ et /setGame/
     - Modification de la signature de /startExecution/ pour ne plus passer en paramètre /plmActor/ et /game/ à chaque fois
+- Gérer les leçons et exercices dans webPLM
+  - Création d'un acteur *LessonsActor*
+    - Initialise les leçons à partir de fichier JSON les décrivant
+    - Expose les leçons via une API
+      - getLessons
+      - getExercisesList
+  - Modification de l'acteur *PLMActor* pour récupérer la liste des leçons à partir de cet acteur au lieu de PLM 
 *** Planned
 **** DONE Refactorer ExecutionSpy & ExecutionResultListener
 - Actuellement, ils sont gérés par *PLMActor*
