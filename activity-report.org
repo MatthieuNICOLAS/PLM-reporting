@@ -2749,7 +2749,33 @@ case _ => MergeStrategy.first
     - Expose les leçons via une API
       - getLessons
       - getExercisesList
-  - Modification de l'acteur *PLMActor* pour récupérer la liste des leçons à partir de cet acteur au lieu de PLM 
+    - Voir où stocker les exercices
+      - Dans le même JSON que la leçon?
+      - Dans des fichiers distincts référencés par le JSON de la leçon?
+    - Voir la structure de donnée utilisée pour référencer les exercices
+      - Directement dans la leçon?
+	- Voir dans ce cas comment tronquer le json pour ne pas fournir tous les exercices lorsqu'un élève demande la liste des leçons
+      - Dans une structure à part?
+	- Utiliser une Map pour faire le lien entre leçons & exercices?
+  - Modification de l'acteur *PLMActor* pour récupérer la liste des leçons à partir de cet acteur au lieu de PLM
+  - Implémentation des fonctions d'export des leçons en JSON
+    - Permettra de générer le /main.json/ décrivant chaque leçon
+    - Reste à ajouter l'image de la leçon, la description et "à propos"
+      - Comment gérer ces champs?
+	- Les ajouter au JSON?
+	- Les conserver dans des fichiers séparés, mais comment les fournir à la volée lorsqu'un utilisateur en a besoin?
+    - Comment gérer les traductions?
+  - Implémentation des fonctons d'export des exercices en JSON
+    - Ajout de /toJSON()/ pour *Lesson* et *Lecture*
+    - Ceci permet de générer pour chaque leçon le fichier JSON la décrivant
+- Modifier le processus de l'exécution d'un exercice
+  - Création d'un exercice type *BuggleExercise* et son entité correction *BuggleExerciseEntity*
+  - Tentative de lui passer le code de la correction pour déterminer les mondes solutions
+    - Pas réussi à initialiser correctement l'exercice tout en modifiant le code de son entité solution
+  - Plus simple de lui passer directement les mondes solutions souhaités
+    - A voir comment l'application détermine les mondes solutions au démarrage
+      - Directement dans le json des exercices?
+      - Regénérer les mondes solutions à partir de l'entité correction? On en revient au problème précédent alors
 *** Planned
 **** DONE Refactorer ExecutionSpy & ExecutionResultListener
 - Actuellement, ils sont gérés par *PLMActor*
@@ -2766,6 +2792,12 @@ case _ => MergeStrategy.first
   - Récupérer la liste des leçons
   - Récupérer la liste des exercices d'une leçon
   - Récupérer un exercice
+**** TODO Modifier le processus de l'exécution d'un exercice
+- Actuellement, on instancie l'exercice qui s'initialise à partir de son entité de correction
+- On génére ensuite une nouvelle entité à partir du code de l'élève et on l'exécute
+- On compare ensuite le monde résultat avec le monde solution
+- Ne pourrait-on pas utiliser qu'un exercice générique qu'on instancierait avec ses mondes initiaux et le code de l'entité correction?
+- Ceci permettrait de retirer l'ensemble des leçons des juges pour ne conserver qu'un exercice générique / un exercice générique par univers
 **** TODO Utiliser l'injection de dépendance
 - Voir si ça permettrait de nettoyer et clarifier le code avec
   - Un injecteur global permettant de récupérer la configuration du serveur, les objets de Silhouette
