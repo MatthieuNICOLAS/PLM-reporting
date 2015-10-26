@@ -2785,6 +2785,30 @@ case _ => MergeStrategy.first
 *** Done
 - Gérer les leçons et exercices dans webPLM
   - Séparation de la tâche en sous-tâches plus précises
+- Instancier les leçons dans webPLM
+  - Export de la leçon *welcome* au format JSON à titre d'exemple
+    - Voir [[https://github.com/BuggleInc/webPLM/blob/refactor-lessons-exercises/lessons/welcome/main.json][ici]] le format
+  - Ajout de la classe *Lesson*
+    - Initialisée avec l'identifiant, le nom et une liste de *Lecture* décrivant la liste des exercices composant cette leçon
+    - Possède aussi une *Map* (vide par défaut) permettant, pour chaque langue, de récupérer la description associée
+  - Ajout de la classe *Lecture*
+    - Initialisée avec l'identifiant et une liste de sous-lectures
+- Exposer les nouveaux objets décrivant les leçons
+  - Implémentation de l'acteur *LessonsActor*
+  - Initialise les leçons à partir d'une liste d'identifiants
+    - Parcoure le JSON de la leçon et instancie une *Lesson* correspondante
+    - Extrait les descriptions et les ajoute aux instances
+    - Possède une liste ordonnée des leçons ainsi qu'une *Map*
+  - Expose le message *GetLessonsList* qui permet de récupérer la liste des leçons
+  - Expose le message *GetExercisesList* qui permet de récupérer la liste des exercices composant une leçon
+- Mettre en place un script exportant les leçons de PLM au format JSON
+  - Ajout de *JSONGeneratorController*
+    - Permet de générer les fichiers JSON décrivant les leçons
+    - Méthode exposée à l'url http://hostname/generators/lessonsToJSON
+  - Ajout des fichiers JSON résultant
+  - Modification de *LessonsActor* & *Lesson* pour s'adapter au JSON résultant
+    - Le champ /name/ peut être NULL
+    - Certaines descriptions n'ont pas été traduites, dans ce cas afficher la description anglaise par défaut
 *** Planned
 **** CANCELLED Gérer les leçons et exercices dans webPLM
 - Pour mettre en place un éditeur d'exercice dans webPLM, il faudrait sortir la gestion des leçons de PLM
@@ -2797,7 +2821,7 @@ case _ => MergeStrategy.first
   - Récupérer la liste des leçons
   - Récupérer la liste des exercices d'une leçon
   - Récupérer un exercice
-**** TODO Instancier les leçons dans webPLM
+**** DONE Instancier les leçons dans webPLM
 - Créer un nouvel objet *Lesson* décrivant les leçons se trouvant auparavant dans PLM
 - Possède comme champs:
   - Le nom de la leçon
@@ -2805,11 +2829,11 @@ case _ => MergeStrategy.first
   - Des informations supplémentaires sur la leçon (en plusieurs langues)
   - La liste des identifiants des exercices composant cette leçon
 - S'instancie à partir du JSON correspondant aux anciennes leçons
-**** TODO Exposer les nouveaux objets décrivant les leçons
+**** DONE Exposer les nouveaux objets décrivant les leçons
 - Implémenter un acteur fournissant une API permettant de
   - Récupérer la liste des leçons
   - Récupérer la liste des exercices d'une leçon
-**** TODO Mettre en place un script exportant les leçons de PLM au format JSON
+**** DONE Mettre en place un script exportant les leçons de PLM au format JSON
 - Afin de faciliter la transition vers la nouvelle architecture, un script permettant de générer le JSON correspondant au leçon serait utile
 - Celui-ci devrait être facilement utilisable
   - Script directement dans PLM?
@@ -2818,7 +2842,7 @@ case _ => MergeStrategy.first
 - Puisqu'on instancie les leçons dans webPLM, il faut aussi modifier le processus d'instanciation des exercices
 - Voir pour instancier les exercices dans webPLM et non à partir de *Game*
 **** TODO Exposer les nouveaux objets décrivant les exercices
-- Implémenter un acteur fournissant une API peremttant de récupérer un exercice
+- Implémenter un acteur fournissant une API permettant de récupérer un exercice
 **** TODO Modifier le processus de l'exécution d'un exercice
 - Actuellement, on instancie l'exercice qui s'initialise à partir de son entité de correction
 - On génére ensuite une nouvelle entité à partir du code de l'élève et on l'exécute
