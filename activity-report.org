@@ -2781,7 +2781,12 @@ case _ => MergeStrategy.first
 - Actuellement, ils sont gérés par *PLMActor*
 - Ils devraient plutôt être gérés par *LocalExecution*
 - Fusionner *LocalExecution* et *ExecutionResultListener*?
-**** TODO Gérer les leçons et exercices dans webPLM
+** Semaine du <2015-10-26 lun.> au <2015-10-30 ven.>
+*** Done
+- Gérer les leçons et exercices dans webPLM
+  - Séparation de la tâche en sous-tâches plus précises
+*** Planned
+**** CANCELLED Gérer les leçons et exercices dans webPLM
 - Pour mettre en place un éditeur d'exercice dans webPLM, il faudrait sortir la gestion des leçons de PLM
 - [ ] Déplacer la composante compilation et exécution de *Exercise* à *LessonRunner*/*DemoRunner*
   - Ceci nous permettrait de ne conserver que le modèle de *Exercise*
@@ -2792,6 +2797,28 @@ case _ => MergeStrategy.first
   - Récupérer la liste des leçons
   - Récupérer la liste des exercices d'une leçon
   - Récupérer un exercice
+**** TODO Instancier les leçons dans webPLM
+- Créer un nouvel objet *Lesson* décrivant les leçons se trouvant auparavant dans PLM
+- Possède comme champs:
+  - Le nom de la leçon
+  - La description de la leçon (en plusieurs langues)
+  - Des informations supplémentaires sur la leçon (en plusieurs langues)
+  - La liste des identifiants des exercices composant cette leçon
+- S'instancie à partir du JSON correspondant aux anciennes leçons
+**** TODO Exposer les nouveaux objets décrivant les leçons
+- Implémenter un acteur fournissant une API permettant de
+  - Récupérer la liste des leçons
+  - Récupérer la liste des exercices d'une leçon
+**** TODO Mettre en place un script exportant les leçons de PLM au format JSON
+- Afin de faciliter la transition vers la nouvelle architecture, un script permettant de générer le JSON correspondant au leçon serait utile
+- Celui-ci devrait être facilement utilisable
+  - Script directement dans PLM?
+  - Méthode de webPLM disponible via une URL spécifique?
+**** TODO Instancier les exercices dans webPLM
+- Puisqu'on instancie les leçons dans webPLM, il faut aussi modifier le processus d'instanciation des exercices
+- Voir pour instancier les exercices dans webPLM et non à partir de *Game*
+**** TODO Exposer les nouveaux objets décrivant les exercices
+- Implémenter un acteur fournissant une API peremttant de récupérer un exercice
 **** TODO Modifier le processus de l'exécution d'un exercice
 - Actuellement, on instancie l'exercice qui s'initialise à partir de son entité de correction
 - On génére ensuite une nouvelle entité à partir du code de l'élève et on l'exécute
