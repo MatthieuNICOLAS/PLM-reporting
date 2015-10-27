@@ -2809,6 +2809,19 @@ case _ => MergeStrategy.first
   - Modification de *LessonsActor* & *Lesson* pour s'adapter au JSON résultant
     - Le champ /name/ peut être NULL
     - Certaines descriptions n'ont pas été traduites, dans ce cas afficher la description anglaise par défaut
+- Instancier les exercices dans webPLM
+  - On cherche à instancier les exercices de façon indépendante de *Game* et de *Lesson*
+  - Au final, les exercices doivent être des structures de données ne servant qu'à décrire une situation donnée (type de monde, mondes initiaux, mondes solutions, consigne de l'exercice)
+  - Comment supprimer le lien vers *Game*?
+    - *Game* sert principalement à récupérer:
+      - Le langage de programmation, utilisé pour compiler et exécuter les entités de la solution pour initialiser l'exercice
+      - *I18n* & *LogHandler*, utilisés pour fournir différents messages (d'erreurs principalement) au cours de l'exécution
+    - Déplacer /Exercise.computeAnswer()/ et /Exercise.mutateEntities()/ vers un autre objet?
+      - Une factory?
+  - Que faire de *Lesson*?
+    - *Lesson* n'a l'air que d'être utilisé que pour récupérer un identifiant, ce qui facilement remplaçable.
+    - Les leçons étant dorénavant gérées par webPLM, supprimer *Lesson* (et *Lecture* tant qu'on y est)?
+      - Implique un refactoring conséquent de *Game*
 *** Planned
 **** CANCELLED Gérer les leçons et exercices dans webPLM
 - Pour mettre en place un éditeur d'exercice dans webPLM, il faudrait sortir la gestion des leçons de PLM
