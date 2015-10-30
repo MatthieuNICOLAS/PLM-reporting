@@ -2822,6 +2822,22 @@ case _ => MergeStrategy.first
     - *Lesson* n'a l'air que d'être utilisé que pour récupérer un identifiant, ce qui facilement remplaçable.
     - Les leçons étant dorénavant gérées par webPLM, supprimer *Lesson* (et *Lecture* tant qu'on y est)?
       - Implique un refactoring conséquent de *Game*
+  - Refactoring de *Exercise*
+    - Ajout de méthodes pour initialiser la structure de données sans *Game* et *Lesson*
+  - Refactoring de *ProgrammingLanguage*
+    - Uniquement *LangJava* pour les tests
+    - Ajout d'une méthode /compileExo/ alternative n'ayant besoin que des sources en paramètre
+    - Ajout d'une méthode /mutatesEntities/ alternative n'ayant besoin que des sources et de la liste des entités précédentes en paramètres
+  - Déplacement de /newSourceFromFile/ de *Exercise* à une nouvelle classe *TemplatedSourceFileFactory*
+  - Ajout de *ExerciseRunner*
+    - Déplacement de /run/, /runDemo/, /mutateEntities/ et /check/ de *Exercise*
+  - Ajout de *ExercisesFactory*
+    - Déplacement de /computeAnswer/ de *Exercise*
+    - Déplacement/Refactoring de /initSourcesFiles/ de *ExerciseTemplated*
+  - Refactoring/Nettoyage du code
+    - Plutôt que de stocker que le nom de l'entité solution dans *Exercise*, stocke le *SourceFile* généré à partir de cette dernière
+    - Plutôt que de recréer le *SourceFile* à partir de l'entité à chaque fois que nécessaire, récupère le *SourceFile* stocké dans *Exercise*
+    - Délègue la génération des sources au langage de programmation
 *** Planned
 **** CANCELLED Gérer les leçons et exercices dans webPLM
 - Pour mettre en place un éditeur d'exercice dans webPLM, il faudrait sortir la gestion des leçons de PLM
