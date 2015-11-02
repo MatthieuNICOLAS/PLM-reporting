@@ -2867,6 +2867,16 @@ case _ => MergeStrategy.first
 - Celui-ci devrait être facilement utilisable
   - Script directement dans PLM?
   - Méthode de webPLM disponible via une URL spécifique?
+** Semaine du <2015-11-02 lun.> au <2015-11-06 ven.>
+*** Done
+- Exposer les nouveaux objets décrivant les exercices
+  - Ajout de l'acteur *ExercisesActor*
+  - Instancie une liste d'exercices à son lancement à l'aide de l'*ExercisesFactory*
+    - Pour le moment, uniquement l'exercice /Environment/
+  - Expose les exercices par le biais de leur ID (normalement référencé dans une leçon dans la liste des lectures)
+  - Modification de *PLMActor*
+    - Refactoring du traitement du message /getExercise/ pour récupérer l'exercice demandé via *ExercisesActor*
+*** Planned
 **** TODO Instancier les exercices dans webPLM
 - Puisqu'on instancie les leçons dans webPLM, il faut aussi modifier le processus d'instanciation des exercices
 - Voir pour instancier les exercices dans webPLM et non à partir de *Game*
