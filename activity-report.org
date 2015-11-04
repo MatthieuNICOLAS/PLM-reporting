@@ -2869,13 +2869,26 @@ case _ => MergeStrategy.first
   - Méthode de webPLM disponible via une URL spécifique?
 ** Semaine du <2015-11-02 lun.> au <2015-11-06 ven.>
 *** Done
+- Instancier les exercices dans webPLM
+  - Ajout d'un constructeur par copie à *Exercise*
+  - Ajout de la classe *BlankExercise* permettant d'utiliser ce constructeur par copie
+  - Ajout de la fonction /cloneExercise()/ à *ExercisesFactory*
+  - Permet ainsi de fournir une copie de travail de l'exercice à l'utilisateur
 - Exposer les nouveaux objets décrivant les exercices
   - Ajout de l'acteur *ExercisesActor*
   - Instancie une liste d'exercices à son lancement à l'aide de l'*ExercisesFactory*
     - Pour le moment, uniquement l'exercice /Environment/
   - Expose les exercices par le biais de leur ID (normalement référencé dans une leçon dans la liste des lectures)
   - Modification de *PLMActor*
-    - Refactoring du traitement du message /getExercise/ pour récupérer l'exercice demandé via *ExercisesActor*
+    - Refactoring du traitement du message /getExercise/ pour récupérer une copie de l'exercice demandé via *ExercisesActor*
+- Modifier le processus de l'exécution d'un exercice
+  - Ajout d'un acteur *ExecutionActor*
+  - Permet de lancer le code de l'élève sur un exercice
+    - [X] Lance l'exécution de l'exercice
+    - [ ] Transmet les opérations générées par l'exécution au client
+    - [ ] Génère un *ExecutionProgress* indiquant le résultat de l'exécution
+  - Modification de *PLMActor*
+    - /runExercise/ envoie dorénavant le message /StartExecution/ à l'*ExecutionActor*
 *** Planned
 **** TODO Instancier les exercices dans webPLM
 - Puisqu'on instancie les leçons dans webPLM, il faut aussi modifier le processus d'instanciation des exercices
