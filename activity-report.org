@@ -2885,10 +2885,26 @@ case _ => MergeStrategy.first
   - Ajout d'un acteur *ExecutionActor*
   - Permet de lancer le code de l'élève sur un exercice
     - [X] Lance l'exécution de l'exercice
-    - [ ] Transmet les opérations générées par l'exécution au client
-    - [ ] Génère un *ExecutionProgress* indiquant le résultat de l'exécution
+    - [X] Transmet les opérations générées par l'exécution au client
+      - Ajout de *OperationSpy*
+    - [X] Génère un *ExecutionProgress* indiquant le résultat de l'exécution
+      - Encore incomplet cependant
   - Modification de *PLMActor*
-    - /runExercise/ envoie dorénavant le message /StartExecution/ à l'*ExecutionActor*
+    - [X] /runExercise/ envoie dorénavant le message /StartExecution/ à l'*ExecutionActor*
+    - [X] Transmet le résultat de l'exécution à l'utilisateur à partir du *ExecutionProgress*
+    - [ ] Déclenche un évènement de commit à partir du *ExecutionProgress*
+- Déployer la version de webPLM avec les tours de Hanoï tricolores supportés
+  - Reprise de la fusion des branches *master* et *prod-judge*
+  - Correction de la configuration de OAuth
+    - Débuggage de la configuration de Google
+    - Débuggage de la configuration de Facebook
+    - Re-ajout de la configuration de GitHub
+    - Re-ajout de la configuration de PLMAccounts
+  - Correction du docker-compose permettant de lancer l'application
+  - Fix rapide des dimensions des tours sur la vue pour ne plus déborder du canvas
+  - Build & push de la nouvelle image docker
+  - Déploiement de cette nouvelle version sur TELECOM Nancy
+  - Mise en ligne sur GitHub de la nouvelle release correspondante
 *** Planned
 **** TODO Instancier les exercices dans webPLM
 - Puisqu'on instancie les leçons dans webPLM, il faut aussi modifier le processus d'instanciation des exercices
@@ -2901,6 +2917,12 @@ case _ => MergeStrategy.first
 - On compare ensuite le monde résultat avec le monde solution
 - Ne pourrait-on pas utiliser qu'un exercice générique qu'on instancierait avec ses mondes initiaux et le code de l'entité correction?
 - Ceci permettrait de retirer l'ensemble des leçons des juges pour ne conserver qu'un exercice générique / un exercice générique par univers
+**** TODO Complèter le résultat de l'exécution
+- Au cours du refactoring du processus d'exécution d'un exercice, on a modifié la gestion du résultat de l'exécution
+- Certaines informations sont manquantes:
+  - Le message de l'erreur de compilation
+  - La différence entre le monde obtenu et le monde objectif
+  - Les indices concernant les erreurs communes
 **** TODO Utiliser l'injection de dépendance
 - Voir si ça permettrait de nettoyer et clarifier le code avec
   - Un injecteur global permettant de récupérer la configuration du serveur, les objets de Silhouette
