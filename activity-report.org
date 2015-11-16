@@ -2905,7 +2905,23 @@ case _ => MergeStrategy.first
   - Build & push de la nouvelle image docker
   - Déploiement de cette nouvelle version sur TELECOM Nancy
   - Mise en ligne sur GitHub de la nouvelle release correspondante
+** Semaine du <2015-11-12 jeu.> au <2015-11-13 ven.>
+*** Done
+- Refactorer la session de l'utilisateur
+  - Ajout de *SessionActor*
+    - Remplace *SessionDB*
+    - Permet de retrouver le code précédent d'un élève
+      - Soit via le cache
+      - Soit via *GitActor*
+      - Soit via le code par défaut de l'exercice
+  - Ajout de *GitActor*
+    - Remplace *GitSpy*
+    - Génère les fichiers représentant le résultat d'une exécution
+    - Permet de retrouver le code précédent d'un élève
 *** Planned
+**** TODO Refactorer la session de l'utilisateur
+- Implémenter un acteur permettant de stocker et récupérer le code de l'élève pour les exercices
+- Implémenter un acteur permettant de générer les événements Git composant les traces des utilisateurs
 **** TODO Instancier les exercices dans webPLM
 - Puisqu'on instancie les leçons dans webPLM, il faut aussi modifier le processus d'instanciation des exercices
 - Voir pour instancier les exercices dans webPLM et non à partir de *Game*
