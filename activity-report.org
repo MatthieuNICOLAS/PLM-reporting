@@ -2918,7 +2918,45 @@ case _ => MergeStrategy.first
     - Remplace *GitSpy*
     - Génère les fichiers représentant le résultat d'une exécution
     - Permet de retrouver le code précédent d'un élève
+** Semaine du <2015-11-16 lun.> au <2015-11-20 ven.>
+*** Done
+- Refactorer la session de l'utilisateur
+  - Implémentation de *GitActor*
+    - Déclenchement d'un commit lorsqu'un utilisateur exécute son code
+    - Déclenchement d'un commit lorsqu'un utilisateur se connecte à la PLM
+    - Prévient *PushActor* que les modifications du repo doivent être push
+  - Implémentation de *PushActor*
+    - Permet de séparer la partie gérant les commits (*GitActor*) et la partie pushant les repos ayant de nouveaux commits (*PushActor*)
+    - Reçoit des notifications d'instances de *GitActor* demandant à ce que les modifications de leur repo soit push
+    - Périodiquement, traite les demandes de push en attente
+- Tester si JGit permet de commit et push en parallèle
+  - Ajout de /testParallelCommitAndPush()/
+  - Lance 2 threads
+    - tCommit ouvre le repo et génère des commits en boucle
+    - tPush ouvre le repo et push les commits en boucle
+  - Ne suffit pas à certifier que commit et push sont faisables sur un même repo en parallèle
+- Changer l'URL de PLM-accounts
+  - Configuration de nginx pour accéder à PLM-accounts uniquement par proxy
+  - Intercepte toutes les requêtes sur https://plm.telecomnancy.univ-lorraine.fr/plm-accounts et les transfère à http://plm.telecomnancy.univ-lorraine:9000
+    - Mais le préfixe rajouté provoque des erreurs de chemins pour récupérer les fichiers
+      - Le navigateur tente de récupérer les fichiers à https://plm.telecomnancy.univ-lorraine.fr/path/to/file au lieu de https://plm.telecomnancy.univ-lorraine.fr/plm-accounts/path/to/file
+    - Pas moyen de rajouter facilement dans la configuration de *MEAN.JS* un préfixe: https://github.com/meanjs/mean/issues/715
+  - Intercepte toutes les requêtes sur https://plm-accounts.telecomnancy.univ-lorraine.fr et les transfère à http://plm.telecomnancy.univ-lorraine:9000
+    - Modification de la configuration de nginx en conséquence
+    - Mail envoyé à Cyril pour demander qu'il affecte le second nom à la machine mise à disposition
 *** Planned
+**** TODO Tester si JGit permet de commit et push en parallèle
+- Séparer *GitSpy* en deux parties peut s'avérer plus simple à gérer et à maintenir
+  - Une partie gérant les commits de l'utilisateur
+  - Une partie gérant les repos à push
+- Mais pour que cette approche soit viable, il faut pouvoir
+  - Accéder via *JGit* plusieurs fois en même temps à un même repo
+  - Pouvoir commit et push en parallèle
+- Ecrire un test permettant de vérifier si des erreurs sont générés dans ces cas de figures
+**** TODO Changer l'URL de PLM-accounts
+- Actuellement, se trouve à http://plm.telecomnancy.univ-lorraine:9000
+- Mais sur certains réseaux, ce port est bloqué
+- Devrait plutôt utiliser nginx pour y accéder par le biais d'une URL utilisant un port standard
 **** TODO Refactorer la session de l'utilisateur
 - Implémenter un acteur permettant de stocker et récupérer le code de l'élève pour les exercices
 - Implémenter un acteur permettant de générer les événements Git composant les traces des utilisateurs
