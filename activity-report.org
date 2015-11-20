@@ -2961,13 +2961,22 @@ case _ => MergeStrategy.first
   - Accéder via *JGit* plusieurs fois en même temps à un même repo
   - Pouvoir commit et push en parallèle
 - Ecrire un test permettant de vérifier si des erreurs sont générés dans ces cas de figures
+**** DONE Refactorer la session de l'utilisateur
+- Implémenter un acteur permettant de stocker et récupérer le code de l'élève pour les exercices
+- Implémenter un acteur permettant de générer les événements Git composant les traces des utilisateurs
+**** TODO Re-implémenter les évènements Git manquants
+- leaved
+- switched
+- reverted
+- idle
+- callForHelp
+- cancelCallForHelp
+- readTip
+- commonErrorFeedback
 **** TODO Changer l'URL de PLM-accounts
 - Actuellement, se trouve à http://plm.telecomnancy.univ-lorraine:9000
 - Mais sur certains réseaux, ce port est bloqué
 - Devrait plutôt utiliser nginx pour y accéder par le biais d'une URL utilisant un port standard
-**** TODO Refactorer la session de l'utilisateur
-- Implémenter un acteur permettant de stocker et récupérer le code de l'élève pour les exercices
-- Implémenter un acteur permettant de générer les événements Git composant les traces des utilisateurs
 **** TODO Instancier les exercices dans webPLM
 - Puisqu'on instancie les leçons dans webPLM, il faut aussi modifier le processus d'instanciation des exercices
 - Voir pour instancier les exercices dans webPLM et non à partir de *Game*
