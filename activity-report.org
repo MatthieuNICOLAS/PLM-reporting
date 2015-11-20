@@ -2952,6 +2952,10 @@ case _ => MergeStrategy.first
     - PLM-accounts ne fonctionne plus pour le moment
       - webPLM essaie d'y accéder en HTTPS mais le certificat SSL à disposition n'est valide que pour https://plm.telecomnancy.univ-lorraine.fr/
       - Mail envoyé à Cyril pour demander la génération d'un certificat SSL pour ce nouveau nom
+- Re-implémenter les évènements Git manquants
+  - switched
+    - Se contente de mettre les champs /kind/, /exo/ et /switchTo/
+    - Re-ajouter les champs dépendants du dernier résultat?
 *** Planned
 **** DONE Tester si JGit permet de commit et push en parallèle
 - Séparer *GitSpy* en deux parties peut s'avérer plus simple à gérer et à maintenir
@@ -2964,9 +2968,10 @@ case _ => MergeStrategy.first
 **** DONE Refactorer la session de l'utilisateur
 - Implémenter un acteur permettant de stocker et récupérer le code de l'élève pour les exercices
 - Implémenter un acteur permettant de générer les événements Git composant les traces des utilisateurs
+**** DONE Re-implémenter les évènements Git manquants
+- switched
 **** TODO Re-implémenter les évènements Git manquants
 - leaved
-- switched
 - reverted
 - idle
 - callForHelp
