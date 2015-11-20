@@ -2935,6 +2935,8 @@ case _ => MergeStrategy.first
     - tCommit ouvre le repo et génère des commits en boucle
     - tPush ouvre le repo et push les commits en boucle
   - Ne suffit pas à certifier que commit et push sont faisables sur un même repo en parallèle
+  - Mais JGit ne semble pas lever d'exceptions sur l'utilisation de commandes Git en parallèle
+  - Et Git lui-même est utilisable en parallèle: utilisation de [[https://en.wikipedia.org/wiki/Multiversion_concurrency_control][MVCC]] voir [[http://stackoverflow.com/questions/13459219/is-it-safe-if-more-git-commands-are-run-on-the-same-repo-in-parallel][ce topic]]
 - Changer l'URL de PLM-accounts
   - Configuration de nginx pour accéder à PLM-accounts uniquement par proxy
   - Intercepte toutes les requêtes sur https://plm.telecomnancy.univ-lorraine.fr/plm-accounts et les transfère à http://plm.telecomnancy.univ-lorraine:9000
@@ -2944,8 +2946,14 @@ case _ => MergeStrategy.first
   - Intercepte toutes les requêtes sur https://plm-accounts.telecomnancy.univ-lorraine.fr et les transfère à http://plm.telecomnancy.univ-lorraine:9000
     - Modification de la configuration de nginx en conséquence
     - Mail envoyé à Cyril pour demander qu'il affecte le second nom à la machine mise à disposition
+    - Le nouveau nom *plm-accounts* est disponible
+    - Déploiement de la nouvelle configuration NGINX
+      - Note à soi-même: Si une image utilisée par un des conteneurs est modifiée, il faut relancer /docker-compose up/ pour que ça soit pris en compte
+    - PLM-accounts ne fonctionne plus pour le moment
+      - webPLM essaie d'y accéder en HTTPS mais le certificat SSL à disposition n'est valide que pour https://plm.telecomnancy.univ-lorraine.fr/
+      - Mail envoyé à Cyril pour demander la génération d'un certificat SSL pour ce nouveau nom
 *** Planned
-**** TODO Tester si JGit permet de commit et push en parallèle
+**** DONE Tester si JGit permet de commit et push en parallèle
 - Séparer *GitSpy* en deux parties peut s'avérer plus simple à gérer et à maintenir
   - Une partie gérant les commits de l'utilisateur
   - Une partie gérant les repos à push
