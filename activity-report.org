@@ -2970,6 +2970,18 @@ case _ => MergeStrategy.first
 - Implémenter un acteur permettant de générer les événements Git composant les traces des utilisateurs
 **** DONE Re-implémenter les évènements Git manquants
 - switched
+** Semaine du <2015-11-23 lun.> au <2015-11-27 ven.>
+*** Planned
+- Compléter le processus de l'exécution d'un exercice
+  - Pour chaque langage de programmation, il faut refactorer /mutateEntities()/ et /compileExo()/
+  - Ajout de /sourceFile/ et de /whatToCompile/ à /ProgrammingLanguage.mutateEntities()/ pour gérer les langages de scripts
+  - [X] Rendre Scala compatible
+  - [X] Rendre Python compatible
+  - [X] Rendre Blockly compatible
+*** Done
+**** DONE Compléter le processus de l'exécution d'un exercice
+- Le nouveau système d'exécution ne supporte que le langage Java actuellement
+- Rendre compatible les autres langages
 **** TODO Re-implémenter les évènements Git manquants
 - leaved
 - reverted
@@ -2987,18 +2999,15 @@ case _ => MergeStrategy.first
 - Voir pour instancier les exercices dans webPLM et non à partir de *Game*
 **** TODO Exposer les nouveaux objets décrivant les exercices
 - Implémenter un acteur fournissant une API permettant de récupérer un exercice
-**** TODO Modifier le processus de l'exécution d'un exercice
-- Actuellement, on instancie l'exercice qui s'initialise à partir de son entité de correction
-- On génére ensuite une nouvelle entité à partir du code de l'élève et on l'exécute
-- On compare ensuite le monde résultat avec le monde solution
-- Ne pourrait-on pas utiliser qu'un exercice générique qu'on instancierait avec ses mondes initiaux et le code de l'entité correction?
-- Ceci permettrait de retirer l'ensemble des leçons des juges pour ne conserver qu'un exercice générique / un exercice générique par univers
 **** TODO Complèter le résultat de l'exécution
 - Au cours du refactoring du processus d'exécution d'un exercice, on a modifié la gestion du résultat de l'exécution
 - Certaines informations sont manquantes:
   - Le message de l'erreur de compilation
   - La différence entre le monde obtenu et le monde objectif
   - Les indices concernant les erreurs communes
+**** TODO Ré-implémenter la gestion erreurs communes
+- Au cours du refactoring du processus d'exécution d'un exercice, la gestion des erreurs communes a été mise de côté pour simplifier le refactoring
+- Maintenant que les fonctionnalités principales sont ré-implémentées, y ajouter la gestion des erreurs communes
 **** TODO Utiliser l'injection de dépendance
 - Voir si ça permettrait de nettoyer et clarifier le code avec
   - Un injecteur global permettant de récupérer la configuration du serveur, les objets de Silhouette
