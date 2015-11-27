@@ -2983,14 +2983,32 @@ case _ => MergeStrategy.first
     - [X] Mettre à jour les consignes
     - [X] Mettre à jour le code de l'élève
     - [ ] Mettre à jour l'API
+  - [ ] Changement de langue
+    - [ ] Mettre à jour les consignes
+    - [ ] Mettre à jour la liste des exercices
+    - [ ] Mettre à jour l'API
+  - [X] Connexion/Déconnexion d'un utilisateur
+    - [X] Mettre à jour le gitID et trackUser à la connexion
+    - [X] Mettre à jour le gitID et trackUser à la déconnexion
+    - [X] Mettre à jour trackUser lors de la soumission de la réponse à la pop-up d'information
+    - [X] Mettre à jour trackUser lors de la soumission du formulaire d'édition de profil
 - Re-implémenter les évènements Git manquants
   - leaved
+- Changer l'URL de PLM-accounts
+  - Reçu le certificat SSL nécessaire à la nouvelle configuration nginx
+  - Mise à jour de /Dockerfile/ et /nginx.conf/ pour utiliser le nouveau certificat
+  - Création et déploiement de la nouvelle image docker PLM-nginx
+  - Nouvelle url: https://plm-accounts.telecomnancy.univ-lorraine.fr/
 *** Done
 **** DONE Compléter le processus de l'exécution d'un exercice
 - Le nouveau système d'exécution ne supporte que le langage Java actuellement
 - Rendre compatible les autres langages
 **** DONE Re-implémenter les évènements Git manquants
 - leaved
+**** DONE Changer l'URL de PLM-accounts
+- Actuellement, se trouve à http://plm.telecomnancy.univ-lorraine:9000
+- Mais sur certains réseaux, ce port est bloqué
+- Devrait plutôt utiliser nginx pour y accéder par le biais d'une URL utilisant un port standard
 **** TODO Refactorer PLMActor
 - La dépendance vers Game et la classe PLM (qui servait à piloter Game) a été supprimée
 - Certaines fonctionnalités sont à re-implémenter puisqu'elles interagissaient avec Game auparavant
@@ -3004,10 +3022,6 @@ case _ => MergeStrategy.first
 - cancelCallForHelp
 - readTip
 - commonErrorFeedback
-**** TODO Changer l'URL de PLM-accounts
-- Actuellement, se trouve à http://plm.telecomnancy.univ-lorraine:9000
-- Mais sur certains réseaux, ce port est bloqué
-- Devrait plutôt utiliser nginx pour y accéder par le biais d'une URL utilisant un port standard
 **** TODO Instancier les exercices dans webPLM
 - Puisqu'on instancie les leçons dans webPLM, il faut aussi modifier le processus d'instanciation des exercices
 - Voir pour instancier les exercices dans webPLM et non à partir de *Game*
