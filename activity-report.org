@@ -2971,7 +2971,7 @@ case _ => MergeStrategy.first
 **** DONE Re-implémenter les évènements Git manquants
 - switched
 ** Semaine du <2015-11-23 lun.> au <2015-11-27 ven.>
-*** Planned
+*** Done
 - Compléter le processus de l'exécution d'un exercice
   - Pour chaque langage de programmation, il faut refactorer /mutateEntities()/ et /compileExo()/
   - Ajout de /sourceFile/ et de /whatToCompile/ à /ProgrammingLanguage.mutateEntities()/ pour gérer les langages de scripts
@@ -2979,7 +2979,7 @@ case _ => MergeStrategy.first
   - [X] Rendre Python compatible
   - [X] Rendre Blockly compatible
 - Refactoring de PLMActor
-  - [ ] Changement de langage
+  - [-] Changement de langage
     - [X] Mettre à jour les consignes
     - [X] Mettre à jour le code de l'élève
     - [ ] Mettre à jour l'API
@@ -2999,7 +2999,7 @@ case _ => MergeStrategy.first
   - Mise à jour de /Dockerfile/ et /nginx.conf/ pour utiliser le nouveau certificat
   - Création et déploiement de la nouvelle image docker PLM-nginx
   - Nouvelle url: https://plm-accounts.telecomnancy.univ-lorraine.fr/
-*** Done
+*** Planned
 **** DONE Compléter le processus de l'exécution d'un exercice
 - Le nouveau système d'exécution ne supporte que le langage Java actuellement
 - Rendre compatible les autres langages
@@ -3009,12 +3009,19 @@ case _ => MergeStrategy.first
 - Actuellement, se trouve à http://plm.telecomnancy.univ-lorraine:9000
 - Mais sur certains réseaux, ce port est bloqué
 - Devrait plutôt utiliser nginx pour y accéder par le biais d'une URL utilisant un port standard
+**** DONE Refactorer PLMActor
+- Connexion/Déconnexion d'un utilisateur
+** Semaine du <2015-11-30 lun.> au <2015-12-04 ven.>
+*** Done
+- Refactoring de PLMActor
+  - [X] Changement de langage
+    - [X] Mettre à jour l'API
+*** Planned
 **** TODO Refactorer PLMActor
 - La dépendance vers Game et la classe PLM (qui servait à piloter Game) a été supprimée
 - Certaines fonctionnalités sont à re-implémenter puisqu'elles interagissaient avec Game auparavant
   - Changement de langue
   - Changement de langage
-  - Connexion/Déconnexion d'un utilisateur
 **** TODO Re-implémenter les évènements Git manquants
 - reverted
 - idle
