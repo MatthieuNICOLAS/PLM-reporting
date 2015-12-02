@@ -3016,15 +3016,30 @@ case _ => MergeStrategy.first
 - Refactoring de PLMActor
   - [X] Changement de langage
     - [X] Mettre à jour l'API
+  - [X] Changement de langue
+    - [X] Mettre à jour les consignes
+    - [X] Mettre à jour la liste des exercices
+    - [X] Mettre à jour l'API
+    - [X] Mettre à jour la liste des leçons
+  - [-] Ajout d'un sanity check lors du changement d'exercice pour vérifier si le couple (leçon, exercice) est valide
+    - [X] Fournir les informations de l'exercice si le test passe
+    - [ ] Rediriger l'utilisateur sur la page d'accueil si le test ne passe pas
+  - Correction d'un bug initialisant de façon incorrecte le modèle de l'utilisateur si celui-ci recharge la page alors qu'il était authentifié
+- Re-implémenter les évènements Git manquants
+  - Ajout de l'évènement /idle/ dans *GitActor*
+  - Refactoring de l'évènement /idle/ dans *PLMActor*
+    - Remplacement des *Instant* directement manipulés par des *Option[Instant]* pour éviter les *NullPointerException*
+    - Simplification du code
 *** Planned
-**** TODO Refactorer PLMActor
+**** DONE Refactorer PLMActor
 - La dépendance vers Game et la classe PLM (qui servait à piloter Game) a été supprimée
 - Certaines fonctionnalités sont à re-implémenter puisqu'elles interagissaient avec Game auparavant
   - Changement de langue
   - Changement de langage
+**** DONE Re-implémenter les évènements Git manquants
+- idle
 **** TODO Re-implémenter les évènements Git manquants
 - reverted
-- idle
 - callForHelp
 - cancelCallForHelp
 - readTip
