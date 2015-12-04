@@ -3030,6 +3030,23 @@ case _ => MergeStrategy.first
   - Refactoring de l'évènement /idle/ dans *PLMActor*
     - Remplacement des *Instant* directement manipulés par des *Option[Instant]* pour éviter les *NullPointerException*
     - Simplification du code
+- Complèter le résultat de l'exécution
+  - Message d'erreur de compilation
+    - Auparavant, on générait un nouveau *ExecutionProgress* directement dans les méthodes /compileExo()/ et l'affectait à l'exercice courant
+    - Comment refactorer ce morceau de code?
+      - [X] Passer une instance de *ExecutionProgress* aux méthodes concernées et le modifier en fonction du résultat?
+      - [ ] Lever une exception, la catcher dans *ExercisesRunner* et utiliser son contenu pour générer un *ExecutionProgress*?
+    - Ajout de /lastResult/ à /compileExo()/ et /mutateEntities/
+    - Ajout de méthodes pour générer le message d'erreur dans *ExecutionProgress*
+  - Message d'erreur car monde résultat non atteint
+    - Le code actuel est incorrect
+      - Seul la dernière comparaison entre le monde courant et le monde objectif importe
+      - Il suffit que celle-ci soit valide pour que l'exercice soit considéré réussi.
+  - Encore quelques problèmes sur le contenu du message
+    - Le numéro de ligne indiqué est incorrect (+1 pour Java et Scala, +13 pour Python)
+    - Manque l'enrobage:
+      - Nature de l'erreur (compilation, exécution...)
+      - Message d'encouragement
 *** Planned
 **** DONE Refactorer PLMActor
 - La dépendance vers Game et la classe PLM (qui servait à piloter Game) a été supprimée
