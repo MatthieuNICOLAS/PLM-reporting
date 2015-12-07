@@ -3055,6 +3055,22 @@ case _ => MergeStrategy.first
   - Changement de langage
 **** DONE Re-implémenter les évènements Git manquants
 - idle
+** Semaine du <2015-12-07 lun.> au <2015-12-11 ven.>
+*** Done
+- Complèter le résultat de l'exécution
+  - Message d'erreur car monde résultat non atteint
+    - Correction du code pour qu'en cas de la présence d'une erreur, l'exercice soit marqué comme échoué
+    - Refactoring du code pour ajouter les différences entre les mondes courants et initiaux au message de résultat
+- Instancier les exercices dans webPLM
+  - Modification de *ExercisesActor*
+    - Ajout de /generateExercisesIDsList()/ pour générer la liste des exercices à partir des fichiers présents dans l'application
+  - Ajout de *Instructions* et de *InstructionsDrawG*
+*** Planned
+**** DONE Complèter le résultat de l'exécution
+- Au cours du refactoring du processus d'exécution d'un exercice, on a modifié la gestion du résultat de l'exécution
+- Certaines informations sont manquantes:
+  - Le message de l'erreur de compilation
+  - La différence entre le monde obtenu et le monde objectif
 **** TODO Re-implémenter les évènements Git manquants
 - reverted
 - callForHelp
@@ -3066,15 +3082,15 @@ case _ => MergeStrategy.first
 - Voir pour instancier les exercices dans webPLM et non à partir de *Game*
 **** TODO Exposer les nouveaux objets décrivant les exercices
 - Implémenter un acteur fournissant une API permettant de récupérer un exercice
-**** TODO Complèter le résultat de l'exécution
-- Au cours du refactoring du processus d'exécution d'un exercice, on a modifié la gestion du résultat de l'exécution
-- Certaines informations sont manquantes:
-  - Le message de l'erreur de compilation
-  - La différence entre le monde obtenu et le monde objectif
-  - Les indices concernant les erreurs communes
 **** TODO Ré-implémenter la gestion erreurs communes
 - Au cours du refactoring du processus d'exécution d'un exercice, la gestion des erreurs communes a été mise de côté pour simplifier le refactoring
 - Maintenant que les fonctionnalités principales sont ré-implémentées, y ajouter la gestion des erreurs communes
+**** TODO Corriger le décalage entre le numéro de ligne affiché et le numéro de ligne réel
+- Lorsque l'utilisateur rencontre une erreur de compilation ou à l'exécution, le message d'erreur spécifie la ligne à laquelle l'erreur s'est produite
+- Vu qu'on place son code dans des templates prédéfinis, on doit modifier le numéro de ligne de l'erreur pour correspondre à l'éditeur de l'élève
+- L'offset est incorrect actuellement:
+  - +1 pour Java et Scala
+  - +13 pour Python
 **** TODO Utiliser l'injection de dépendance
 - Voir si ça permettrait de nettoyer et clarifier le code avec
   - Un injecteur global permettant de récupérer la configuration du serveur, les objets de Silhouette
