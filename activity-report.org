@@ -3070,6 +3070,12 @@ case _ => MergeStrategy.first
       - Besoin de les regénérer à chaque modification de l'exercice et de les maintenir à jour
     - Fournir les opérations à partir des exercices instanciés pour les besoins de l'application serait préférable
     - Mais manque la notion de /step/ (toutes les opérations sont jouées en 1 seul coup)
+      - [ ] Ajouter des listeners sur les mondes solutions lors de l'exécution de la démo pour récupérer les étapes?
+      - [X] Refactorer la gestion des opérations dans *Entity* et *World* pour y ajouter la notion d'étape?
+	- Ajout d'une liste de /steps/ dans *World*, chaque /step/ étant une liste d'opérations
+	- Lors d'un /stepUI()/, transfère les opérations de l'entité dans /steps/
+	- *OperationSpy* se contente d'envoyer les /steps/ présentes au fur et à mesure des appels
+	- /runDemo/ se contenter d'envoyer les /steps/ des mondes solutions
 - Ne pas montrer automatiquement la démo
   - Ajout des mondes solutions au json envoyé au client lorsqu'il accède à un exercice
 *** Planned
