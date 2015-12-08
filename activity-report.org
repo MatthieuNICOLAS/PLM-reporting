@@ -3065,12 +3065,22 @@ case _ => MergeStrategy.first
   - Modification de *ExercisesActor*
     - Ajout de /generateExercisesIDsList()/ pour générer la liste des exercices à partir des fichiers présents dans l'application
   - Ajout de *Instructions* et de *InstructionsDrawG*
+  - Refactoring des démos
+    - Actuellement, besoin de générer des fichiers JSON contenant la liste des opérations de la solution
+      - Besoin de les regénérer à chaque modification de l'exercice et de les maintenir à jour
+    - Fournir les opérations à partir des exercices instanciés pour les besoins de l'application serait préférable
+    - Mais manque la notion de /step/ (toutes les opérations sont jouées en 1 seul coup)
+- Ne pas montrer automatiquement la démo
+  - Ajout des mondes solutions au json envoyé au client lorsqu'il accède à un exercice
 *** Planned
 **** DONE Complèter le résultat de l'exécution
 - Au cours du refactoring du processus d'exécution d'un exercice, on a modifié la gestion du résultat de l'exécution
 - Certaines informations sont manquantes:
   - Le message de l'erreur de compilation
   - La différence entre le monde obtenu et le monde objectif
+**** DONE Ne pas montrer automatiquement la démo
+- Basculer sur le monde objectif lance actuellement la démo automatiquement pour arriver à l'état final
+- Se contenter de montrer l'état objectif
 **** TODO Re-implémenter les évènements Git manquants
 - reverted
 - callForHelp
