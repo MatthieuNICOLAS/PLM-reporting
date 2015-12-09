@@ -3064,6 +3064,7 @@ case _ => MergeStrategy.first
 - Instancier les exercices dans webPLM
   - Modification de *ExercisesActor*
     - Ajout de /generateExercisesIDsList()/ pour générer la liste des exercices à partir des fichiers présents dans l'application
+    - Modification de l'expression régulière utilisée pour filtrer les fichiers pour ne pas prendre en compte les erreurs communes
   - Ajout de *Instructions* et de *InstructionsDrawG*
   - Refactoring des démos
     - Actuellement, besoin de générer des fichiers JSON contenant la liste des opérations de la solution
@@ -3076,8 +3077,20 @@ case _ => MergeStrategy.first
 	- Lors d'un /stepUI()/, transfère les opérations de l'entité dans /steps/
 	- *OperationSpy* se contente d'envoyer les /steps/ présentes au fur et à mesure des appels
 	- /runDemo/ se contenter d'envoyer les /steps/ des mondes solutions
+  - Ajout des exercices jusqu'aux *BatExercise*
+  - Problème avec les *BatExercise*
+    - Ne possède pas d'entités
+      - Ma détection des langages supportées se fait actuellement en utilisant les fichiers des entités
+    - Références à *Game.JAVA*, *Game.SCALA* & *Game.PYTHON* à retirer
+    - Refactorer les *BatExercise* pour unifier le système?
+    - Pour le moment, je vais me contenter de refactorer *ExerciseFactory* pour gérer ce cas particulier
 - Ne pas montrer automatiquement la démo
   - Ajout des mondes solutions au json envoyé au client lorsqu'il accède à un exercice
+*** Question
+- Refactorer les *BatExercise*
+  - Les *BatExercise* ont une structure différente des autres exercices (entités directement dans le monde)
+  - Est-ce que cette structure est justifiée?
+    - Dans le cas contraire, un refactoring s'impose
 *** Planned
 **** DONE Complèter le résultat de l'exécution
 - Au cours du refactoring du processus d'exécution d'un exercice, on a modifié la gestion du résultat de l'exécution
