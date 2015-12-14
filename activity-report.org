@@ -3086,6 +3086,13 @@ case _ => MergeStrategy.first
     - Pour le moment, je vais me contenter de refactorer *ExerciseFactory* pour gérer ce cas particulier
 - Ne pas montrer automatiquement la démo
   - Ajout des mondes solutions au json envoyé au client lorsqu'il accède à un exercice
+- Refactorer les *BatExercise*
+  - Modification de *BatExercise* pour séparer l'ajout du template de l'entité de la création du fichier source associé
+  - Modification de *BatExercise* pour ajouter /templateJava()/ pour que ce langage soit géré de la même manière que les autres
+  - Modification de *ExerciseFactory* pour initialiser l'exercice différement s'il s'agit d'un *BatExercise*
+  - Permis d'instancier *SleepIn* dans webPLM
+    - Fonctionne en Java!
+    - Mais pas en Python
 *** Question
 - Refactorer les *BatExercise*
   - Les *BatExercise* ont une structure différente des autres exercices (entités directement dans le monde)
@@ -3100,6 +3107,26 @@ case _ => MergeStrategy.first
 **** DONE Ne pas montrer automatiquement la démo
 - Basculer sur le monde objectif lance actuellement la démo automatiquement pour arriver à l'état final
 - Se contenter de montrer l'état objectif
+** Semaine du <2015-12-14 lun.> au <2015-12-18 ven.>
+*** Done
+- Refactorer les *BatExercise*
+  - Il a été facile de modifier *SleepIn* pour qu'il ressemble aux autres exercices
+    - Hérite de *ExerciseTemplated*
+    - Ajout de l'entité *Java*
+  - Ce qui pose problème est l'affichage
+    - Actuellement, lorsque l'élève obtient un mauvais résultat, on affiche par exemple /sleepIn(true,true)=false (expected: true)/
+    - Pour cela, on a besoin d'utiliser le champ *expected*
+    - Celui-ci était initialisé en exécutant le code de la solution avant le /setup()/ des mondes
+    - Comment initialiser ce champ dorénavant?
+    - Ou peut-on se passer de ce champ ?
+      - Comparaison avec le résultat du test solution? Mais dans ce cas, comment y accéder?
+    - Il suffit de gérer ce problème du côté de l'UI
+      - Récupèrer l'*expected* à partir du monde solution envoyé à l'initialisation de l'UI
+      - Modifier les opérations pour se contenter d'envoyer les nouveaux *result* au lieu de renvoyer tout le monde
+*** Planned
+**** TODO Refactorer les BatExercise
+- Les *BatExercise* ont un format différent du reste des exercices, ce qui a posé problème plusieurs fois par le passé
+- Les refactorer pour unifier le format des exercices
 **** TODO Re-implémenter les évènements Git manquants
 - reverted
 - callForHelp
