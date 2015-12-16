@@ -3121,10 +3121,21 @@ case _ => MergeStrategy.first
     - Ou peut-on se passer de ce champ ?
       - Comparaison avec le résultat du test solution? Mais dans ce cas, comment y accéder?
     - Il suffit de gérer ce problème du côté de l'UI
-      - Récupèrer l'*expected* à partir du monde solution envoyé à l'initialisation de l'UI
-      - Modifier les opérations pour se contenter d'envoyer les nouveaux *result* au lieu de renvoyer tout le monde
+      - [X] Récupèrer l'*expected* à partir du monde solution envoyé à l'initialisation de l'UI
+      - [X] Modifier les opérations pour se contenter d'envoyer les nouveaux *result* au lieu de renvoyer tout le monde
+	- Ajout de l'opération *SetResult*
+  - Le Python
+    - C'est la méthode /run()/ actuellement qui parcoure les *BatTests* et qui applique la méthode de l'élève dessus pour calculer son résultat
+      - Ce qui génère au passage les opérations pour mettre à jour la vue
+    - En Python, la méthode /run()/ n'est pas appelée
+      - Il faut donc ajouter au script de l'entité un morceau de code pour reproduire le /run()/ traditionnel
+      - Ajouté ici: https://github.com/BuggleInc/PLM/blob/refactor-lessons-exercises/src/plm/universe/bat/BatEntity.java#L57-L71
+  - Le Java et Scala
+    - Dans les entités Java et Scala, on est obligé de redéfinir /run(BatTest t)/ pour appeler la méthode qui doit être ré-écrite par l'élève
+    - Possible d'écrire /run(BatTest t)/ de façon générique pour éviter cela?
+      - Réflection?
 *** Planned
-**** TODO Refactorer les BatExercise
+**** DONE Refactorer les BatExercise
 - Les *BatExercise* ont un format différent du reste des exercices, ce qui a posé problème plusieurs fois par le passé
 - Les refactorer pour unifier le format des exercices
 **** TODO Re-implémenter les évènements Git manquants
