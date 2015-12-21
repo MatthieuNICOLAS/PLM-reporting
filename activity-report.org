@@ -3186,6 +3186,23 @@ case _ => MergeStrategy.first
 - [X] Univers des buggles
 ** Semaine du <2015-12-21 lun.> au <2015-12-22 mar.>
 *** Done
+- Refactorer les juges
+  - Nettoyage du code
+  - Ajout d'une classe *Judge* qui
+    - Initialise un *ExerciseRunner*
+    - Attend une requête d'exécution
+    - Génère un exercice à partir de la requête
+    - Ajoute des listeners aux mondes de l'exercice
+    - Lance le programme de l'élève
+  - Bug lors de la re-création de l'exercice à partir du JSON
+    - Le JSON ne contient plus des *int* mais des *Long*
+      - Voir [[http://stackoverflow.com/questions/29770329/json-simple-integer-parsing][ce thread]]
+- Refactorer le *Tribunal*
+  - Passage de *ExecutionActor* en classe abstraite
+  - Création de la classe *LocalExecutionActor* reprenant les fonctionnalités de l'ancien *ExecutionActor*
+  - Création de *TribunalActor*
+    - Implémentation de /startExecution()/
+      - Génère un message comprenant le JSON de l'exercice, le code de l'élève et le langage de programmation utilisé
 *** Planned
 **** TODO Cloner les mondes, entités et opérations lors d'un clonage d'un exercice
 - Actuellement, on se contente de fournir au clone les mêmes références pour les mondes
