@@ -3139,6 +3139,25 @@ case _ => MergeStrategy.first
   - Certains exercices (RunFour, RunHalf...) initialisent leurs mondes via des fichiers .map
   - Les chemins de ces fichiers n'avaient pas été mis à jour lors du déplacement des exercices de PLM à webPLM
   - Correction de ces chemins dans les exercices concernés
+- Refactorer la conversion des objets de PLM en JSON
+  - Création de l'interface *ToJSON*
+    - Demande l'implémentation de la fonction /toJSON()/
+    - Propose une implémentation par défaut de /getJSONType()/
+      - Retourne le nom de la classe
+    - Cette méthode est utilisée dans /toJSON()/ pour préciser la classe de l'objet à utiliser pour instancier l'objet à partir du JSON
+      - Utile pour recréer dans un juge un exercice à partir du JSON reçu
+- Implémenter *ToJSON*
+  - Un comportement étrange détecté pour les entités compilées à la volée
+  - Par défaut, /getJSONType()/ renvoie pour elles une valeur du type /plm.runtime1.Environment/
+  - Cette classe est du coup inconnue pour le juge
+  - En surchargeant /getJSONType()/ dans *AbstractBuggle* (classe mère de *EnvironmentEntity*) pour renvoyer une valeur fixe, le résultat précédent n'est pas modifié
+  - Ajout d'un fix pas très glorieux
+    - Récupère le type des entités du monde initiaux, qui est bien la valeur récupérée de *AbstractBuggle*
+    - Remplace le type des entités du monde solution par la valeur récupérée précédemment
+- Ajouter une méthode /exerciseFromJSON()/ à *ExerciseFactory*
+  - Ajout d'un constructeur prenant du JSON comme paramètre à *BlankExercise*
+    - Se contente d'initialiser les mondes initiaux, courants et solutions
+    - Pour cela, extrait le JSON des mondes, récupère leur type et appelle le constructeur de la classe correspondante en passant le JSON en paramètre
 *** Planned
 **** DONE Refactorer les BatExercise
 - Les *BatExercise* ont un format différent du reste des exercices, ce qui a posé problème plusieurs fois par le passé
@@ -3152,16 +3171,47 @@ case _ => MergeStrategy.first
   - Anciennes méthodes pour exécuter un exercice
 - Ces morceaux de codes sont néanmoins utilisés à de nombreux endroits, notamment dans les fichiers des exercices
 - Pour éviter qu'on ne puisse plus compiler PLM au cours de ce refactoring, ajouter l'extension .todo aux fichiers concernés
+**** DONE Refactorer la conversion des objets de PLM en JSON
+- Actuellement, c'est webPLM et PLM-judge qui explorent les instances fournies par PLM pour créer le JSON correspondant
+- Se contenter d'ajouter une interface fournissant une méthode /toJSON()/ aux objets concernés permettrait de simplifier le code et d'en éviter la duplication
+**** DONE Implémenter *ToJSON*
+- [X] Classes de base
+  - *World*, *GridWorld*
+  - *Entity*
+- [X] Univers des buggles
+**** DONE Ajouter une méthode /exerciseFromJSON()/ à *ExerciseFactory*
+- Cette méthode servira à re-créer les exercices dans les juges à partir du JSON fourni par le *Tribunal*
+**** DONE Implémenter un constructeur à partir d'un *JSONObject*
+- [X] Classes de base
+- [X] Univers des buggles
+** Semaine du <2015-12-21 lun.> au <2015-12-22 mar.>
+*** Done
+*** Planned
 **** TODO Cloner les mondes, entités et opérations lors d'un clonage d'un exercice
 - Actuellement, on se contente de fournir au clone les mêmes références pour les mondes
 - Lorsque plusieurs utilisateurs exécutent en concurrence un programme sur un même exercice, leur programmes modifient le monde simultanément
-**** TODO Refactorer la conversion des objets de PLM en JSON
-- Actuellement, c'est webPLM et PLM-judge qui explorent les instances fournies par PLM pour créer le JSON correspondant
-- Se contenter d'ajouter une interface fournissant une méthode /toJSON()/ aux objets concernés permettrait de simplifier le code et d'en éviter la duplication
-**** TODO Ajouter une méthode /exerciseFromJSON()/ à *ExerciseFactory*
-- Cette méthode servira à re-créer les exercices dans les juges à partir du JSON fourni par le *Tribunal*
+**** TODO Implémenter *ToJSON*
+- [ ] Univers des tests unitaires
+- [ ] Univers des tortues
+- [ ] Univers du drapeau hollandais
+- [ ] Univers des pancakes
+- [ ] Univers des tris
+- [ ] Univers du baseball
+- [ ] Univers des listes récursives
+- [ ] Univers de light bot
+- [ ] Univers du lander
+**** TODO Implémenter un constructeur à partir d'un *JSONObject*
+- [ ] Univers des tests unitaires
+- [ ] Univers des tortues
+- [ ] Univers du drapeau hollandais
+- [ ] Univers des pancakes
+- [ ] Univers des tris
+- [ ] Univers du baseball
+- [ ] Univers des listes récursives
+- [ ] Univers de light bot
+- [ ] Univers du lander
 **** TODO Refactorer les juges
-- Le refactoring PLM a modifé comment on instancie un exercice et exécute le code d'un élève
+- Le refactoring PLM a modifié comment on instancie un exercice et exécute le code d'un élève
 - Modifier les juges en conséquences
 **** TODO Refactorer le *Tribunal*
 - Modifier le *Tribunal* pour envoyer l'exercice courant au format JSON au lieu de juste fournir son identifiant au juge
