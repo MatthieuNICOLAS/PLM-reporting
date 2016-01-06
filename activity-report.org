@@ -3221,7 +3221,24 @@ case _ => MergeStrategy.first
   - Rédaction des slides concernant
     - Le résultat de la séance d'utilisation à TN
     - Les prochaines étapes
+- Implémenter *ToJSON*
+  - [X] ExecutionProgress
+  - Correction de la gestion des couleurs dans *BuggleWorldCell*
+- Implémenter un construction à partir d'un *JSONObject*
+  - SourceFile
+    - Correction de l'ordre des paramètres du constructeur
+  - [X] ExecutionProgress
+  - Correction de la gestion des couleurs dans *BuggleWorldCell*
+- Refactorer les juges
+  - Envoi de l'*ExecutionProgress* résultant de l'exécution du code de l'élève
+- Refactorer le *Tribunal*
+  - Réception et affichage de l'*ExecutionProgress* transmis par le juge
+  - Transmission de l'*ExecutionProgress* à *PLMActor* pour qu'il le transmette au client et enregistre dans git le résultat
 *** Planned
+**** DONE Implémenter *ToJSON*
+- [X] ExecutionProgress
+**** DONE Implémenter un constructeur à partir d'un *JSONObject*
+- [X] ExecutionProgress
 **** TODO Préparer la présentation dans le cadre du séminaire IJD
 - Je dois faire une nouvelle présentation de mon travail sur PLM le 02 février 2016
 - Rédiger les slides
