@@ -3186,6 +3186,8 @@ case _ => MergeStrategy.first
 - [X] Univers des buggles
 ** Semaine du <2015-12-21 lun.> au <2015-12-22 mar.>
 *** Done
+- Implémenter *ToJSON*
+  - Manque *SourceFile* actuellement
 - Refactorer les juges
   - Nettoyage du code
   - Ajout d'une classe *Judge* qui
@@ -3197,6 +3199,7 @@ case _ => MergeStrategy.first
   - Bug lors de la re-création de l'exercice à partir du JSON
     - Le JSON ne contient plus des *int* mais des *Long*
       - Voir [[http://stackoverflow.com/questions/29770329/json-simple-integer-parsing][ce thread]]
+    - Modification des constructeurs pour récupérer les *int* correctement
 - Refactorer le *Tribunal*
   - Passage de *ExecutionActor* en classe abstraite
   - Création de la classe *LocalExecutionActor* reprenant les fonctionnalités de l'ancien *ExecutionActor*
@@ -3204,9 +3207,27 @@ case _ => MergeStrategy.first
     - Implémentation de /startExecution()/
       - Génère un message comprenant le JSON de l'exercice, le code de l'élève et le langage de programmation utilisé
 *** Planned
+**** DONE Implémenter *ToJSON*
+- [X] *SourceFile*
+**** DONE Implémenter un constructeur à partir d'un *JSONObject*
+- [X] *SourceFile*
+** Semaine du <2016-01-04 lun.> au <2016-01-08 ven.>
+*** Done
+- Rédiger la documentation concernant les opérations d'un univers
+  - Page accessible [[https://github.com/BuggleInc/PLM/wiki/Adapt-the-world's-evolution][ici]]
+- Préparer la présentation dans le cadre du séminaire IJD
+  - Création du [[https://github.com/MatthieuNICOLAS/IJD-seminar-2016-02-02][repo]]
+  - Rédaction du plan
+  - Rédaction des slides concernant
+    - Le résultat de la séance d'utilisation à TN
+    - Les prochaines étapes
+*** Planned
+**** TODO Préparer la présentation dans le cadre du séminaire IJD
+- Je dois faire une nouvelle présentation de mon travail sur PLM le 02 février 2016
+- Rédiger les slides
 **** TODO Cloner les mondes, entités et opérations lors d'un clonage d'un exercice
 - Actuellement, on se contente de fournir au clone les mêmes références pour les mondes
-- Lorsque plusieurs utilisateurs exécutent en concurrence un programme sur un même exercice, leur programmes modifient le monde simultanément
+- Lorsque plusieurs utilisateurs exécutent en concurrence un programme sur un même exercice en mode local, leur programmes modifient le monde simultanément
 **** TODO Implémenter *ToJSON*
 - [ ] Univers des tests unitaires
 - [ ] Univers des tortues
