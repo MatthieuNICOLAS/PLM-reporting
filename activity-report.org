@@ -3231,9 +3231,22 @@ case _ => MergeStrategy.first
   - Correction de la gestion des couleurs dans *BuggleWorldCell*
 - Refactorer les juges
   - Envoi de l'*ExecutionProgress* résultant de l'exécution du code de l'élève
+  - Suppression des fichiers dans /generators/
+    - Plus le rôle des juges, dans webPLM dorénavant
+  - Envoi des *Operations* générées lors de l'exécution du code de l'élève à webPLM
 - Refactorer le *Tribunal*
   - Réception et affichage de l'*ExecutionProgress* transmis par le juge
   - Transmission de l'*ExecutionProgress* à *PLMActor* pour qu'il le transmette au client et enregistre dans git le résultat
+    - Bug détecté occassionnellement: le résultat de l'exécution n'est pas transmis au client
+      - Semble se produire si aucun juge n'est lancé au moment de la requête d'exécution et qu'on tarde à en lancer un
+      - L'*ExecutionProgress* est pourtant bien reçu par *TribunalActor*
+      - L'erreur provient en fait d'un timeout de *PLMActor* qui attendait la réponse de *TribunalActor*
+	- [X] Soit gérer le timeout dans *PLMActor*
+	- [ ] Soit augmenter la durée du timeout pour que *TribunalActor* ait le temps de se rendre compte du timeout du juge et de transmettre l'information
+	- Dans tous les cas, il faudrait que *PLMActor* soit capable de supporter un dysfonctionnement du *TribunalActor*, donc la 1ère solution semble plus adaptée
+  - Détection et transmission des *Operations* au client
+  - Gérer le timeout de /executionActor ? StartExecution/ dans *PLMActor*
+    - Génère un *ExecutionProgress* particulier indiquant le timeout
 *** Planned
 **** DONE Implémenter *ToJSON*
 - [X] ExecutionProgress
@@ -3309,6 +3322,7 @@ case _ => MergeStrategy.first
 - Récupère le token d'authentification de GitHub via un webservice
 - Refactoring de *HanoiWorld* et support de tous ses exercices
 - Ajout du bouton 'Réinitialiser'
+- Voir [[https://www.playframework.com/documentation/2.4.x/Production][cette page]] pour configurer le build pour générer un .jar
 **** TODO Corriger les tests d'intégration
 - Les tests d'intégration de PLM échouent depuis l'ajout de la leçon Logo
 - Ils échouent aussi dans la branche webPLM-split
