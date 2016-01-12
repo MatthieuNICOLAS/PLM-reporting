@@ -3252,6 +3252,37 @@ case _ => MergeStrategy.first
 - [X] ExecutionProgress
 **** DONE Implémenter un constructeur à partir d'un *JSONObject*
 - [X] ExecutionProgress
+** Semaine du <2016-01-12 mar.> au <2016-01-15 ven.>
+*** Done
+- Extraire le gestionnaire de session de Game
+- Extraire le contenu commun de Game
+- Refactorer GitUtils & GitSpy pour mieux gérer les dépendances
+- Instancier les exercices dans webPLM
+- Exposer les nouveux objets décrivant les exercices
+  - Réalisé depuis quelques temps lors la ré-écriture de *Game* en plusieurs composants
+- Release la nouvelle version
+  - Release disponible [[https://github.com/BuggleInc/webPLM/releases/tag/v1.2.2][ici]]
+*** Planned
+**** DONE Extraire le gestionnaire de session de Game
+- Les données de la session courante font partie de *Game*
+- La session courante de l'utilisateur comprend la leçon sélectionnée, l'exercice en cours, les mondes de travail...
+- En faire un composant séparé
+**** DONE Extraire le contenu commun de Game
+- Plusieurs éléments sont communs à tous les utilisateurs
+- Les leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...
+- Extraire ces objets de la classe *Game*
+**** DONE Refactorer GitUtils & GitSpy pour mieux gérer les dépendances
+- Permettrait de sortir l'instanciation de GitUtils de PLM facilement
+- Faciliterait l'écriture et le maintien des tests unitaires sur la partie Git
+**** DONE Instancier les exercices dans webPLM
+- Puisqu'on instancie les leçons dans webPLM, il faut aussi modifier le processus d'instanciation des exercices
+- Voir pour instancier les exercices dans webPLM et non à partir de *Game*
+**** DONE Exposer les nouveaux objets décrivant les exercices
+- Implémenter un acteur fournissant une API permettant de récupérer un exercice
+**** DONE Release la nouvelle version
+- Récupère le token d'authentification de GitHub via un webservice
+- Refactoring de *HanoiWorld* et support de tous ses exercices
+- Ajout du bouton 'Réinitialiser'
 **** TODO Préparer la présentation dans le cadre du séminaire IJD
 - Je dois faire une nouvelle présentation de mon travail sur PLM le 02 février 2016
 - Rédiger les slides
@@ -3283,17 +3314,30 @@ case _ => MergeStrategy.first
 - Modifier les juges en conséquences
 **** TODO Refactorer le *Tribunal*
 - Modifier le *Tribunal* pour envoyer l'exercice courant au format JSON au lieu de juste fournir son identifiant au juge
+**** TODO Re-implémenter les exercices manquants
+- Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
+- Tous les exos n'ont pas encore été extraits
+- Il faut aussi modifier le constructeur appelé
+- [ ] Welcome
+- [ ] Maze
+- [ ] Turmites
+- [ ] TurtleArt
+- [ ] Sort.basic
+- [ ] Sort.dutchflag
+- [ ] Sort.baseball
+- [ ] Sort.pancake
+- [ ] Recursion.cons
+- [ ] Recursion.logo
+- [ ] Recursion.hanoi
+- [ ] Bat.string1
 **** TODO Re-implémenter les évènements Git manquants
 - reverted
 - callForHelp
 - cancelCallForHelp
 - readTip
 - commonErrorFeedback
-**** TODO Instancier les exercices dans webPLM
-- Puisqu'on instancie les leçons dans webPLM, il faut aussi modifier le processus d'instanciation des exercices
-- Voir pour instancier les exercices dans webPLM et non à partir de *Game*
-**** TODO Exposer les nouveaux objets décrivant les exercices
-- Implémenter un acteur fournissant une API permettant de récupérer un exercice
+**** TODO Release l'application sous forme de .jar
+- Voir [[https://www.playframework.com/documentation/2.4.x/Production][cette page]] pour configurer le build pour générer un .jar
 **** TODO Ré-implémenter la gestion erreurs communes
 - Au cours du refactoring du processus d'exécution d'un exercice, la gestion des erreurs communes a été mise de côté pour simplifier le refactoring
 - Maintenant que les fonctionnalités principales sont ré-implémentées, y ajouter la gestion des erreurs communes
@@ -3318,11 +3362,6 @@ case _ => MergeStrategy.first
 - Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
 - C'est seulement s'il sélectionne "Décider plus tard" que la pop-up disparaît pendant plusieurs jours.
 - Voir pour n'afficher la pop-up qu'après un certain nombre d'exécution
-**** TODO Release la nouvelle version
-- Récupère le token d'authentification de GitHub via un webservice
-- Refactoring de *HanoiWorld* et support de tous ses exercices
-- Ajout du bouton 'Réinitialiser'
-- Voir [[https://www.playframework.com/documentation/2.4.x/Production][cette page]] pour configurer le build pour générer un .jar
 **** TODO Corriger les tests d'intégration
 - Les tests d'intégration de PLM échouent depuis l'ajout de la leçon Logo
 - Ils échouent aussi dans la branche webPLM-split
@@ -3351,9 +3390,6 @@ case _ => MergeStrategy.first
 **** TODO Désactiver la démo pour TurtleArt
 - [[https://github.com/BuggleInc/webPLM/issues/2][Cette issue]] est d'autant plus vraie pour la leçon *TurtleArt*
 - Voir pour désactiver la démo pour cette leçon
-**** TODO Refactorer GitUtils & GitSpy pour mieux gérer les dépendances
-- Permettrait de sortir l'instanciation de GitUtils de PLM facilement
-- Faciliterait l'écriture et le maintien des tests unitaires sur la partie Git
 **** TODO Générer une erreur si l'application est mal configurée
 - Actuellement, des valeurs par défaut sont passées si l'application est mal configurée (variables d'environnements manquantes par exemple)
 - Il faudrait mieux interrompre le démarrage de l'application & générer une erreur indiquant à l'admin/au développeur qu'il faut revoir la configuration
@@ -3434,14 +3470,6 @@ case _ => MergeStrategy.first
 - Une des recommandations est de mettre en place un mécanisme empêchant une attaque de type "Brute force"
 - Pour cela, il "suffit" de désactiver temporairement un compte lorsque plusieurs tentatives de connexion avec un mot de passe erroné ont été détectées
 - Implémenter ce mécanisme
-**** TODO Extraire le gestionnaire de session de Game
-- Les données de la session courante font partie de *Game*
-- La session courante de l'utilisateur comprend la leçon sélectionnée, l'exercice en cours, les mondes de travail...
-- En faire un composant séparé
-**** TODO Extraire le contenu commun de Game
-- Plusieurs éléments sont communs à tous les utilisateurs
-- Les leçons disponibles, mondes initiaux et objectifs des exercices, langages de programmation disponible...
-- Extraire ces objets de la classe *Game*
 **** TODO Finaliser le système de traduction
 - Au cours du refactoring, j'ai dû remplacer /Direction.toString/ par /Direction.direction2translated/
   - Voir où était appelé /Direction.toString/ pour mettre à jour le code
