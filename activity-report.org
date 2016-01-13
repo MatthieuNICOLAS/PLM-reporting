@@ -3262,6 +3262,18 @@ case _ => MergeStrategy.first
   - Réalisé depuis quelques temps lors la ré-écriture de *Game* en plusieurs composants
 - Release la nouvelle version
   - Release disponible [[https://github.com/BuggleInc/webPLM/releases/tag/v1.2.2][ici]]
+- Revoir les dependencies et devDependencies de PLMAccounts & PLMProfiles
+  - Si on re-écrit ces deux services avec PlayFramework, cette tâche ne sera plus nécessaire
+- Permettre de stopper l'exécution
+  - Actuellement, /ExerciseRunner.runExercise()/ est séquentiel:
+    - On lance le /run()/ des entités dans des threads
+    - On attend la fin de tous ces threads
+    - On compare le monde obtenu avec le monde solution pour déterminer si l'exercice est passé
+  - Ceci empêche de stopper l'exécution
+    - Si une demande d'arrêt de l'exécution est reçue, elle ne sera traité qu'une fois que l'exécution se soit terminée
+  - Modifier /runExercise()/ pour que cette fonction ne soit pas bloquante
+    - Modifier le type de retour pour renvoyer une *Future<ExecutionProgress* permettrait à l'appelant d'attacher une fonction de callback pour traiter le résultat de façon non-bloquant dès que celui-ci est disponible
+      - Comment générer une future attendant l'exécution du code des entités avant de générer un *ExecutionProgress*?
 *** Planned
 **** DONE Extraire le gestionnaire de session de Game
 - Les données de la session courante font partie de *Game*
@@ -3283,6 +3295,12 @@ case _ => MergeStrategy.first
 - Récupère le token d'authentification de GitHub via un webservice
 - Refactoring de *HanoiWorld* et support de tous ses exercices
 - Ajout du bouton 'Réinitialiser'
+**** CANCELLED Revoir les dependencies et devDependencies de PLMAccounts & PLMProfiles
+- Etudier le Gruntfile de ces 2 applications et comprendre les dépendances nécessaires à la tâche par défaut
+- Déplacer les dépendances nécessaires au lancement de l'application de *devDependencies* à *dependencies*
+**** TODO Permettre de stopper l'exécution
+- L'utilisateur doit pouvoir stopper l'exécution de son code si besoin
+- Implémenter cette fonctionnalité
 **** TODO Préparer la présentation dans le cadre du séminaire IJD
 - Je dois faire une nouvelle présentation de mon travail sur PLM le 02 février 2016
 - Rédiger les slides
@@ -3426,9 +3444,6 @@ case _ => MergeStrategy.first
 - Transférer ces applications:
   - GitHub -> A BuggleInc
   - Google -> Créer un compte Google BuggleInc
-**** TODO Revoir les dependencies et devDependencies de PLMAccounts & PLMProfiles
-- Etudier le Gruntfile de ces 2 applications et comprendre les dépendances nécessaires à la tâche par défaut
-- Déplacer les dépendances nécessaires au lancement de l'application de *devDependencies* à *dependencies*
 **** TODO Séparer l'exécution par monde
 - Avec la nouvelle interface, exécuter le programme de l'utilisateur monde par monde permettrait de mieux indiquer sur quel monde s'est produit l'erreur
 - On a donc besoin d'un résultat par monde et non plus global
