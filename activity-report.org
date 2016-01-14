@@ -3270,10 +3270,28 @@ case _ => MergeStrategy.first
     - On attend la fin de tous ces threads
     - On compare le monde obtenu avec le monde solution pour déterminer si l'exercice est passé
   - Ceci empêche de stopper l'exécution
-    - Si une demande d'arrêt de l'exécution est reçue, elle ne sera traité qu'une fois que l'exécution se soit terminée
+    - Si une demande d'arrêt de l'exécution est reçue, elle ne sera traité qu'une fois que l'exécution sera terminée
   - Modifier /runExercise()/ pour que cette fonction ne soit pas bloquante
     - Modifier le type de retour pour renvoyer une *Future<ExecutionProgress* permettrait à l'appelant d'attacher une fonction de callback pour traiter le résultat de façon non-bloquant dès que celui-ci est disponible
       - Comment générer une future attendant l'exécution du code des entités avant de générer un *ExecutionProgress*?
+      - [[http://www.nurkiewicz.com/2013/05/java-8-definitive-guide-to.html][Voir ce tuto]]
+    - Modification de /runExercise()/ pour qu'elle génère une *CompletableFuture<ExecutionProgress* (une *Promise* globalement)
+      - Cette *Promise* est retournée à l'appelant pour qu'il gère le résultat lorsqu'il est disponible
+      - Si une erreur est rencontrée à la compilation du code, on peut dès lors répondre à la *Promise* avec l'*ExecutionProgress* correspondant
+      - Sinon, on lance une tâche asynchrone qui va démarrer les entités
+	- Démarre les entités dans des *Threads*
+	  - Peut pas utiliser des *Futures* à la place puisqu'il n'y a pas de moyen de les stopper
+	  - Peut uniquement demander à la *Future* de s'interrompre
+	- Pour gérer les boucles infinies au mieux, pour chaque thread
+	  - On vérifie au cas où que l'utilisateur n'ait pas demandé de stopper l'exécution
+	  - Sinon on attend le thread une courte durée
+	    - S'il a fini au cours de ce délai, on passe au suivant
+	    - Sinon, on recommence à l'attendre
+	  - Si la tâche n'est toujours pas terminée au bout d'un nombre d'essais, on stoppe nous-même l'exécution
+        - Finalement on complète l'*ExecutionProgress* en fonction de ce qu'il s'est passé et on répond à la *Promise*
+  - Ajout d'un attribut booléen *executionStopped* à *ExerciseRunner*
+    - A *false* au démarrage de l'exécution
+    - Peut passer à *true* via /ExerciseRunner.stopExecution()/
 *** Planned
 **** DONE Extraire le gestionnaire de session de Game
 - Les données de la session courante font partie de *Game*
@@ -3295,12 +3313,12 @@ case _ => MergeStrategy.first
 - Récupère le token d'authentification de GitHub via un webservice
 - Refactoring de *HanoiWorld* et support de tous ses exercices
 - Ajout du bouton 'Réinitialiser'
+**** DONE Permettre de stopper l'exécution
+- L'utilisateur doit pouvoir stopper l'exécution de son code si besoin
+- Implémenter cette fonctionnalité
 **** CANCELLED Revoir les dependencies et devDependencies de PLMAccounts & PLMProfiles
 - Etudier le Gruntfile de ces 2 applications et comprendre les dépendances nécessaires à la tâche par défaut
 - Déplacer les dépendances nécessaires au lancement de l'application de *devDependencies* à *dependencies*
-**** TODO Permettre de stopper l'exécution
-- L'utilisateur doit pouvoir stopper l'exécution de son code si besoin
-- Implémenter cette fonctionnalité
 **** TODO Préparer la présentation dans le cadre du séminaire IJD
 - Je dois faire une nouvelle présentation de mon travail sur PLM le 02 février 2016
 - Rédiger les slides
