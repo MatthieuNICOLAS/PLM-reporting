@@ -3292,6 +3292,9 @@ case _ => MergeStrategy.first
   - Ajout d'un attribut booléen *executionStopped* à *ExerciseRunner*
     - A *false* au démarrage de l'exécution
     - Peut passer à *true* via /ExerciseRunner.stopExecution()/
+- Préparer la présentation dans le cadre du séminaire IJD
+  - Ajout des slides concernant le contenu de PLM
+  - Début de la réalisation du schéma de l'architecture initiale de webPLM 
 *** Planned
 **** DONE Extraire le gestionnaire de session de Game
 - Les données de la session courante font partie de *Game*
@@ -3319,6 +3322,17 @@ case _ => MergeStrategy.first
 **** CANCELLED Revoir les dependencies et devDependencies de PLMAccounts & PLMProfiles
 - Etudier le Gruntfile de ces 2 applications et comprendre les dépendances nécessaires à la tâche par défaut
 - Déplacer les dépendances nécessaires au lancement de l'application de *devDependencies* à *dependencies*
+** Semaine du <2016-01-18 lun.> au <2016-01-22 ven.>
+*** Done
+- Préparer la présentation dans le cadre du séminaire IJD
+  - Réalisation des schémas d'architecture
+    - Architecture initiale
+    - Execution initale
+    - Execution avec juges
+    - Architecture courante
+  - Ajout des slides sur les juges
+  - Ajout des slides sur docker
+*** Planned
 **** TODO Préparer la présentation dans le cadre du séminaire IJD
 - Je dois faire une nouvelle présentation de mon travail sur PLM le 02 février 2016
 - Rédiger les slides
