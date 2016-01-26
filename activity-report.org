@@ -3332,6 +3332,44 @@ case _ => MergeStrategy.first
     - Architecture courante
   - Ajout des slides sur les juges
   - Ajout des slides sur docker
+- Permettre de stopper l'exécution
+  - Mise à jour des juges pour qu'il gère le résultat de /ExerciseRunner.run()/ sous forme de *CompletableFuture*
+  - Refactoring de *TribunalActor* pour supporter le stop de l'exécution
+- Correction de bugs mineurs
+  - Les couleurs dans *BuggleWorld* ne sont plus correctement prises en compte par l'UI
+  - L'UI attend les couleurs au format [r, g, b, a] alors qu'on les lui fournit au format [r, g, b]
+  - Factorisation et correction des méthodes d'import/export au format JSON des couleurs pour utiliser le format [r, g, b, a]
+- Utiliser l'injection de dépendance
+  - Les acteurs *LocalExecutionActor* et *TribunalActor* semblent terminés
+  - Reste à instancier le bon au démarrage de l'application en fonction de la configuration
+*** Planned
+**** DONE Refactorer les juges
+- Le refactoring PLM a modifié comment on instancie un exercice et exécute le code d'un élève
+- Modifier les juges en conséquences
+**** DONE Refactorer le *Tribunal*
+- Modifier le *Tribunal* pour envoyer l'exercice courant au format JSON au lieu de juste fournir son identifiant au juge
+** Semaine du <2016-01-25 lun.> au <2016-01-29 ven.>
+*** Done
+- Préparer la présentation dans le cadre du séminaire IJD
+  - Une répétition a eu lieu <2016-01-25 lun.>
+    - Les retours sont disponibles [[https://github.com/MatthieuNICOLAS/IJD-seminar-2016-02-02/blob/master/feedback-rehearsal.org][ici]]
+- Modification du fichier de build
+  - Il semblerait que compiler webPLM sur un disque dur chiffré échoue à cause d'une limite de scalac sur la taille des noms de fichiers
+    - Voir [[https://github.com/playframework/playframework/issues/1379][cette issue]]
+  - J'ai donc ajouté l'option du compilateur scala indiquée pour pallier à ce problème
+    - Reste à voir si cela corrige effectivement le problème
+- Nettoyage du code
+  - Souhaite supprimer les doublons de code
+  - En commençant par utiliser *ToJSON* pour envoyer les objets de PLM au client
+    - Permettra de retirer les anciennes méthodes de conversion au format JSON
+  - Ajout de *JSONUtils* pour faciliter la manipulation des *JSONObject*
+    - En Scala, il n'a pas l'air possible d'utiliser des méthodes surchargées provenant de librairies Java
+    - Cette classe Java offre des wrappers pour accéder aux méthodes de JSONSimple
+  - Utilisation de /Exercise.toJSON()/
+    - Pas le même format qu'auparavant
+      - On note juste les cellules qui diffèrent de la cellule "défaut"
+      - Les entités sont sous la forme de tableau et non de hashmap
+    - Modification du code client pour prendre en compte ces changements 
 *** Planned
 **** TODO Préparer la présentation dans le cadre du séminaire IJD
 - Je dois faire une nouvelle présentation de mon travail sur PLM le 02 février 2016
@@ -3359,11 +3397,6 @@ case _ => MergeStrategy.first
 - [ ] Univers des listes récursives
 - [ ] Univers de light bot
 - [ ] Univers du lander
-**** TODO Refactorer les juges
-- Le refactoring PLM a modifié comment on instancie un exercice et exécute le code d'un élève
-- Modifier les juges en conséquences
-**** TODO Refactorer le *Tribunal*
-- Modifier le *Tribunal* pour envoyer l'exercice courant au format JSON au lieu de juste fournir son identifiant au juge
 **** TODO Re-implémenter les exercices manquants
 - Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
 - Tous les exos n'ont pas encore été extraits
