@@ -3366,10 +3366,21 @@ case _ => MergeStrategy.first
     - En Scala, il n'a pas l'air possible d'utiliser des méthodes surchargées provenant de librairies Java
     - Cette classe Java offre des wrappers pour accéder aux méthodes de JSONSimple
   - Utilisation de /Exercise.toJSON()/
-    - Pas le même format qu'auparavant
-      - On note juste les cellules qui diffèrent de la cellule "défaut"
-      - Les entités sont sous la forme de tableau et non de hashmap
-    - Modification du code client pour prendre en compte ces changements 
+    - Pas le même format qu'auparavant, notamment pour *BuggleWorld*
+      - On note juste les cellules qui diffèrent de la cellule "défaut" au lieu d'avoir un tableau à 2 dimensions regroupant l'ensemble des cellules
+      - Les entités sont sous la forme de tableau et non plus de hashmap
+    - Modification du code client pour prendre en compte ces changements
+  - Suppression des classes dorénavant inutiles
+    - Anciennes méthodes de conversion des *Exercises*, *Lectures*, *Worlds* et *Operations* en JSON
+    - *Tribunal*, *LocalExecution*, *Verdict*
+    - *ExecutionSpy*, *ProgLangListener*, *HumanLangListener*
+  - Suppression de *Game*
+    - Généralement, les classes ont une dépendance vers *Game* afin d'accéder à une instance de *I18n* et de *LogHandler*
+    - Il faudrait trouver une meilleure approche pour fournir ces objets à ces classes avant de supprimer *Game*
+      - [ ] Injection de dépendance? Voir dans ce cas comment injecter et garder en vie des instances différentes pour chaque utilisateur
+      - [ ] Ajouter ces objets en paramètres des méthodes les exigeant
+      - [ ] Ajouter des singletons *Logger* et *I18n* permettant d'accéder à une instance partagée de *LogHandler* et des instances de *I18n* pour chaque *Locale*
+	- Ajouter le paramètre *Locale* aux méthodes l'exigeant
 *** Planned
 **** TODO Préparer la présentation dans le cadre du séminaire IJD
 - Je dois faire une nouvelle présentation de mon travail sur PLM le 02 février 2016
