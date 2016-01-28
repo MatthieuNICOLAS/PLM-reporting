@@ -3353,6 +3353,12 @@ case _ => MergeStrategy.first
 - Préparer la présentation dans le cadre du séminaire IJD
   - Une répétition a eu lieu <2016-01-25 lun.>
     - Les retours sont disponibles [[https://github.com/MatthieuNICOLAS/IJD-seminar-2016-02-02/blob/master/feedback-rehearsal.org][ici]]
+  - Ajout d'une description du passage en application web
+    - Motivations
+    - Méthode employée
+      - Transformation du client lourd en librairie
+      - Implémentation d'un serveur d'application permettant d'interagir par le biais de messages JSON avec cette librairie
+    - Résultat
 - Modification du fichier de build
   - Il semblerait que compiler webPLM sur un disque dur chiffré échoue à cause d'une limite de scalac sur la taille des noms de fichiers
     - Voir [[https://github.com/playframework/playframework/issues/1379][cette issue]]
@@ -3469,6 +3475,16 @@ case _ => MergeStrategy.first
   - Les machines de productions n'ont besoin seulement que des *docker-compose.yml* des applications à déployer
   - Les mettre dans un repo différent? ([[https://github.com/BuggleInc/plm-dockers][PLM-dockers?]])
   - Garder cependant les *docker-compose.yml* dans repo du projet pour faciliter le test de l'application en mode développement?
+**** TODO Mettre en place des outils de monitoring
+- Voir http://kamon.io/, http://graphite.wikidot.com/, http://munin-monitoring.org/ pour voir lequel est le plus adapté à notre besoin
+- Stats intéressantes à posséder:
+  - Nombre de messages envoyés par webPLM et nombre de messages reçus par les juges
+  - Nombre de messages envoyés par les juges et nombre de messages reçus par webPLM
+  - Nombre de juges en vie
+  - Nombre d'exécutions ayant pour résultat un timeout
+  - Stats de la JVM?
+  - Utilisation du CPU de la machine
+  - Utilisation de la RAM de la machine
 **** TODO Reprendre les tests de charges
 - L'application ne tenant pas la charge en utilisation réelle, il faut déterminer d'où provient le (les?) problème
 - Il faudrait pour ça reprendre et continuer [[https://github.com/BuggleInc/PLM-Protractor][le travail de Pierric]]
