@@ -3359,6 +3359,16 @@ case _ => MergeStrategy.first
       - Transformation du client lourd en librairie
       - Implémentation d'un serveur d'application permettant d'interagir par le biais de messages JSON avec cette librairie
     - Résultat
+  - Ajout d'une slide de présentation des queues de messages
+    - Qu'est-ce que c'est?
+    - A quoi ça peut servir?
+    - Pourquoi nous l'utilisons dans notre cas
+  - Slides à revoir
+    - [ ] 11
+    - [ ] 12
+    - [ ] 15
+    - [ ] 19
+    - [ ] 36
 - Modification du fichier de build
   - Il semblerait que compiler webPLM sur un disque dur chiffré échoue à cause d'une limite de scalac sur la taille des noms de fichiers
     - Voir [[https://github.com/playframework/playframework/issues/1379][cette issue]]
@@ -3388,7 +3398,17 @@ case _ => MergeStrategy.first
       - [ ] Ajouter des singletons *Logger* et *I18n* permettant d'accéder à une instance partagée de *LogHandler* et des instances de *I18n* pour chaque *Locale*
 	- Ajouter le paramètre *Locale* aux méthodes l'exigeant
 *** Planned
-**** TODO Préparer la présentation dans le cadre du séminaire IJD
+** Semaine du <2016-02-01 lun.> au <2016-02-05 ven.>
+*** Done
+- Préparer la présentation de la cadre du séminaire IJD
+  - Slides à revoir
+    - [X] 11: Ajout de la partie SaaS
+    - [X] 12: Ajout du diagramme de classe des principaux composants
+    - [X] 15: Ajout de la partie concernant l'UI
+    - [X] 19: Ajout d'une slide pour présenter la solution de déléguer l'exécution à des workers
+    - [X] 36: Déplacement de la slide de *Next steps* à *Result*
+*** Planned
+**** DONE Préparer la présentation dans le cadre du séminaire IJD
 - Je dois faire une nouvelle présentation de mon travail sur PLM le 02 février 2016
 - Rédiger les slides
 **** TODO Cloner les mondes, entités et opérations lors d'un clonage d'un exercice
