@@ -3407,6 +3407,22 @@ case _ => MergeStrategy.first
     - [X] 15: Ajout de la partie concernant l'UI
     - [X] 19: Ajout d'une slide pour présenter la solution de déléguer l'exécution à des workers
     - [X] 36: Déplacement de la slide de *Next steps* à *Result*
+- Nettoyage du code
+  - Ajout du singleton *Logger*
+    - Redirige vers une instance par défaut de *LogHandler*
+    - Possible de remplacer cette instance de *LogHandler* par une autre de notre choix
+    - Modification de webPLM pour qu'il remplace l'instance par défaut de *LogHandler* par la sienne de *PLMLogger*
+- Mettre en place des outils de monitoring
+  - Essai avec  http://kamon.io/ pour tester le fonctionnement de cet outil
+    - Ajout des modules nécessaires pour utiliser /kamon/ depuis /webPLM/
+      - *kamon-core*
+      - *kamon-statsd*
+      - *kamon-log-reporter*
+      - *kamon-system-metrics*
+    - Ajout du support de *AspectJ Weaver* et des modules de /kamon/ en ayant besoin
+      - *kamon-scala*
+      - *kamon-play-24*
+    - Besoin de lancer /webPLM/ avec la commande /activator aspectj-runner:run/ dorénavant
 *** Planned
 **** DONE Préparer la présentation dans le cadre du séminaire IJD
 - Je dois faire une nouvelle présentation de mon travail sur PLM le 02 février 2016
