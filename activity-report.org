@@ -3414,19 +3414,43 @@ case _ => MergeStrategy.first
     - Modification de webPLM pour qu'il remplace l'instance par défaut de *LogHandler* par la sienne de *PLMLogger*
 - Mettre en place des outils de monitoring
   - Essai avec  http://kamon.io/ pour tester le fonctionnement de cet outil
-    - Ajout des modules nécessaires pour utiliser /kamon/ depuis /webPLM/
-      - *kamon-core*
-      - *kamon-statsd*
-      - *kamon-log-reporter*
-      - *kamon-system-metrics*
-    - Ajout du support de *AspectJ Weaver* et des modules de /kamon/ en ayant besoin
-      - *kamon-scala*
-      - *kamon-play-24*
-    - Besoin de lancer /webPLM/ avec la commande /activator aspectj-runner:run/ dorénavant
+  - Ajout des modules nécessaires pour utiliser /kamon/ depuis /webPLM/
+    - *kamon-core*
+    - *kamon-statsd*
+    - *kamon-log-reporter*
+    - *kamon-system-metrics*
+  - Ajout du support de *AspectJ Weaver* et des modules de /kamon/ en ayant besoin
+    - *kamon-scala*
+    - *kamon-play-24*
+  - Besoin de lancer /webPLM/ avec la commande /activator aspectj-runner:run/ dorénavant
+    - Aucune stat n'est générée pour le moment à l'aide de *AspectJ*, donc semblerait qu'on puisse sans passer
+    - Vérifier ce qu'il se passe si on essaie d'utiliser *AspectJ* sans l'avoir injecté
+      - [ ] Plantage?
+      - [ ] Warning mais rien de plus?
+  - Ajout de l'injection d'un service pour démarrer /kamon/ dans /webPLM/
+  - Ajout de /kamon/ dans /PLM-judge/
+    - Pour ajouter /kamon/, utiliser un gestionnaire de build semble particulièrement utile
+    - Mise en place de *sbt*
+  - Création d'un [[http://kamon.io/core/metrics/instruments/#minmaxcounters][MinMaxCounters]] pour observer le nombre de messages d'opérations présents dans les queues de réponses
+    - Lorsqu'un juge envoie un message d'opérations, il incrémente le compteur de 1
+    - Lorsque /webPLM/ dépile un message d'opérations, il décremente le compteur de 1
+    - Il semblerait que le compteur n'est pas correctement incrémenté
+      - Dans le test que j'effectuais, le juge se terminait très rapidement après que l'instruction pour incrémenter le compteur soit lancée
+      - L'instruction n'est alors pas prise en compte (le serveur de collecte ne reçoit pas l'info?)
+      - Si je fais durer le juge ~10s de plus, l'opération apparaît correctement
+      - Semblerait que l'instruction /Kamon.shutdown()/ n'attend pas non plus que les demandes d'incrémentations en cours soient effectuées avant de couper le service
 *** Planned
 **** DONE Préparer la présentation dans le cadre du séminaire IJD
 - Je dois faire une nouvelle présentation de mon travail sur PLM le 02 février 2016
 - Rédiger les slides
+**** TODO Résoudre le problème d'incrémentation du compteur avec Kamon
+**** TODO Trouver pourquoi l'exécution du code de l'élève perdure ~60s après la génération du résultat
+- En essayant de régler les problèmes d'incrémentation du compteur d'opérations en cours, j'ai retiré le /System.exit()/ se trouvant à la fin de l'exécution de /PLM-judge/
+- Le programme ne termine plus correctement:
+  - Le résultat est correctement généré et envoyé à /webPLM/
+  - Mais le programme ne termine pas pour autant
+  - Le juge ne se termine et ne rend la main que 60s plus tard
+- Déterminer la cause de ce comportement
 **** TODO Cloner les mondes, entités et opérations lors d'un clonage d'un exercice
 - Actuellement, on se contente de fournir au clone les mêmes références pour les mondes
 - Lorsque plusieurs utilisateurs exécutent en concurrence un programme sur un même exercice en mode local, leur programmes modifient le monde simultanément
