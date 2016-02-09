@@ -3443,14 +3443,61 @@ case _ => MergeStrategy.first
 **** DONE Préparer la présentation dans le cadre du séminaire IJD
 - Je dois faire une nouvelle présentation de mon travail sur PLM le 02 février 2016
 - Rédiger les slides
-**** TODO Résoudre le problème d'incrémentation du compteur avec Kamon
-**** TODO Trouver pourquoi l'exécution du code de l'élève perdure ~60s après la génération du résultat
+** Semaine du <2016-02-08 lun.> au <2016-02-12 ven.>
+*** Done
+- Résoudre le problème d'incrémentation du compteur avec Kamon
+  - J'ai demandé plus d'informations à ce sujet sur la mailing list de *Kamon* [[https://groups.google.com/forum/#!topic/kamon-user/ru7WHMPYQ8k][ici]]
+  - En attente d'une réponse
+- Trouver pourquoi l'exécution du code de l'élève perdure ~60s après la génération du résultat
+  - Silly me, j'avais oublié de shutdown l'*ExecutorService*
+  - Il fallait donc attendre qu'il se coupe de lui-même, ce qui se produisait après 1min d'inactivité
+  - Ajout de l'instruction /mainExecutor.shutdown();/
+- Résoudre le problème d'accès concurrents à la liste des étapes
+  - Plusieurs entités ajoutent des étapes dans l'*ArrayList* /steps/ du monde
+  - En parallèle, ces mêmes entités essaient de lire cette liste
+  - *ArrayList* ne supporte pas les lectures et écritures en concurrence
+  - Il arrive donc que, de temps en temps, une /step/ lue soit *null*
+  - Séparation des producteurs d'opérations et des consommateurs
+    - On veut avoir un seul lecteur d'opérations par monde
+    - Le lecteur ne doit plus être appelé par les entités mais doit tourner dans un thread séparé
+    - Modification de *BasicListener* pour utiliser /Executors.newSingleThreadScheduledExecutor()/ qui retourne un *ScheduledExecutorService*
+    - Permet de scheduler une tâche *Runnable* à intervalles réguliers
+    - Déplacement du code lisant les opérations et les transmettant à la queue de message dans cette nouvelle tâche
+    - Modification du judge pour stopper les *ScheduledExecutorService* à la fin de l'exécution
+    - Ajout de la méthode /BasicListener.flush()/ pour traiter les opérations restantes
+      - Pour éviter les étapes instables obtenues en cas de timeout (car thread de l'entité interrompu à coups de hache), n'est pas appelée en cas de timeout de l'exécution
+  - Utilisation d'une structure de données supportant les accès concurrents pour stocker les étapes d'évolution d'un *World*
+    - Passage d'une *ArrayList* à une *ConcurrentLinkedDeque*
+      - A voir si il vaudrait mieux utiliser une *ConcurrentLinkedQueue* d'un point de vue fonctionnalités et performances
+    - Les entités peuvent donc ajouter en concurrence leurs étapes de façon transparente
+    - *BasicListener* peut retirer en concurrence les étapes
+    - Permet ainsi de vider la liste des étapes au fur et à mesure qu'on la traite dans le cas où il s'agit d'une exécution de code d'élève
+    - Modification de *PLMActor* pour se contenter de parcourir (sans retirer) les opérations correspondant à la démo
+  - Juste un problème repéré avec *sbt* lors du run
+    - Interrompre les threads brutalement n'a pas l'air de lui plaire, ce qui empêche le programme de se terminer correctement pendant ~15s
+    - Générer un jar du judge permet de contourner ce problème apparament
+*** Planned
+**** DONE Trouver pourquoi l'exécution du code de l'élève perdure ~60s après la génération du résultat
 - En essayant de régler les problèmes d'incrémentation du compteur d'opérations en cours, j'ai retiré le /System.exit()/ se trouvant à la fin de l'exécution de /PLM-judge/
 - Le programme ne termine plus correctement:
   - Le résultat est correctement généré et envoyé à /webPLM/
   - Mais le programme ne termine pas pour autant
   - Le juge ne se termine et ne rend la main que 60s plus tard
 - Déterminer la cause de ce comportement
+**** DONE Résoudre le problème d'accès concurrents à la liste des étapes
+- Lorsqu'on exécute le code de l'élève, les entités ajoutent leur progression sous la forme de /step/ dans la liste des /steps/ global d'un monde
+- Lorsque plusieurs entités sont présentes dans un monde, nous avons des problèmes d'accès concurrents
+- Les régler
+**** TODO Améliorer la gestion du timeout de l'exécution du code élève
+- Actuellement, un thread supervise les threads des entités
+  - Ce thread attend une période de temps donnée avec /thread.join(duration)/
+  - Il vérifie ensuite si ce thread est terminé, il passe au suivant
+  - Lorsque toutes les entités ont fini de s'exécuter, il génère un *ExecutionProgress* résultat
+  - Si les threads sont toujours en vie après un certain nombre de /join()/, il les stoppe et génère un *ExecutionProgress* pour spécifier le timeout
+- Cette méthode n'est pas très efficiente et performante
+  - La durée de timeout n'est parfois pas respecté, avec des threads tournant pendant ~60s au lieu de ~10s
+- Voir si *ScheduledExecutorService* permettrait pas d'implémenter une solution plus efficace
+**** TODO Résoudre le problème d'incrémentation du compteur avec Kamon
 **** TODO Cloner les mondes, entités et opérations lors d'un clonage d'un exercice
 - Actuellement, on se contente de fournir au clone les mêmes références pour les mondes
 - Lorsque plusieurs utilisateurs exécutent en concurrence un programme sur un même exercice en mode local, leur programmes modifient le monde simultanément
