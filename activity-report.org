@@ -3476,6 +3476,27 @@ case _ => MergeStrategy.first
   - Juste un problème repéré avec *sbt* lors du run
     - Interrompre les threads brutalement n'a pas l'air de lui plaire, ce qui empêche le programme de se terminer correctement pendant ~15s
     - Générer un jar du judge permet de contourner ce problème apparament
+- Améliorer la gestion du timeout de l'exécution du code élève
+  - Modification de *ExerciseRunner*
+    - Création d'une tâche /monitorThreads/ *Runnable* reprenant le code du thread surveillant les entités
+    - Lancement de cette tâche de façon périodique à l'aide de *ScheduledExecutorService*
+    - Ajout de /ScheduledExecutorService.shutdown()/ dans la tâche /monitorThreads/ pour s'arrêter lorsqu'un résultat est généré
+  - Ajout de la valeur /TIMEOUT/ dans *OutcomeKind*
+    - Permet de différencier dans les traces utilisateurs si une exécution a timeout ou juste échoué
+    - Permet aux tâches transmettant les opérations au client de savoir s'il est nécessaire d'envoyer les opérations pas encore traitées
+      - Permet d'éviter de traiter des /steps/ malformées
+        - Car thread stoppé lors de leur génération
+      - Permet de réduire le nombre de messages entre webPLM et les juges, et entre webPLM et les clients
+        - Economie de bande passante
+        - Economie de CPU
+      - Permet d'améliorer l'efficacité globale des juges
+        - Auparavant, on attendait qu'ils aient traités l'ensemble des opérations
+        - En cas de timeout, passé un certain point dans l'exécution, ces dernières ont peu de valeur car l'utilisateur boucle indéfiniment
+        - Les skipper permet donc au juge de passer plus rapidement au traitement de la requête suivante
+*** Question
+- Ajouter la valeur /STOP/ dans *OutcomeKind*?
+  - Permettrait de différencier dans les traces utilisateurs si une exécution a été stoppée par l'utilisateur ou si elle a juste échoué
+  - Permettrait d'éviter de traiter et de transmettre les opérations restantes au client alors qu'elles représentent peu d'intérêt 
 *** Planned
 **** DONE Trouver pourquoi l'exécution du code de l'élève perdure ~60s après la génération du résultat
 - En essayant de régler les problèmes d'incrémentation du compteur d'opérations en cours, j'ai retiré le /System.exit()/ se trouvant à la fin de l'exécution de /PLM-judge/
@@ -3488,7 +3509,7 @@ case _ => MergeStrategy.first
 - Lorsqu'on exécute le code de l'élève, les entités ajoutent leur progression sous la forme de /step/ dans la liste des /steps/ global d'un monde
 - Lorsque plusieurs entités sont présentes dans un monde, nous avons des problèmes d'accès concurrents
 - Les régler
-**** TODO Améliorer la gestion du timeout de l'exécution du code élève
+**** DONE Améliorer la gestion du timeout de l'exécution du code élève
 - Actuellement, un thread supervise les threads des entités
   - Ce thread attend une période de temps donnée avec /thread.join(duration)/
   - Il vérifie ensuite si ce thread est terminé, il passe au suivant
@@ -3497,6 +3518,11 @@ case _ => MergeStrategy.first
 - Cette méthode n'est pas très efficiente et performante
   - La durée de timeout n'est parfois pas respecté, avec des threads tournant pendant ~60s au lieu de ~10s
 - Voir si *ScheduledExecutorService* permettrait pas d'implémenter une solution plus efficace
+**** TODO Mettre à jour *OperationSpy* de webPLM
+- Refactorer *OperationSpy* comme nous l'avons fait pour *BasicListener* pour
+  - Utiliser *ScheduledExecutorService* ou équivalent pour traiter les opérations générées périodiquement
+  - Adapter le parcours des /steps/ à la nouvelle de structure utilisée *ConcurrentLinkedDeque*
+  - Ne plus traiter les opérations restantes en cas de timeout car inutile et inefficient
 **** TODO Résoudre le problème d'incrémentation du compteur avec Kamon
 **** TODO Cloner les mondes, entités et opérations lors d'un clonage d'un exercice
 - Actuellement, on se contente de fournir au clone les mêmes références pour les mondes
