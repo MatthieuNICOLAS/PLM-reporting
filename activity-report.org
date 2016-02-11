@@ -3493,10 +3493,22 @@ case _ => MergeStrategy.first
         - Auparavant, on attendait qu'ils aient traités l'ensemble des opérations
         - En cas de timeout, passé un certain point dans l'exécution, ces dernières ont peu de valeur car l'utilisateur boucle indéfiniment
         - Les skipper permet donc au juge de passer plus rapidement au traitement de la requête suivante
+- Mettre à jour *OperationSpy* de webPLM
+  - Essai avec *Scheduler* ([[http://doc.akka.io/docs/akka/current/scala/scheduler.html][voir ici]]) de /Akka/ qui semble préférable d'utiliser en Scala
+  - Ajout d'une tâche planifiée vidant la liste des /steps/ et les transmettant au client
+  - Mais problème de concurrence entre la tâche planifiée et la méthode /OperationSpy.flush()/ appelée lorsque l'exécution est terminée
+    - On peut annuler la tâche planifiée
+    - Mais celle-ci finit son exécution si elle est en cours
+    - Pas de méthode pour attendre son arrêt complet
+  - Utilisation de *ScheduledExecutorService*
+    - Permet de reproduire le même fonctionnement que *BasicListener*
+  - Problème de performances ressenti après plusieurs timeout
+    - Si l'utilisateur enchaîne les exécutions à base de boucles infinies, j'ai l'impression que le serveur rencontre de plus en plus de mal à traiter les exécutions suivantes
+    - Vérifier si ces problèmes sont avérés à l'aide d'un outil de monitoring
 *** Question
 - Ajouter la valeur /STOP/ dans *OutcomeKind*?
   - Permettrait de différencier dans les traces utilisateurs si une exécution a été stoppée par l'utilisateur ou si elle a juste échoué
-  - Permettrait d'éviter de traiter et de transmettre les opérations restantes au client alors qu'elles représentent peu d'intérêt 
+  - Permettrait d'éviter de traiter et de transmettre les opérations restantes au client alors qu'elles représentent peu d'intérêt
 *** Planned
 **** DONE Trouver pourquoi l'exécution du code de l'élève perdure ~60s après la génération du résultat
 - En essayant de régler les problèmes d'incrémentation du compteur d'opérations en cours, j'ai retiré le /System.exit()/ se trouvant à la fin de l'exécution de /PLM-judge/
@@ -3518,7 +3530,7 @@ case _ => MergeStrategy.first
 - Cette méthode n'est pas très efficiente et performante
   - La durée de timeout n'est parfois pas respecté, avec des threads tournant pendant ~60s au lieu de ~10s
 - Voir si *ScheduledExecutorService* permettrait pas d'implémenter une solution plus efficace
-**** TODO Mettre à jour *OperationSpy* de webPLM
+**** DONE Mettre à jour *OperationSpy* de webPLM
 - Refactorer *OperationSpy* comme nous l'avons fait pour *BasicListener* pour
   - Utiliser *ScheduledExecutorService* ou équivalent pour traiter les opérations générées périodiquement
   - Adapter le parcours des /steps/ à la nouvelle de structure utilisée *ConcurrentLinkedDeque*
@@ -3618,6 +3630,9 @@ case _ => MergeStrategy.first
   - Stats de la JVM?
   - Utilisation du CPU de la machine
   - Utilisation de la RAM de la machine
+**** TODO Vérifier les performances de webPLM après plusieurs exécutions ayant timeout en mode local
+- J'ai eu le sentiment que les performances de webPLM se dégradaient au fur et à mesure que l'utilisateur lui faisait exécuter des boucles infinies en mode local
+- Voir si ce ressenti est vérifié à l'aide d'un outil de monitoring 
 **** TODO Reprendre les tests de charges
 - L'application ne tenant pas la charge en utilisation réelle, il faut déterminer d'où provient le (les?) problème
 - Il faudrait pour ça reprendre et continuer [[https://github.com/BuggleInc/PLM-Protractor][le travail de Pierric]]
