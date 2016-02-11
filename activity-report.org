@@ -3514,17 +3514,17 @@ case _ => MergeStrategy.first
     - Permet de conserver les versions du code des élèves
     - Permet de conserver les actions des utilisateurs sous forme de message de commit
     - Le contenu est public
-  - [ ] Ajouter des slides concernant les publics visés
+  - [X] Ajouter des slides concernant les publics visés
     - Elèves
     - Enseignants
     - Chercheurs
-  - [ ] Ajouter des slides pour expliquer le problème du singleton *Game*
+  - [X] Ajouter des slides pour expliquer le problème du singleton *Game*
     - A la base, *Game* était un singleton
     - Comme *Game* permet de conserver la session de l'utilisateur, il a fallu modifier cela pour supporter le multi-utilisateurs
     - S'est contenté de fournir l'instance de *Game* à toutes les classes en ayant besoin
     - Création d'un *Game* par utilisateur
-  - [ ] Développer la partie /Next steps/
-    - [ ] Développer la slide sur le refactoring
+  - [X] Développer la partie /Next steps/
+    - [X] Développer la slide sur le refactoring
       - Voulait retirer les leçons et exercices de *Game*
       - S'est transformée en "Supprimer *Game*"
       - A dû réécrire les composants reposant sur *Game*
@@ -3560,9 +3560,13 @@ case _ => MergeStrategy.first
   - Adapter le parcours des /steps/ à la nouvelle de structure utilisée *ConcurrentLinkedDeque*
   - Ne plus traiter les opérations restantes en cas de timeout car inutile et inefficient
 **** TODO Préparer les slides pour la présentation de PLM au sein de l'équipe
-- Dans l'équipe coast, nous effectuons des réunions hebdomadaires pour partager sur les différentes tâches/problématiques sur lesquelles nous avons travaillé
-- Comme PLM est un projet à part de l'équipe, et que tous les membres ne sont pas familiers avec, il a été proposé que je fasse une présentation
+- Dans l'équipe COAST, nous effectuons des réunions hebdomadaires pour partager sur les différentes tâches/problématiques sur lesquelles nous avons travaillé
+- Comme PLM est un projet en marge de l'équipe, et que tous les membres ne sont pas familiers avec, il a été proposé que je le présente
 - Revoir les slides utilisées dans le cadre des séminaires IJD et en adapter le contenu
+**** TODO Résoudre le problème d'erreur de compilation de webPLM sur les disques durs chiffrés
+- Potentiellement lié à [[https://github.com/playframework/playframework/issues/1379][cette issue]]
+- J'avais modifié le fichier de build pour ajouter [[https://github.com/BuggleInc/webPLM/blob/master/build.sbt#L38][cette option]] censée résoudre le problème
+- Malheureusement le problème semble toujours présent
 **** TODO Résoudre le problème d'incrémentation du compteur avec Kamon
 **** TODO Cloner les mondes, entités et opérations lors d'un clonage d'un exercice
 - Actuellement, on se contente de fournir au clone les mêmes références pour les mondes
