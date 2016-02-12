@@ -3559,7 +3559,7 @@ case _ => MergeStrategy.first
   - Utiliser *ScheduledExecutorService* ou équivalent pour traiter les opérations générées périodiquement
   - Adapter le parcours des /steps/ à la nouvelle de structure utilisée *ConcurrentLinkedDeque*
   - Ne plus traiter les opérations restantes en cas de timeout car inutile et inefficient
-**** TODO Préparer les slides pour la présentation de PLM au sein de l'équipe
+**** DONE Préparer les slides pour la présentation de PLM au sein de l'équipe
 - Dans l'équipe COAST, nous effectuons des réunions hebdomadaires pour partager sur les différentes tâches/problématiques sur lesquelles nous avons travaillé
 - Comme PLM est un projet en marge de l'équipe, et que tous les membres ne sont pas familiers avec, il a été proposé que je le présente
 - Revoir les slides utilisées dans le cadre des séminaires IJD et en adapter le contenu
@@ -3782,4 +3782,14 @@ case _ => MergeStrategy.first
 - Documenter les composants et leurs méthodes
 - Documenter le protocole de communication de la websocket entre le client et le serveur
 - Documenter le système de traduction
-  
+**** TODO Créer une VM de l'environnement de développement de *PLM*
+- Installer les dépendances
+  - Java 8
+  - Play
+  - Git
+- Cloner les différents repos
+  - PLM
+  - webPLM
+  - PLM-judge?
+**** TODO Créer un script d'installation de l'environnement de développement de *PLM*
+- Dans la même veine que la VM, mettre à disposition un script d'installation de l'environnement de dev pourrait aider certains
