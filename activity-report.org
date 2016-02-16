@@ -3563,6 +3563,44 @@ case _ => MergeStrategy.first
 - Dans l'équipe COAST, nous effectuons des réunions hebdomadaires pour partager sur les différentes tâches/problématiques sur lesquelles nous avons travaillé
 - Comme PLM est un projet en marge de l'équipe, et que tous les membres ne sont pas familiers avec, il a été proposé que je le présente
 - Revoir les slides utilisées dans le cadre des séminaires IJD et en adapter le contenu
+** Semaine du <2016-02-15 lun.> au <2016-02-19 ven.>
+*** Done
+- Supprimer *IWorldView*
+  - Suite au refactoring pour résoudre le problème de lectures concurrentes de la liste des étapes, *IWorldView* n'est plus nécessaire
+  - Suppression de l'interface *IWorldView* et des méthodes y faisant référence
+  - Mise à jour de webPLM et de PLM-judge
+- Implémenter *I18nManager*
+  - Map /static/ des différentes instances de *I18n*
+  - Méthode pour récupérer l'instance souhaitée en fonction d'une *Locale*
+  - Si l'instance de *I18n* n'est pas encore repertoriée, elle est générée et ajoutée
+- Retirer *Game*
+  - Suppression des classes et méthodes dorénavant non-utilisées
+  - Ajout de *Locale* en paramètre constructeur de *GitUtils*
+  - Ajout de *UserSettings*
+    - Permet d'obtenir une référence vers la *Locale* et le *ProgrammingLanguage* courants
+  - Ajout de *UserSettings* en paramètre de *Exercise*
+    - Permet aux méthodes ayant besoin de soit *Locale* soit de *ProgrammingLanguage* d'y accéder
+    - Pas besoin de mettre à jour la référence vers *UserSettings* lorsque l'utilisateur change un de ses paramètres
+    - Suffit juste d'actualiser les références dans *UserSettings*
+  - Suppression de la dépendance à *Game* dans *World*
+  - Suppression de la dépendance à *Game* dans *Exercise*
+  - Suppression de *Game*, *Lecture* et *Lesson*
+*** Planned
+**** DONE Implémenter *I18nManager*
+- Actuellement, on génère une instance de l'outil de traduction *I18n* pour chaque utilisateur
+- En générer une instance pour chaque langue supportée à l'initialisation et les partager entre les utilisateurs serait plus propre et efficace
+- Implémenter le singleton *I18nManager* qui permettrait de générer et d'accéder à ces instances
+**** DONE Retirer *Game*
+**** TODO Re-implémenter la gestion des indices
+- Auparavant, ils étaient gérés dans *Lecture*
+- Les regénérer depuis *ExerciseFactory* à l'initialisation
+**** TODO Re-implémenter les tests unitaires
+- Les tests permettant de vérifier le bon fonctionnement des méthodes de compilation et d'exécution ne sont plus à jour
+- Les ré-implémenter
+- Revoir si les tests de git ont aussi besoin d'être mis à jour
+**** TODO Re-implémenter les tests d'intégrations
+- Les leçons et les exercises ayant été retirés du repo /PLM/, les tests d'intégrations concernant ces objets ne fonctionnent plus
+- Les re-implémenter dans /webPLM/
 **** TODO Résoudre le problème d'erreur de compilation de webPLM sur les disques durs chiffrés
 - Potentiellement lié à [[https://github.com/playframework/playframework/issues/1379][cette issue]]
 - J'avais modifié le fichier de build pour ajouter [[https://github.com/BuggleInc/webPLM/blob/master/build.sbt#L38][cette option]] censée résoudre le problème
