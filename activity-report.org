@@ -3585,6 +3585,11 @@ case _ => MergeStrategy.first
   - Suppression de la dépendance à *Game* dans *World*
   - Suppression de la dépendance à *Game* dans *Exercise*
   - Suppression de *Game*, *Lecture* et *Lesson*
+- Re-implémenter les tests unitaires
+  - Les tests de git passent toujours et me paraissent à jour
+  - Définition des cas de tests pour *ExerciseFactory*
+  - Définition des cas de tests pour *ExerciseRunner*
+  - Implémentation des tests unitaires pour *ExerciseFactory*
 *** Planned
 **** DONE Implémenter *I18nManager*
 - Actuellement, on génère une instance de l'outil de traduction *I18n* pour chaque utilisateur
@@ -3597,6 +3602,16 @@ case _ => MergeStrategy.first
 **** TODO Re-implémenter les tests unitaires
 - Les tests permettant de vérifier le bon fonctionnement des méthodes de compilation et d'exécution ne sont plus à jour
 - Les ré-implémenter
+  - [X] Implémenter des tests unitaires pour *ExerciseFactory*
+    - [X] /initializeExercise()/ doit initialiser les /defaultSourceFiles/
+    - [X] /initializeExercise()/ doit initialiser les /missions/
+    - [X] /initializeExercise()/ doit initialiser les mondes solutions
+  - [ ] Implémenter des tests unitaires pour *ExerciseRunner*
+    - [ ] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.COMPILATION/ si le code contient une erreur de syntaxe
+    - [ ] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.FAILED/ si le code génère une erreur d'exécution
+    - [ ] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.FAILED/ si le code ne permet pas d'atteindre l'état objectif
+    - [ ] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.TIMEOUT/ si le code ne finit pas de s'exécuter avant la durée fixée
+    - [ ] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.PASS/ si le code permet d'atteindre l'état objectif
 - Revoir si les tests de git ont aussi besoin d'être mis à jour
 **** TODO Re-implémenter les tests d'intégrations
 - Les leçons et les exercises ayant été retirés du repo /PLM/, les tests d'intégrations concernant ces objets ne fonctionnent plus
