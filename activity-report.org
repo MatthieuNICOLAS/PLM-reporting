@@ -3590,6 +3590,9 @@ case _ => MergeStrategy.first
   - Définition des cas de tests pour *ExerciseFactory*
   - Définition des cas de tests pour *ExerciseRunner*
   - Implémentation des tests unitaires pour *ExerciseFactory*
+  - Implémentation des tests unitaires pour *ExerciseRunner* pour chaque *ProgrammingLanguage*
+    - Implémentation des tests concernant l'exécution du code en Java
+    - Voir comment factoriser ces tests pour chaque *ProgrammingLanguage*
 *** Planned
 **** DONE Implémenter *I18nManager*
 - Actuellement, on génère une instance de l'outil de traduction *I18n* pour chaque utilisateur
@@ -3606,7 +3609,7 @@ case _ => MergeStrategy.first
     - [X] /initializeExercise()/ doit initialiser les /defaultSourceFiles/
     - [X] /initializeExercise()/ doit initialiser les /missions/
     - [X] /initializeExercise()/ doit initialiser les mondes solutions
-  - [ ] Implémenter des tests unitaires pour *ExerciseRunner*
+  - [ ] Implémenter des tests unitaires pour *ExerciseRunner* pour chaque *ProgrammingLanguage*
     - [ ] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.COMPILATION/ si le code contient une erreur de syntaxe
     - [ ] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.FAILED/ si le code génère une erreur d'exécution
     - [ ] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.FAILED/ si le code ne permet pas d'atteindre l'état objectif
