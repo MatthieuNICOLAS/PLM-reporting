@@ -3599,23 +3599,33 @@ case _ => MergeStrategy.first
 - En générer une instance pour chaque langue supportée à l'initialisation et les partager entre les utilisateurs serait plus propre et efficace
 - Implémenter le singleton *I18nManager* qui permettrait de générer et d'accéder à ces instances
 **** DONE Retirer *Game*
-**** TODO Re-implémenter la gestion des indices
-- Auparavant, ils étaient gérés dans *Lecture*
-- Les regénérer depuis *ExerciseFactory* à l'initialisation
-**** TODO Re-implémenter les tests unitaires
+** Semaine du <2016-02-22 lun.> au <2016-02-26 ven.>
+*** Done
+- Re-implémenter les tests unitaires
+  - Correction des tests unitaires de /webPLM/
+    - Le modèle *PLM* n'existe plus, les tests unitaires pour cette classe ont donc été retirés
+    - Correction des tests unitaires de *BuggleWorld*
+  - Implémenter des tests unitaires pour *ExerciseRunner* pour chaque *ProgrammingLanguage*
+    - Utilisation de /@RunWith(Parameterized.class)/ pour que la classe de test *ExerciseRunnerTest* soit instanciée successivement avec chaque langage de programmation
+    - Modification des tests pour adapter le code exécuté en fonction du langage de programmation actuel
+*** Planned
+**** DONE Re-implémenter les tests unitaires
 - Les tests permettant de vérifier le bon fonctionnement des méthodes de compilation et d'exécution ne sont plus à jour
 - Les ré-implémenter
   - [X] Implémenter des tests unitaires pour *ExerciseFactory*
     - [X] /initializeExercise()/ doit initialiser les /defaultSourceFiles/
     - [X] /initializeExercise()/ doit initialiser les /missions/
     - [X] /initializeExercise()/ doit initialiser les mondes solutions
-  - [ ] Implémenter des tests unitaires pour *ExerciseRunner* pour chaque *ProgrammingLanguage*
-    - [ ] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.COMPILATION/ si le code contient une erreur de syntaxe
-    - [ ] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.FAILED/ si le code génère une erreur d'exécution
-    - [ ] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.FAILED/ si le code ne permet pas d'atteindre l'état objectif
-    - [ ] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.TIMEOUT/ si le code ne finit pas de s'exécuter avant la durée fixée
-    - [ ] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.PASS/ si le code permet d'atteindre l'état objectif
+  - [X] Implémenter des tests unitaires pour *ExerciseRunner* pour chaque *ProgrammingLanguage*
+    - [X] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.COMPILATION/ si le code contient une erreur de syntaxe
+    - [X] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.FAILED/ si le code génère une erreur d'exécution
+    - [X] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.FAILED/ si le code ne permet pas d'atteindre l'état objectif
+    - [X] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.TIMEOUT/ si le code ne finit pas de s'exécuter avant la durée fixée
+    - [X] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.PASS/ si le code permet d'atteindre l'état objectif
 - Revoir si les tests de git ont aussi besoin d'être mis à jour
+**** TODO Re-implémenter la gestion des indices
+- Auparavant, ils étaient gérés dans *Lecture*
+- Les regénérer depuis *ExerciseFactory* à l'initialisation
 **** TODO Re-implémenter les tests d'intégrations
 - Les leçons et les exercises ayant été retirés du repo /PLM/, les tests d'intégrations concernant ces objets ne fonctionnent plus
 - Les re-implémenter dans /webPLM/
