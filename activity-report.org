@@ -3608,6 +3608,22 @@ case _ => MergeStrategy.first
   - Implémenter des tests unitaires pour *ExerciseRunner* pour chaque *ProgrammingLanguage*
     - Utilisation de /@RunWith(Parameterized.class)/ pour que la classe de test *ExerciseRunnerTest* soit instanciée successivement avec chaque langage de programmation
     - Modification des tests pour adapter le code exécuté en fonction du langage de programmation actuel
+- Re-implémenter la gestion des indices
+  - Les indices sont directement présents dans les consignes d'un exercice
+  - Y a-t-il un intérêt à les parser depuis /PLM/ et à les repertorier dans le modèle d'un *Exercise*?
+    - Je ne vois un intérêt à cela qu'uniquement pour effectuer un sanity check, pour vérifier lors du déclenchement d'un évènement git /readTip/ que l'indice existe bel et bien
+  - On souhaite en tout cas permettre au développeur de surcharger le processus de parsage des indices pour qu'il puisse modifier facilement le format affiché
+  - Création de *TipFactory*
+    - Nécessite un *Exercise*, une mission et une *Locale*
+    - Extrait les tips
+    - Les ajoute à la liste des tips de *Exercise*
+    - Génère une nouvelle mission où les tips sont cachés jusqu'à ce que l'utilisateur demande à les consulter
+  - Ajout d'une directive /tips/ permettant d'afficher sous la forme de sections dépliables les indices
+  - Surcharge de *TipFactory* pour que la mission générée utilise cette directive au lieu de générer un lien
+- Implémenter *ToJSON* & Implémenter un constructeur à partir d'un *JSONObject*
+  - Univers des tests unitaires
+    - Comment exporter la liste des paramètres (un tableau d'*Object*) en JSON et la ré-importer correctement dans le constructeur?
+    - Vu que *JSON.Simple* convertit de base les *int* en *Long*, ne risque-t-on pas de rencontrer des problèmes dans les exercices où les paramètres sont des *int*?
 *** Planned
 **** DONE Re-implémenter les tests unitaires
 - Les tests permettant de vérifier le bon fonctionnement des méthodes de compilation et d'exécution ne sont plus à jour
@@ -3623,7 +3639,7 @@ case _ => MergeStrategy.first
     - [X] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.TIMEOUT/ si le code ne finit pas de s'exécuter avant la durée fixée
     - [X] /run()/ doit returner un *ExecutionProgress* avec /outcome=OutcomeKind.PASS/ si le code permet d'atteindre l'état objectif
 - Revoir si les tests de git ont aussi besoin d'être mis à jour
-**** TODO Re-implémenter la gestion des indices
+**** DONE Re-implémenter la gestion des indices
 - Auparavant, ils étaient gérés dans *Lecture*
 - Les regénérer depuis *ExerciseFactory* à l'initialisation
 **** TODO Re-implémenter les tests d'intégrations
