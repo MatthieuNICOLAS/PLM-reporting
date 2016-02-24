@@ -3624,6 +3624,16 @@ case _ => MergeStrategy.first
   - Univers des tests unitaires
     - Comment exporter la liste des paramètres (un tableau d'*Object*) en JSON et la ré-importer correctement dans le constructeur?
     - Vu que *JSON.Simple* convertit de base les *int* en *Long*, ne risque-t-on pas de rencontrer des problèmes dans les exercices où les paramètres sont des *int*?
+    - Dans certains exercices, notamment ceux de la leçon /recursion.cons/, on passe des objets *RecList* en paramètre
+    - Modification de /BatTest.toJSON()/
+      - Le champ /parameters/ est un *JSONArray* de *JSONObject*
+      - Chaque *JSONObject* comporte deux champs
+      - /parameter/ qui est le paramètre
+      - /type/ qui est le nom de la classe du paramètre
+      - Ceci permettra, en fonction du /type/, de traiter les cas particuliers des paramètres (tels que les instances *RecList*)
+    - Modification de /BatTest(JSONObject json)/
+      - Lors du parcours de la liste des paramètres, vérifie la valeur du champ /type/
+      - Permet de traiter les cas particuliers
 *** Planned
 **** DONE Re-implémenter les tests unitaires
 - Les tests permettant de vérifier le bon fonctionnement des méthodes de compilation et d'exécution ne sont plus à jour
