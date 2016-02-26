@@ -3635,6 +3635,32 @@ case _ => MergeStrategy.first
       - Lors du parcours de la liste des paramètres, vérifie la valeur du champ /type/
       - Permet de traiter les cas particuliers
     - Plutôt que de faire ça à la main à chaque fois que nous en avons besoin, il serait sans doute préférable d'utiliser une librairie de sérialisation/désérialisation JSON pouvant le gérer automatiquement
+- Cloner les mondes, entités et opérations lors d'un clonage d'un exercice
+  - Ajout d'un appel à /World.copy()/ dans le constructeur
+  - Besoin de modifier le constructeur par copie de *World* pour copier aussi les opérations (afin de conserver la démo)
+  - Besoin d'ajouter une méthode /clone()/ pour toutes les classes héritant de *Operation*
+- Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
+  - /Jackson/
+    - Du côté de /Jackson/, j'ai trouvé plusieurs liens intéressants
+      - Comment ajouter le type automatiquement au JSON pour que le désérialiseur puisse reformer correctement l'objet:  http://www.davismol.net/2015/03/05/jackson-json-deserialize-a-list-of-objects-of-subclasses-of-an-abstract-class/
+      - Comment lire soi-même le type pour orienter la désérialisation: http://stackoverflow.com/questions/28384281/can-jackson-determine-root-object-type-to-deserialize-to-when-json-includes-type
+    - Sérialisation de *Exercise* en utilisant /Jackson/
+      - Suppression de boucles infinies
+	- *World* -> *Entity* -> *World*
+	- Ajout de l'annotation /@JsonManagedReference/ dans *World* et /@JsonBackReference/ dans *Entity*
+      - Ajout de getters dans *World*
+	- /getInitialWorld()/
+	- /getAnswerWorld()/
+      - Suppression des champs doublons dans les entités
+	- Les traductions des getters des entités sont considérées par /Jackson/ comme de nouveaux champs
+	- Ajout de l'annotation /@JsonIgnore/
+      - Ajout du type des objets
+	- Utilisation de l'annotation /@JsonTypeInfo/
+	- On rencontre cependant le problème des entités solutions ayant pour type *plm.runtimeX.NomExercise*
+	- Pour le moment, je parcours le *JsonNode* obtenu par /Jackson/ de l'objet et modifie les valeurs des champs /type/ des entités solutions
+      - Ajout de *CustomColorSerializer* pour sérialiser les *Color*
+	- Par défaut, la sérialisation des *Color* par /Jackson/ est exhaustive
+	- Se contente de sérialiser les valeurs RGBA de *Color* dans notre cas
 *** Planned
 **** DONE Re-implémenter les tests unitaires
 - Les tests permettant de vérifier le bon fonctionnement des méthodes de compilation et d'exécution ne sont plus à jour
@@ -3663,6 +3689,9 @@ case _ => MergeStrategy.first
   - Dans /BatTest.toJSON()/, il faut spécifier le type des paramètres de ce test
 - Les solutions apportées ne sont pas très élégantes et consistent plus en des hacks qu'autre chose
 - Est-ce que remplacer /JSON.Simple/ par une librairie telle que [[https://github.com/FasterXML/jackson][Jackson]] ou [[https://github.com/google/gson][Gson]] permettrait d'accéder à des fonctionnalités apportant une meilleure solution à ces problèmes?
+- Vu que nous utilisons les mêmes méthodes pour générer le JSON envoyé au client et aux juges, il faudrait aussi pouvoir modifier facilement le JSON généré pour filtrer des champs
+  - On a besoin d'envoyer le *SourceFile* aux juges pour qu'ils puissent correctement générer l'entité de l'élève et l'executé
+  - Mais on ne veut pas le transmettre au client puisqu'il contient le code de la correction
 **** TODO Nettoyer l'univers des tests unitaires
 - Auparavant, l'univers des tests unitaires fonctionnait de la manière suivante:
   - On exécutait le code de la solution sur tous les mondes à l'initialisation pour déterminer la valeur /expected/
