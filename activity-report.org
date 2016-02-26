@@ -3634,6 +3634,7 @@ case _ => MergeStrategy.first
     - Modification de /BatTest(JSONObject json)/
       - Lors du parcours de la liste des paramètres, vérifie la valeur du champ /type/
       - Permet de traiter les cas particuliers
+    - Plutôt que de faire ça à la main à chaque fois que nous en avons besoin, il serait sans doute préférable d'utiliser une librairie de sérialisation/désérialisation JSON pouvant le gérer automatiquement
 *** Planned
 **** DONE Re-implémenter les tests unitaires
 - Les tests permettant de vérifier le bon fonctionnement des méthodes de compilation et d'exécution ne sont plus à jour
@@ -3652,6 +3653,27 @@ case _ => MergeStrategy.first
 **** DONE Re-implémenter la gestion des indices
 - Auparavant, ils étaient gérés dans *Lecture*
 - Les regénérer depuis *ExerciseFactory* à l'initialisation
+**** TODO Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
+- J'ai commencé à implémenter des méthodes d'import/export au format JSON des différents objets formant les univers à l'aide de /JSON.Simple/
+- Mais on rencontre des difficultés avec certains cas particuliers
+  - Dans /Exercise.toJSON()/, il faut spécifier le type des mondes composant cet exercice
+  - Dans /World.toJSON()/, il faut spécifier le type des entités peuplant ce monde
+    - Dans le cas des mondes solutions, puisqu'on a executé la démo, le type obtenu est de la forme /plm.runtime1.nomEntité/ car l'entité a été généré dynamiquement
+    - Il faut donc remplacer ce type par le type des entités du monde initial
+  - Dans /BatTest.toJSON()/, il faut spécifier le type des paramètres de ce test
+- Les solutions apportées ne sont pas très élégantes et consistent plus en des hacks qu'autre chose
+- Est-ce que remplacer /JSON.Simple/ par une librairie telle que [[https://github.com/FasterXML/jackson][Jackson]] ou [[https://github.com/google/gson][Gson]] permettrait d'accéder à des fonctionnalités apportant une meilleure solution à ces problèmes?
+**** TODO Nettoyer l'univers des tests unitaires
+- Auparavant, l'univers des tests unitaires fonctionnait de la manière suivante:
+  - On exécutait le code de la solution sur tous les mondes à l'initialisation pour déterminer la valeur /expected/
+  - On exécutait ensuite le code de l'élève pour évaluer le /result/ obtenu
+  - On comparait les 2 pour vérifier si l'exercice était réussi ou non par l'élève
+- Pour rapprocher le comportement de l'univers *Bat* au comportement des autres univers, je l'avais modifié pour
+  - Executer le code de la solution uniquement sur le monde solution pour déterminer son /result/
+  - Et pour vérifier si l'élève a réussi l'exercice, on compare son /result/ au /result/ du monde solution
+- Il reste cependant des traces de l'ancien mode de fonctionnement dans l'univers *Bat*
+- Le nettoyer pour faciliter sa compréhension et sa maintenabilité
+- Revoir aussi le modèle côté client
 **** TODO Re-implémenter les tests d'intégrations
 - Les leçons et les exercises ayant été retirés du repo /PLM/, les tests d'intégrations concernant ces objets ne fonctionnent plus
 - Les re-implémenter dans /webPLM/
