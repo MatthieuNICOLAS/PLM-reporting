@@ -3689,7 +3689,7 @@ case _ => MergeStrategy.first
   - Remplacer ces annotations par /@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@jsonId")/ sur *World* semble plus efficace
   - Cette annotation permet d'attribuer un identifiant pour chaque instance de *World*
   - Lors de la sérialisation des autres objets ayant une référence vers un monde, /Jackson/ se contentera de spécifier l'identifiant de l'instance de *World* concernée
-  - Succès troublant de la sérialisation/désérialisation de *World* du projet de test
+  - Succès /troublant/ de la sérialisation/désérialisation de *World* du projet de test
     - Initialisation d'un monde initial
       - Création d'une instance /world/ de *BuggleWorld*
       - Création d'instances de *Buggle* ayant une référence vers /world/
@@ -3710,6 +3710,18 @@ case _ => MergeStrategy.first
     - La cellule de l'objet /clone/, /clone/ ayant été obtenu par désérialisation du JSON, comporte bien la modification effectuée
     - Alors que le constructeur appelé par /Jackson/ aurait dû généré un tableau de cellules toutes identiques à la cellule par défaut
     - Il semblerait donc que /Jackson/, après avoir généré l'instance /clone/ à l'aide du constructeur indiqué, génère les objets ayant une reférence vers celui-ci et les bind correctement automatiquement
+  - Modification du code de /PLM/ pour
+    - Utiliser l'annotation /@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@jsonId")/
+    - Retirer les arguments /initialWorld/, /answerWorld/ et /cells/ des constructeurs utilisés par /Jackson/
+  - Arrive enfin à sérialiser puis désérialiser un *Exercise*
+    - On sérialise un *Exercise* standard tel que *Environment*
+    - On remplace les valeurs des champs /type/ des entités des mondes solutions par celles des champs /type/ des mondes initiaux
+      - Sinon on aurait une erreur à la désérialisation car classe inconnue
+    - On sérialise l'objet
+    - On désérialise le JSON obtenue en un *BlankExercise*
+    - On initialise /currentWorld/ en clonant /initialWorld/
+    - On définit un /progLang/ et un /humanLang/ courant
+  - Ajout de la config /Jackson/ pour l'univers des tests unitaires
 *** Planned
 **** TODO Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
 - J'ai commencé à implémenter des méthodes d'import/export au format JSON des différents objets formant les univers à l'aide de /JSON.Simple/
