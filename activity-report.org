@@ -16,7 +16,6 @@
       environnements UNIX et un pour les environnements Windows.
 **** DONE Vérifier que le binaire pour UNIX fonctionne correctement
      SCHEDULED: <2014-12-02 mar.>
-
 **** DONE Vérifier que le script .bat fonctionne correctement
      SCHEDULED: <2014-12-02 mar.>
 **** DONE Mettre en place plusieurs vues côté client
@@ -3679,6 +3678,39 @@ case _ => MergeStrategy.first
 **** DONE Re-implémenter la gestion des indices
 - Auparavant, ils étaient gérés dans *Lecture*
 - Les regénérer depuis *ExerciseFactory* à l'initialisation
+** Semaine du <2016-02-29 lun.> au <2016-03-04 ven.>
+*** Done
+- Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
+  - Je rencontre toujours des difficultés à sérialiser et désérialiser au format JSON *Exercise* avec la libraire /Jackson/
+  - Création d'un projet de test
+    - Recréé l'architecture des composants avec *World*, *Entity* et leurs implémentations respectives *BuggleWorld*, *Buggle*
+  - /@JsonManagedReference/ et /@JsonBackReference/ ont l'air d'aider à la sérialisation en empêchant les boucles infinies
+  - Mais ces annotations n'ont pas l'air d'ajouter d'information pouvant aider à la désérialisation
+  - Remplacer ces annotations par /@JsonIdentityInfo(generator=ObjectIdGenerators.IntSequenceGenerator.class, property="@jsonId")/ sur *World* semble plus efficace
+  - Cette annotation permet d'attribuer un identifiant pour chaque instance de *World*
+  - Lors de la sérialisation des autres objets ayant une référence vers un monde, /Jackson/ se contentera de spécifier l'identifiant de l'instance de *World* concernée
+  - Succès troublant de la sérialisation/désérialisation de *World* du projet de test
+    - Initialisation d'un monde initial
+      - Création d'une instance /world/ de *BuggleWorld*
+      - Création d'instances de *Buggle* ayant une référence vers /world/
+      - Ajout des entités créées à /world/
+    - Sérialisation du monde
+      - /{"type":"model.BuggleWorld","@jsonId":1,"id":"World 1","name":"Essai","entities":[{"type":"model.Buggle","world":1,"id":"Entity 1"},{"type":"model.Buggle","world":1,"id":"Entity 2"}]}/
+    - Désérialisation du JSON pour générer une instance /clone/ du monde
+      - L'instance générée correspond au monde initial
+      - /{"type":"model.BuggleWorld","@jsonId":1,"id":"World 1","name":"Essai","entities":[{"type":"model.Buggle","world":1,"id":"Entity 1"},{"type":"model.Buggle","world":1,"id":"Entity 2"}]}/
+    - Cependant, le constructeur appelé par /Jackson/ n'est pas censé gérer les entités
+      - Il se contente d'extraire l'/id/ et le /name/ du JSON et de les affecter à la nouvelle instance
+    - Les entités sont donc ajoutées automatiquement par un mécanisme de /Jackson/
+    - Je n'arrive cependant pas à comprendre son workflow
+  - Même constat avec les instances de *Cell*
+    - Ajout d'un paramètre /private Cell[][] cells/ à *World*
+    - Génération de cellules par défaut dans le constructeur de *World*
+    - Modification d'une des cellules avant de sérialiser /world/
+    - La cellule de l'objet /clone/, /clone/ ayant été obtenu par désérialisation du JSON, comporte bien la modification effectuée
+    - Alors que le constructeur appelé par /Jackson/ aurait dû généré un tableau de cellules toutes identiques à la cellule par défaut
+    - Il semblerait donc que /Jackson/, après avoir généré l'instance /clone/ à l'aide du constructeur indiqué, génère les objets ayant une reférence vers celui-ci et les bind correctement automatiquement
+*** Planned
 **** TODO Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
 - J'ai commencé à implémenter des méthodes d'import/export au format JSON des différents objets formant les univers à l'aide de /JSON.Simple/
 - Mais on rencontre des difficultés avec certains cas particuliers
