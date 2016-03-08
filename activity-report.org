@@ -3738,11 +3738,19 @@ case _ => MergeStrategy.first
     - Attachement de la méthode de callback à cette variable à l'aide de /$watch/, fournie par /AngularJS/
       - Permet de déclencher la méthode de callback à chaque modification de cette variable
       - Il faut faire attention cependant, la callback est appelée dès la création du listener
+  - Issue #71
+    - Actuellement, on se contente d'envoyer un message au serveur pour lui dire de stopper l'exécution et de ne plus transférer les opérations
+    - Arrêter l'animation serait utile
+    - Ajout de /exercise.executionStopped/ indiquant si l'exécution courante a été interrompue par l'utilisateur
+    - Arrêt des boucles d'animations lors de l'appel à /stopExecution()/
+    - Lors de la réception du résultat, vérifie si l'exécution a été stoppée pour savoir si on délaie l'apparition du message ou pas
+  - Issue #75
+    - Je me suis contenter de retirer la mention au graphe de progression pour le moment
 *** Planned
 **** TODO Corriger les bugs d'interfaces pour la présentation de Martin aux profs d'ISN
-- [ ] https://github.com/BuggleInc/webPLM/issues/75: Progression graphs should be implemented or not mentionned
+- [X] https://github.com/BuggleInc/webPLM/issues/75: Progression graphs should be implemented or not mentionned
 - [ ] https://github.com/BuggleInc/webPLM/issues/79: Demo empty in the last exercise of Tri-color Hanoi Towers
-- [ ] https://github.com/BuggleInc/webPLM/issues/71: An infinite loop loops infinitely (stop button is useless)
+- [X] https://github.com/BuggleInc/webPLM/issues/71: An infinite loop loops infinitely (stop button is useless)
 - [ ] https://github.com/BuggleInc/webPLM/issues/58: Hints do not seem to be implemented
 - [X] https://github.com/BuggleInc/webPLM/issues/24: When you pass an exercise, the congratulation picture comes before the end
 **** TODO Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
