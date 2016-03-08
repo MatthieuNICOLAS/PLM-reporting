@@ -3722,16 +3722,29 @@ case _ => MergeStrategy.first
     - On initialise /currentWorld/ en clonant /initialWorld/
     - On définit un /progLang/ et un /humanLang/ courant
   - Ajout de la config /Jackson/ pour l'univers des tests unitaires
+  - Ajout de *JSONUtils*
+    - Classe mettant à disposition des méthodes /static/ pour générer du JSON à partir d'objet Java
 *** Planned
 ** Semaine du <2016-03-08 mar.> au <2016-03-11 ven.>
 *** Done
+- Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
+  - Modification du code de /webPLM/ pour utiliser les méthodes de *JSONUtils* pour fournir l'exercice et les opérations au client
+  - Adaptation du code client de /webPLM/ au nouveau format du JSON
+- Corriger les bugs d'interfaces pour la présentation de Martin aux profs d'ISN
+  - Issue #24
+    - L'idée serait de générer une méthode de callback affichant le résultat lorsqu'on reçoit ce dernier
+    - Cette méthode ne serait appelée qu'à la fin de l'animation
+    - Ajout d'une variable /exercise.animationOnGoing/ spécifiant si l'animation est en cours ou non
+    - Attachement de la méthode de callback à cette variable à l'aide de /$watch/, fournie par /AngularJS/
+      - Permet de déclencher la méthode de callback à chaque modification de cette variable
+      - Il faut faire attention cependant, la callback est appelée dès la création du listener
 *** Planned
 **** TODO Corriger les bugs d'interfaces pour la présentation de Martin aux profs d'ISN
 - [ ] https://github.com/BuggleInc/webPLM/issues/75: Progression graphs should be implemented or not mentionned
 - [ ] https://github.com/BuggleInc/webPLM/issues/79: Demo empty in the last exercise of Tri-color Hanoi Towers
 - [ ] https://github.com/BuggleInc/webPLM/issues/71: An infinite loop loops infinitely (stop button is useless)
 - [ ] https://github.com/BuggleInc/webPLM/issues/58: Hints do not seem to be implemented
-- [ ] https://github.com/BuggleInc/webPLM/issues/24: When you pass an exercise, the congratulation picture comes before the end
+- [X] https://github.com/BuggleInc/webPLM/issues/24: When you pass an exercise, the congratulation picture comes before the end
 **** TODO Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
 - J'ai commencé à implémenter des méthodes d'import/export au format JSON des différents objets formant les univers à l'aide de /JSON.Simple/
 - Mais on rencontre des difficultés avec certains cas particuliers
