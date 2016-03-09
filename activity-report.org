@@ -3745,13 +3745,21 @@ case _ => MergeStrategy.first
     - Arrêt des boucles d'animations lors de l'appel à /stopExecution()/
     - Lors de la réception du résultat, vérifie si l'exécution a été stoppée pour savoir si on délaie l'apparition du message ou pas
   - Issue #75
-    - Je me suis contenter de retirer la mention au graphe de progression pour le moment
+    - Je me suis contenté de retirer la mention au graphe de progression pour le moment
+  - Issue #79
+    - Les noms des mondes dans le fichier de cache de la démo de *TricolorHanoi3* ne correspond pas aux nom des mondes de l'exercice
+    - Il semblerait que j'ai effectué un mauvais copier/coller lors du refactoring de l'univers de Hanoi (voir ce commit https://github.com/BuggleInc/PLM/commit/a454d2fb609ae97e9e82fc89afc9cf24b30876b3#diff-e6efca3e2b225b61f0357a30a70aa9cd)
+    - Correction des noms des mondes dans /PLM/ et mise à jour de la version de /PLM/ embarquée dans /webPLM/
+  - Issue #58
+    - Ce problème a déjà été résolu dans les branches de refactoring par les commits [[https://github.com/BuggleInc/webPLM/commit/eedc3cdadf6a2908f14b0bad88151ba3dd827a1a][eedc3cdadf6a2908f14b0bad88151ba3dd827a1]]a et [[https://github.com/BuggleInc/PLM/commit/09be922fef2d4fd8d3cadab5b2737f8c09c860ca][09be922fef2d4fd8d3cadab5b2737f8c09c860ca]]
+    - Je serai bien tenté de /cherry-pick/ ces commits mais une partie de leurs modifications ne sont pas compatibles avec la version actuelle de master
+    - En attendant de fusionner les modifications de la branche /refactor-lessons-exercises/, je me suis contenté de copier/coller les éléments de ces commits qui étaient pertinents
 *** Planned
 **** TODO Corriger les bugs d'interfaces pour la présentation de Martin aux profs d'ISN
 - [X] https://github.com/BuggleInc/webPLM/issues/75: Progression graphs should be implemented or not mentionned
-- [ ] https://github.com/BuggleInc/webPLM/issues/79: Demo empty in the last exercise of Tri-color Hanoi Towers
+- [X] https://github.com/BuggleInc/webPLM/issues/79: Demo empty in the last exercise of Tri-color Hanoi Towers
 - [X] https://github.com/BuggleInc/webPLM/issues/71: An infinite loop loops infinitely (stop button is useless)
-- [ ] https://github.com/BuggleInc/webPLM/issues/58: Hints do not seem to be implemented
+- [X] https://github.com/BuggleInc/webPLM/issues/58: Hints do not seem to be implemented
 - [X] https://github.com/BuggleInc/webPLM/issues/24: When you pass an exercise, the congratulation picture comes before the end
 **** TODO Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
 - J'ai commencé à implémenter des méthodes d'import/export au format JSON des différents objets formant les univers à l'aide de /JSON.Simple/
