@@ -3754,6 +3754,9 @@ case _ => MergeStrategy.first
     - Ce problème a déjà été résolu dans les branches de refactoring par les commits [[https://github.com/BuggleInc/webPLM/commit/eedc3cdadf6a2908f14b0bad88151ba3dd827a1a][eedc3cdadf6a2908f14b0bad88151ba3dd827a1]]a et [[https://github.com/BuggleInc/PLM/commit/09be922fef2d4fd8d3cadab5b2737f8c09c860ca][09be922fef2d4fd8d3cadab5b2737f8c09c860ca]]
     - Je serai bien tenté de /cherry-pick/ ces commits mais une partie de leurs modifications ne sont pas compatibles avec la version actuelle de master
     - En attendant de fusionner les modifications de la branche /refactor-lessons-exercises/, je me suis contenté de copier/coller les éléments de ces commits qui étaient pertinents
+  - Issue #2
+    - Même cas que l'issue #58, issue déjà corrigée par des commits pas encore mergés [[https://github.com/BuggleInc/webPLM/commit/a07f2a7d781d59b652a49bebce6360c368c998cf][a07f2a7d781d59b652a49bebce6360c368c998cf]] et [[https://github.com/BuggleInc/webPLM/commit/d1ebbb00b93dabfeab27a293bdfafd3af11c3b2d][d1ebbb00b93dabfeab27a293bdfafd3af11c3b2d]]
+    - Copier/coller des éléments nous intéressant dans ces commits
 *** Planned
 **** TODO Corriger les bugs d'interfaces pour la présentation de Martin aux profs d'ISN
 - [X] https://github.com/BuggleInc/webPLM/issues/75: Progression graphs should be implemented or not mentionned
@@ -3761,6 +3764,9 @@ case _ => MergeStrategy.first
 - [X] https://github.com/BuggleInc/webPLM/issues/71: An infinite loop loops infinitely (stop button is useless)
 - [X] https://github.com/BuggleInc/webPLM/issues/58: Hints do not seem to be implemented
 - [X] https://github.com/BuggleInc/webPLM/issues/24: When you pass an exercise, the congratulation picture comes before the end
+- [X] https://github.com/BuggleInc/webPLM/issues/2: Objectives tab should not show the demo by default 
+- [ ] https://github.com/BuggleInc/webPLM/issues/69: Reporting a bug does not work
+- [ ] https://github.com/BuggleInc/webPLM/issues/65: When switching the exercise, the chooser tab should close automatically
 **** TODO Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
 - J'ai commencé à implémenter des méthodes d'import/export au format JSON des différents objets formant les univers à l'aide de /JSON.Simple/
 - Mais on rencontre des difficultés avec certains cas particuliers
