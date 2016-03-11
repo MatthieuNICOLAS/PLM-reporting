@@ -3757,16 +3757,55 @@ case _ => MergeStrategy.first
   - Issue #2
     - Même cas que l'issue #58, issue déjà corrigée par des commits pas encore mergés [[https://github.com/BuggleInc/webPLM/commit/a07f2a7d781d59b652a49bebce6360c368c998cf][a07f2a7d781d59b652a49bebce6360c368c998cf]] et [[https://github.com/BuggleInc/webPLM/commit/d1ebbb00b93dabfeab27a293bdfafd3af11c3b2d][d1ebbb00b93dabfeab27a293bdfafd3af11c3b2d]]
     - Copier/coller des éléments nous intéressant dans ces commits
+  - Pull Request #80
+    - Ajout de commentaires concernant le code en lui-même
+    - Ajout d'une réponse plus complète sur un problème détecté concernant l'implémentation actuelle : https://github.com/BuggleInc/webPLM/pull/80#issuecomment-194839065
+    - On ne va donc pas intégrer cette PR pour le moment
+  - Issue #65
+    - Ce détail peut facilement être résolu: http://foundation.zurb.com/sites/docs/v/5.5.3/components/offcanvas.html#optional-javascript-configuration
+    - En fait, ce n'est pas si trivial que cela
+    - Cette option permet effectivement de fermer le menu latéral dès qu'on clique sur un de ses items
+    - Mais certains des items du menu sont des menus déroulants
+    - Il ne faudrait pas que le menu se ferme si l'on clique sur un de ces items particuliers
+    - Il est possible de déclencher la fermeture manuellement avec la commande /$('.off-canvas-wrap').foundation('offcanvas', 'toggle', 'move-right');/
+    - Je ne suis toujours pas convaincu du résultat
+    - Ajouter une préférence utilisateur permettant à chacun de définir le comportement à adopter?
+  - Issue #77
+    - Ajout du plugin SBT assembly: https://www.playframework.com/documentation/2.4.x/Production#Using-the-SBT-assembly-plugin
+    - Rencontre de conflits lors de la génération du jar, certains packages sont référencés par 2 dépendances différentes
+      - Généralement, ces packages sont référencés d'une part par /PLM/ et de l'autre par /webPLM/
+    - Ajout d'une nouvelle configuration de build pour générer un jar de /PLM/ sur-mesure pour /webPLM/ pour ne pas avoir de doublons dans les dépendances
+    - Il reste un problème de dépendance généré par /Play/
+      - /commons-logging/ et /jcl-over-slf4j/ rentrent en conflit
+    - Conflit connu, une solution est proposé par /Play/ pour le contourner
+    - Cette solution n'a pas l'air de fonctionner
+    - Ajout d'une /MergeStrategy/ spécifique pour conserver la version la plus récente
+  - Issue #69
+    - La manière pour récupérer le token d'authentification auprès de GitHub n'avait pas été mise à jour depuis la disparition de l'objet *Global*
+    - Utilise maintenant la variable de configuration pour récupérer le token
 *** Planned
-**** TODO Corriger les bugs d'interfaces pour la présentation de Martin aux profs d'ISN
+**** DONE Release l'application sous forme de .jar
+- Voir [[https://www.playframework.com/documentation/2.4.x/Production][cette page]] pour configurer le build pour générer un .jar
+**** DONE Corriger les bugs d'interfaces pour la présentation de Martin aux profs d'ISN
 - [X] https://github.com/BuggleInc/webPLM/issues/75: Progression graphs should be implemented or not mentionned
 - [X] https://github.com/BuggleInc/webPLM/issues/79: Demo empty in the last exercise of Tri-color Hanoi Towers
 - [X] https://github.com/BuggleInc/webPLM/issues/71: An infinite loop loops infinitely (stop button is useless)
 - [X] https://github.com/BuggleInc/webPLM/issues/58: Hints do not seem to be implemented
 - [X] https://github.com/BuggleInc/webPLM/issues/24: When you pass an exercise, the congratulation picture comes before the end
 - [X] https://github.com/BuggleInc/webPLM/issues/2: Objectives tab should not show the demo by default 
-- [ ] https://github.com/BuggleInc/webPLM/issues/69: Reporting a bug does not work
-- [ ] https://github.com/BuggleInc/webPLM/issues/65: When switching the exercise, the chooser tab should close automatically
+- [X] https://github.com/BuggleInc/webPLM/issues/69: Reporting a bug does not work
+- [-] https://github.com/BuggleInc/webPLM/issues/65: When switching the exercise, the chooser tab should close automatically
+- [-] https://github.com/BuggleInc/webPLM/pull/80: Add localStorage
+- [X] https://github.com/BuggleInc/webPLM/issues/77: The local server should be a single jarfile
+**** TODO Corriger les démos des 3 premiers exercices de la leçon des pancakes
+- Les démos ne comportent pas les bonnes opérations
+- Le résultat doit être plutôt déstabilisant pour les élèves
+**** TODO Release la nouvelle version de webPLM
+- [ ] Mettre à jour le numéro de version et tagger le commit correspondant
+- [ ] Re-générer le binaire, le JAR et l'image docker de l'application
+  - Ne pas oublier d'utiliser le bon token d'authentification pour GitHub
+- [ ] Tagger l'image docker avec le bon n° de version de /webPLM/
+- [ ] Redéployer les conteneurs tournant sur la machine de TELECOM Nancy
 **** TODO Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
 - J'ai commencé à implémenter des méthodes d'import/export au format JSON des différents objets formant les univers à l'aide de /JSON.Simple/
 - Mais on rencontre des difficultés avec certains cas particuliers
@@ -3844,8 +3883,6 @@ case _ => MergeStrategy.first
 - cancelCallForHelp
 - readTip
 - commonErrorFeedback
-**** TODO Release l'application sous forme de .jar
-- Voir [[https://www.playframework.com/documentation/2.4.x/Production][cette page]] pour configurer le build pour générer un .jar
 **** TODO Ré-implémenter la gestion erreurs communes
 - Au cours du refactoring du processus d'exécution d'un exercice, la gestion des erreurs communes a été mise de côté pour simplifier le refactoring
 - Maintenant que les fonctionnalités principales sont ré-implémentées, y ajouter la gestion des erreurs communes
