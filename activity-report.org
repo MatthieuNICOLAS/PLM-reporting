@@ -3797,15 +3797,34 @@ case _ => MergeStrategy.first
 - [-] https://github.com/BuggleInc/webPLM/issues/65: When switching the exercise, the chooser tab should close automatically
 - [-] https://github.com/BuggleInc/webPLM/pull/80: Add localStorage
 - [X] https://github.com/BuggleInc/webPLM/issues/77: The local server should be a single jarfile
-**** TODO Corriger les démos des 3 premiers exercices de la leçon des pancakes
+** Semaine du <2016-03-14 lun.> au <2016-03-18 ven.>
+*** Planned
+- Corriger les démos des 3 premiers exercices de la leçon des pancakes
+  - Ce bug est dû au fait que les mondes sont générés aléatoirement
+  - Comme on met en cache les démos au préalable, les démos ne correspondent pas aux mondes affichés
+  - On peut
+    - Rendre fixe les mondes, en supprimant leur composante aléatoire
+    - Supprimer le système de cache des démos (ce qui est déjà fait dans la branche refactoring)
+  - Si on conserve le côté aléatoire de ces mondes, il faut pouvoir
+    - Transmettre l'état initial des mondes aux juges pour qu'ils exécutent le code de l'élève dans le même environnement (ce qui est déjà fait dans la branche refactoring)
+    - Garder une trace dans git de l'état initial des mondes pour pouvoir rejouer les traces de façon cohérente
+  - Suppression de la composante aléatoire des mondes de ces exercices
+  - Mise à jour des démos pour correspondre aux nouvelles instance des mondes
+*** Done
+**** DONE Corriger les démos des 3 premiers exercices de la leçon des pancakes
 - Les démos ne comportent pas les bonnes opérations
 - Le résultat doit être plutôt déstabilisant pour les élèves
-**** TODO Release la nouvelle version de webPLM
-- [ ] Mettre à jour le numéro de version et tagger le commit correspondant
-- [ ] Re-générer le binaire, le JAR et l'image docker de l'application
+**** DONE Release la nouvelle version de webPLM
+- [X] Mettre à jour le numéro de version et tagger le commit correspondant
+- [X] Re-générer le binaire, le JAR et l'image docker de l'application
   - Ne pas oublier d'utiliser le bon token d'authentification pour GitHub
-- [ ] Tagger l'image docker avec le bon n° de version de /webPLM/
-- [ ] Redéployer les conteneurs tournant sur la machine de TELECOM Nancy
+- [X] Tagger l'image docker avec le bon n° de version de /webPLM/
+- [X] Redéployer les conteneurs tournant sur la machine de TELECOM Nancy
+**** TODO Améliorer la configuration de logback
+- Auparavant, la configuration de logback était à la fois effectuée dans /conf/application.conf/ et via un fichier /conf/logback.xml/
+- Depuis *Play 2.4*, la configuration via /conf/application.conf/ est dépréciée
+- Retirer les lignes correspondantes
+- Revoir la stratégie de log
 **** TODO Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
 - J'ai commencé à implémenter des méthodes d'import/export au format JSON des différents objets formant les univers à l'aide de /JSON.Simple/
 - Mais on rencontre des difficultés avec certains cas particuliers
