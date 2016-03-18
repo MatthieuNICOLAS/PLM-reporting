@@ -3821,6 +3821,22 @@ case _ => MergeStrategy.first
     - penny
   - Re-déploiement des juges sur ces machines
   - Le problème semble résolu
+- Fixer les juges
+  - Lors de la mise à jour des juges, j'ai exporté la mauvaise version de PLM
+  - La version utilisée par les juges essayait alors de récupérer et de stocker la progression de l'élève dans git
+  - Le code de l'élève était correctement exécuté, mais trop tardivement pour que /webPLM/ accepte la réponse
+  - Merge des modifications de PLM/master dans PLM/judge
+  - Export de cette version de PLM dans les juges
+  - Re-génération de l'image docker des juges et re-déploiement des conteneurs
+- Trouver un moyen de récupérer la date de la dernière version du code de l'élève que l'on stocke
+  - Avec /JGit/, on peut "facilement" retrouver les commits concernant un fichier avec *LogCommand*
+    - /log().addPath(path)/ permet de filtrer les commits en fonction du fichier qui nous intéresse
+    - /log().setMaxCount(1)/ peremt de filtrer le nombre de commit que l'on souhaite récupérer
+  - A partir du moment que l'on récupère le commit qui nous intéresse, on peut retrouver sa date
+    - /commit.getAuthorIdent().getWhen()/
+  - Reste à voir si
+    - [ ] j'implémente moi-même cette portion de code et je me contente d'expliquer aux élèves comment ils peuvent dorénavant récupérer la date de la version du serveur depuis /webPLM/
+    - [ ] c'est plus intéressant pédagogiquement de les travailler sur le sujet, je me contente de répondre à leurs questions
 *** Done
 **** DONE Corriger les démos des 3 premiers exercices de la leçon des pancakes
 - Les démos ne comportent pas les bonnes opérations
@@ -3836,6 +3852,12 @@ case _ => MergeStrategy.first
 - Il faut donc mettre à jour la version de PLM contenu dans les juges
 - Mettre à jour l'image docker /buggleinc/plm-judge/
 - Re-déployer les conteneurs
+**** DONE Fixer les juges
+- Ceux-ci ne répondent pas plus fréquemment que d'habitude
+- Trouver l'origine de ce dysfonctionnement
+**** TODO Trouver un moyen de récupérer la date de la dernière version du code de l'élève que l'on stocke
+- Si on veut gérer correctement tous les cas avec le localStorage, il faut comparer à la réception du code de serveur les dates de la version du serveur et de la version du localStorage
+- Voir comment fournir la date de la version du serveur au client
 **** TODO Améliorer la configuration de logback
 - Auparavant, la configuration de logback était à la fois effectuée dans /conf/application.conf/ et via un fichier /conf/logback.xml/
 - Depuis *Play 2.4*, la configuration via /conf/application.conf/ est dépréciée
