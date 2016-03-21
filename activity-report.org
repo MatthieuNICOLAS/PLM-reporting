@@ -3831,12 +3831,23 @@ case _ => MergeStrategy.first
 - Trouver un moyen de récupérer la date de la dernière version du code de l'élève que l'on stocke
   - Avec /JGit/, on peut "facilement" retrouver les commits concernant un fichier avec *LogCommand*
     - /log().addPath(path)/ permet de filtrer les commits en fonction du fichier qui nous intéresse
-    - /log().setMaxCount(1)/ peremt de filtrer le nombre de commit que l'on souhaite récupérer
+    - /log().setMaxCount(nbCommits)/ permet de filtrer le nombre de commit que l'on souhaite récupérer
   - A partir du moment que l'on récupère le commit qui nous intéresse, on peut retrouver sa date
     - /commit.getAuthorIdent().getWhen()/
   - Reste à voir si
     - [ ] j'implémente moi-même cette portion de code et je me contente d'expliquer aux élèves comment ils peuvent dorénavant récupérer la date de la version du serveur depuis /webPLM/
-    - [ ] c'est plus intéressant pédagogiquement de les travailler sur le sujet, je me contente de répondre à leurs questions
+    - [ ] c'est plus intéressant pédagogiquement de les laisser travailler sur le sujet, je me contente de répondre à leurs questions
+- Délayer l'affichage du résultat
+  - Ajout d'un /$timeout()/ pour que le résultat ne s'affiche que 500ms après la fin de l'animation
+- Scroller automatiquement sur la vue du monde lors de l'exécution du code de l'élève
+  - /$anchorScroll(elementID)/ permet de faire scroller la vue sur /elementID/ via le code
+  - Ajout de /$anchorScroll(exercise.drawingArea)/ dans /runCode()/
+  - Le scroll se fait de façon plutôt abrupte
+    - Instantanément, la vue se retrouve centrée sur la représentation du monde
+  - J'ai essayé d'utiliser plutôt des librairies pour disposer d'un smooth scroll
+    - https://github.com/d-oliveros/ngSmoothScroll
+    - https://github.com/arnaudbreton/angular-smoothscroll
+  - Mais j'ai pas réussi à faire fonctionner l'ensemble
 *** Done
 **** DONE Corriger les démos des 3 premiers exercices de la leçon des pancakes
 - Les démos ne comportent pas les bonnes opérations
@@ -3855,6 +3866,21 @@ case _ => MergeStrategy.first
 **** DONE Fixer les juges
 - Ceux-ci ne répondent pas plus fréquemment que d'habitude
 - Trouver l'origine de ce dysfonctionnement
+**** DONE Délayer l'affichage du résultat
+- L'affichage du résultat se fait maintenant dès que l'animation de la représentation du monde s'achève
+- Les utilisateurs n'ont pas le temps de constater qu'ils sont parvenus à l'état objectif que le résultat s'affiche
+- Ajouter un léger délai
+**** DONE Scroller automatiquement sur la vue du monde lors de l'exécution du code de l'élève
+- Lorsqu'un utilisateur soumet son code, la représentation du monde s'anime pour lui montrer quelles opérations s'effectuent
+- Cependant, la représentation du monde n'est pas forcément visible à ce moment, en fonction de où l'utilisateur se place dans le panel de gauche
+- Scroller automatiquement vers la représentation du monde peut s'avérer ergonomique
+**** TODO Re-tester les différentes librairies pour un smootScroll
+- On scroll dorénavant correctement jusqu'à la représentation du monde lorsque l'élève soumet son code
+- Le scroll, par défaut, est instantané
+- Ceci pourrait être améliorer en utilisant une librairie de /smoothScroll/
+  - https://github.com/d-oliveros/ngSmoothScroll
+  - https://github.com/arnaudbreton/angular-smoothscroll
+  - https://github.com/oblador/angular-scroll
 **** TODO Trouver un moyen de récupérer la date de la dernière version du code de l'élève que l'on stocke
 - Si on veut gérer correctement tous les cas avec le localStorage, il faut comparer à la réception du code de serveur les dates de la version du serveur et de la version du localStorage
 - Voir comment fournir la date de la version du serveur au client
