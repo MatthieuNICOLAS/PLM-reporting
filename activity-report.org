@@ -3798,7 +3798,7 @@ case _ => MergeStrategy.first
 - [-] https://github.com/BuggleInc/webPLM/pull/80: Add localStorage
 - [X] https://github.com/BuggleInc/webPLM/issues/77: The local server should be a single jarfile
 ** Semaine du <2016-03-14 lun.> au <2016-03-18 ven.>
-*** Planned
+*** Done
 - Corriger les démos des 3 premiers exercices de la leçon des pancakes
   - Ce bug est dû au fait que les mondes sont générés aléatoirement
   - Comme on met en cache les démos au préalable, les démos ne correspondent pas aux mondes affichés
@@ -3848,7 +3848,7 @@ case _ => MergeStrategy.first
     - https://github.com/d-oliveros/ngSmoothScroll
     - https://github.com/arnaudbreton/angular-smoothscroll
   - Mais j'ai pas réussi à faire fonctionner l'ensemble
-*** Done
+*** Planned
 **** DONE Corriger les démos des 3 premiers exercices de la leçon des pancakes
 - Les démos ne comportent pas les bonnes opérations
 - Le résultat doit être plutôt déstabilisant pour les élèves
@@ -3874,6 +3874,9 @@ case _ => MergeStrategy.first
 - Lorsqu'un utilisateur soumet son code, la représentation du monde s'anime pour lui montrer quelles opérations s'effectuent
 - Cependant, la représentation du monde n'est pas forcément visible à ce moment, en fonction de où l'utilisateur se place dans le panel de gauche
 - Scroller automatiquement vers la représentation du monde peut s'avérer ergonomique
+** Semaine du <2016-03-24 jeu.> au <2016-03-25 ven.>
+*** Done
+*** Planned
 **** TODO Re-tester les différentes librairies pour un smootScroll
 - On scroll dorénavant correctement jusqu'à la représentation du monde lorsque l'élève soumet son code
 - Le scroll, par défaut, est instantané
@@ -3902,6 +3905,30 @@ case _ => MergeStrategy.first
 - Vu que nous utilisons les mêmes méthodes pour générer le JSON envoyé au client et aux juges, il faudrait aussi pouvoir modifier facilement le JSON généré pour filtrer des champs
   - On a besoin d'envoyer le *SourceFile* aux juges pour qu'ils puissent correctement générer l'entité de l'élève et l'executé
   - Mais on ne veut pas le transmettre au client puisqu'il contient le code de la correction
+**** TODO Retravailler l'UI de PLM
+- Durant le barcamp avec LINAGORA, j'ai eu l'occasion de rencontrer et de discuter avec Jérémie Kornobis
+- Il s'occupe de prototyper leurs interfaces graphiques
+- Je lui ai demandé son avis concernant l'interface de PLM
+- J'ai ainsi pu avoir plusieurs remarques constructives
+- Notamment, la page d'exercice est trop chargée
+  - L'utilisateur a trop de choses à faire sur cette page
+    - Lire les instructions
+    - Prendre connaissance de l'état initial du monde, de l'état objectif et de la démo
+    - Potentiellement parcourir l'aide pour trouver les méthodes à utiliser
+    - Résoudre l'exercice
+  - La séparer en plusieurs pages permettrait d'alléger la charge pour les utilisateurs
+    - Afficher au démarrage de l'exercice une page présentant uniquement les instructions et les mondes
+    - Avant de passer à la page de résolution de l'exercice
+  - Le bouton *RUN* n'est pas intuitif et gagnerait à être rapproché de l'éditeur de code
+- Jérémie a travaillé sur un mock-up d'interface pour donner une idée de comment la retravailler et disposer les différents éléments
+- J'ai aussi obtenu quelques références à lire/consulter pour retravailler l'UI
+  - Si on s'oriente vers du Material Design
+    - http://www.materialup.com/ : regroupe différents composants à intégrer dans son site web
+    - https://www.google.com/design/spec/material-design/introduction.html : les guidelines d'une interface Material Design
+  - Du côté de la gamification
+    - http://www.serious-game.fr/tag/education/ : pour voir ce qu'il se fait d'autres
+    - http://opengameart.org/ : des ressources à utiliser
+    - http://game-icons.net/ : autre site de ressources
 **** TODO Nettoyer l'univers des tests unitaires
 - Auparavant, l'univers des tests unitaires fonctionnait de la manière suivante:
   - On exécutait le code de la solution sur tous les mondes à l'initialisation pour déterminer la valeur /expected/
