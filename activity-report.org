@@ -3876,8 +3876,15 @@ case _ => MergeStrategy.first
 - Scroller automatiquement vers la représentation du monde peut s'avérer ergonomique
 ** Semaine du <2016-03-24 jeu.> au <2016-03-25 ven.>
 *** Done
+- Retravailler l'UI de PLM
+  - Ajout du mock-up de Jérémie dans le repo de webPLM: https://github.com/BuggleInc/webPLM/blob/master/mockup-UI/PLM.pdf
+- Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
+  - Ajout du support de l'univers des tests unitaires
+    - Modification du nom de certains champs du JSON formé par Jackson pour correspondre au format attendu par le code JS côté client
+    - Suppression des champs /displayedResult/ et /displayedExpected/
+    - Serait-il pas préférable de déplacer le code traitant /parameters/, /result/ et /expected/ pour les afficher correctement en fonction du langage côté client? 
 *** Planned
-**** TODO Re-tester les différentes librairies pour un smootScroll
+**** TODO Re-tester les différentes librairies pour un smoothScroll
 - On scroll dorénavant correctement jusqu'à la représentation du monde lorsque l'élève soumet son code
 - Le scroll, par défaut, est instantané
 - Ceci pourrait être améliorer en utilisant une librairie de /smoothScroll/
@@ -3925,6 +3932,7 @@ case _ => MergeStrategy.first
   - Si on s'oriente vers du Material Design
     - http://www.materialup.com/ : regroupe différents composants à intégrer dans son site web
     - https://www.google.com/design/spec/material-design/introduction.html : les guidelines d'une interface Material Design
+    - https://www.materialpalette.com/ : palette de couleurs
   - Du côté de la gamification
     - http://www.serious-game.fr/tag/education/ : pour voir ce qu'il se fait d'autres
     - http://opengameart.org/ : des ressources à utiliser
