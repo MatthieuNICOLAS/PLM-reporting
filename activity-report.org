@@ -3883,6 +3883,31 @@ case _ => MergeStrategy.first
     - Modification du nom de certains champs du JSON formé par Jackson pour correspondre au format attendu par le code JS côté client
     - Suppression des champs /displayedResult/ et /displayedExpected/
     - Serait-il pas préférable de déplacer le code traitant /parameters/, /result/ et /expected/ pour les afficher correctement en fonction du langage côté client? 
+  - Mise à jour des juges pour utiliser Jackson
+    - Ajout de Jackson
+    - Modification de *RequestMsg* pour parser le JSON et extraire les différentes valeurs des champs
+    - Modification de *BasicListener* pour utiliser les méthodes de *JSONUtils* pour formatter les opérations et les envoyer
+*** Planned
+** Semaine du <2016-03-29 mar.> au <2016-04-01 ven.>
+*** Done
+- Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
+  - *ExecutionProgress*
+    - Ajout de la config Jackson
+    - Attention: ne transmet pas le *ProgrammingLanguage*
+  - *JSONUtils*
+    - Modification de /jsonToExercise/ pour générer un *Exercise* à partir d'un *JsonNode* au lieu d'une *String*
+  - *Judge*
+    - Suppression des classes inutiles *OperationParser*, *StreamMsg*
+  - *TribunalActor*
+    - Récupère le /executionResult/ renvoyé par le juge
+    - Y ajoute le /currentProgLang/
+      - Nécessaire pour ensuite stocker correctement le code de l'élève dans *GitActor*
+    - Correction d'un bug ne stoppant pas la boucle d'écoute du juge lorsqu'on reçoit /executionResult/
+      - Ne modifiait pas /state/
+      - On continuait donc d'écouter la queue de message jusqu'au moment où l'exécution "timeout"
+      - On retournait un *ExecutionProgress* correspondant à un "timeout" à *PLMActor*
+	- Sauf que *PLMActor* n'attendait plus de réponse
+	- Il avait généralement déjà reçu et traité l'/executionResult/ produit par le juge 
 *** Planned
 **** TODO Re-tester les différentes librairies pour un smoothScroll
 - On scroll dorénavant correctement jusqu'à la représentation du monde lorsque l'élève soumet son code
