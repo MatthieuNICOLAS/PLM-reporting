@@ -3934,7 +3934,14 @@ case _ => MergeStrategy.first
   - Envoi d'un mail à Ariel pour vérifier la version du projet qu'il compile et m'assurer qu'il est à jour
 - Ecriture d'alias pour nettoyer Docker
   - Pour supprimer l'ensemble des containers non-lancés: /docker rm $(docker ps -aqf status=exited)/
-  - Pour supprimer l'ensemble des images sans tag: /docker rmi $(docker images | grep '^<none>' | tr -s ' ' | cut -d ' ' -f 3)/ 
+  - Pour supprimer l'ensemble des images sans tag: /docker rmi $(docker images | grep '^<none>' | tr -s ' ' | cut -d ' ' -f 3)/
+- Déplacer les exercices de PLM à webPLM
+  - Portage de *Moria* et des *Traversals*
+  - Rencontre d'un problème lors du portage de *Island*
+    - La désérialisation d'un tableau d'objets simples par Jackson fonctionne correctement
+    - Mais la désérialisation d'un tableau de tableaux d'objets pose problème
+      - On obtient un tableau de listes d'objets
+      - On a besoin de reconvertir les listes en tableaux pour éviter des problèmes de cast lors de l'exécution
 *** Planned
 **** DONE Nettoyer docker
 - Par défaut, docker conserve l'ensemble des containers lancés et des images construites
