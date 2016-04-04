@@ -3896,6 +3896,7 @@ case _ => MergeStrategy.first
     - Attention: ne transmet pas le *ProgrammingLanguage*
   - *JSONUtils*
     - Modification de /jsonToExercise/ pour générer un *Exercise* à partir d'un *JsonNode* au lieu d'une *String*
+    - Modification de /createMessage/ pour placer le champ /cmd/ en tête du JSON généré
   - *Judge*
     - Suppression des classes inutiles *OperationParser*, *StreamMsg*
   - *TribunalActor*
@@ -3907,8 +3908,43 @@ case _ => MergeStrategy.first
       - On continuait donc d'écouter la queue de message jusqu'au moment où l'exécution "timeout"
       - On retournait un *ExecutionProgress* correspondant à un "timeout" à *PLMActor*
 	- Sauf que *PLMActor* n'attendait plus de réponse
-	- Il avait généralement déjà reçu et traité l'/executionResult/ produit par le juge 
+	- Il avait généralement déjà reçu et traité l'/executionResult/ produit par le juge
+  - Merge de la branche /jackson/ dans la branche /refactor-lessons-exercises/
+- Déplacer les exercices de PLM à webPLM
+  - Maintenant que Jackson est implémenté et testé pour l'univers des Buggles et des tests unitaires, on peut adapter les exercices de ces types
+  - Ecriture d'un script permettant de
+    - Parser le JSON d'une leçon pour déterminer les exercices qui n'ont pas encore été déplacé
+    - Pour chaque exo
+      - Copier l'ensemble des fichiers nécessaires de cet exo de PLM à webPLM
+    - Mise à jour du JSON de la leçon
+  - Reste à modifier manuellement les fichiers
+    - package
+    - constructeur de l'exercice
+    - constructeurs des mondes
+  - Problème avec *BatExercise*, dans leur cas, il faut aussi
+    - Recréer correctement les différentes entités à partir des instructions /templatePython/, /templateScala/ et du code java contenu dans l'exercice
+    - /extends ExerciseTemplated/ au lieu de /extends BatExercise/
+  - Portage d'exercices de /welcome.bat.bool1/
 *** Planned
+** Semaine du <2016-04-04 lun.> au <2016-04-07 jeu.>
+*** Done
+- Vérifier le problème rencontré par Ariel
+  - Ce bug semble avoir été résolu y a quelques temps: https://github.com/BuggleInc/PLM/pull/474
+  - Je n'ai pas réussi à rencontrer la même erreur de compilation qu'Ariel, que ça soit sur la branche /master/ ou /javaUI/
+  - Envoi d'un mail à Ariel pour vérifier la version du projet qu'il compile et m'assurer qu'il est à jour
+- Ecriture d'alias pour nettoyer Docker
+  - Pour supprimer l'ensemble des containers non-lancés: /docker rm $(docker ps -aqf status=exited)/
+  - Pour supprimer l'ensemble des images sans tag: /docker rmi $(docker images | grep '^<none>' | tr -s ' ' | cut -d ' ' -f 3)/ 
+*** Planned
+**** DONE Nettoyer docker
+- Par défaut, docker conserve l'ensemble des containers lancés et des images construites
+- Voir pour supprimer les containers et les images plus utilisés
+**** TODO Vérifier le problème rencontré par Ariel
+- Ariel est un contributeur souhaitant traduire PLM en espagnol
+- Cependant il rencontre l'erreur suivante lorsqu'il compile PLM
+  - /home/ariel/PLM-master/src/plm/test/git/GitUtilsTest.java:361: error: local variable progress is accessed from within inner class; needs to be declared final
+  - ~gitUtils.pushChanges(userBranch, progress, null);~
+- Résoudre cette erreur
 **** TODO Re-tester les différentes librairies pour un smoothScroll
 - On scroll dorénavant correctement jusqu'à la représentation du monde lorsque l'élève soumet son code
 - Le scroll, par défaut, est instantané
