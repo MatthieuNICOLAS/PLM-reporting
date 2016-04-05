@@ -3942,10 +3942,43 @@ case _ => MergeStrategy.first
     - Mais la désérialisation d'un tableau de tableaux d'objets pose problème
       - On obtient un tableau de listes d'objets
       - On a besoin de reconvertir les listes en tableaux pour éviter des problèmes de cast lors de l'exécution
+  - Portage de *Island*
+- Débugger la désérialisation des paramètres
+  - Ajout du type des paramètres au JSON
+    - Permet à Jackson de recréer les bonnes structures de données à la désérialisation
+  - Modification du constructeur de *BatTest* côté client
+    - Le JSON reçu pour /parameters/ a été modifié à cause de l'ajout du type
+      - Pour un exemple donné /parameters/, un tableau d'*Object* comportant un *int[]*, une *ArrayList<Integer>* et un *int*
+      - Auparavant, on avait le format suivant:
+        - parameters: [ 
+                        [1, 2, 3], 
+                        [4, 5, 6],
+                        7 
+                      ]
+      - Maintenant, on a:
+        - parameters: [
+                        [ "[I", [1, 2, 3] ],
+                        [ "java.util.ArrayList", [4, 5, 6] ],
+                        7
+                      ]
+    - Pour chaque /parameter/ de /parameters/, si /parameter/ est un tableau alors on sait que
+      - /parameter[0]/ est le type du paramètre
+      - /parameter[1]/ est le paramètre
+    - On se contente donc de régenérer la liste des paramètres, sans leur type, en filtrant de cette manière
 *** Planned
 **** DONE Nettoyer docker
 - Par défaut, docker conserve l'ensemble des containers lancés et des images construites
 - Voir pour supprimer les containers et les images plus utilisés
+**** DONE Débugger la désérialisation des paramètres
+- Lorsqu'on sérialise en utilisant Jackson un *Object[]*, la sérialisation obtenue est ambigüe
+- Par exemple, sérialiser un *int[][]* ou un *ArrayList<Integer>[]* mène au même résultat
+  - parameters: [ 
+                  [1, 2, 3], 
+                  [4, 5, 6]
+                ]
+- Lorsque Jackson désérialise ce JSON, il choisit de générer un *ArrayList<Integer>[]* ce qui ne nous convient pas dans tous les cas
+- Dans *Buggle's Island*, on attend par exemple un *int[][]*
+- Voir comment lever l'ambigüité lors de la sérialisation/désérialisation des paramètres de *BatTest*
 **** TODO Vérifier le problème rencontré par Ariel
 - Ariel est un contributeur souhaitant traduire PLM en espagnol
 - Cependant il rencontre l'erreur suivante lorsqu'il compile PLM
