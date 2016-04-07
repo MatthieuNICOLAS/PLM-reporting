@@ -3943,6 +3943,11 @@ case _ => MergeStrategy.first
       - On obtient un tableau de listes d'objets
       - On a besoin de reconvertir les listes en tableaux pour éviter des problèmes de cast lors de l'exécution
   - Portage de *Island*
+  - Portage de *RandomMouseMaze*
+  - Rencontre d'un problème lors du portage de *WallFollowerMaze*
+    - La consigne de cet exercice comporte un indice
+    - Cet indice explique par le biais d'images à l'apprenant la méthode qu'il doit implémenter
+    - Il faut donc rendre accessible ces images
 - Débugger la désérialisation des paramètres
   - Ajout du type des paramètres au JSON
     - Permet à Jackson de recréer les bonnes structures de données à la désérialisation
@@ -3965,6 +3970,24 @@ case _ => MergeStrategy.first
       - /parameter[0]/ est le type du paramètre
       - /parameter[1]/ est le paramètre
     - On se contente donc de régenérer la liste des paramètres, sans leur type, en filtrant de cette manière
+- Gérer les images présentes dans les consignes d'exercices
+  - Pour rendre accessible les fichiers d'un répertoire via URL dans Playframework, il faut ajouter une commande dans le fichier de build
+    - unmanagedResourceDirectories in Assets += baseDirectory.value / "exercises"
+  - En modifiant les règles de routing utilisées, on peut dorénavant exposer ces fichiers
+    - Ajout de: GET     /exercises/*file                     controllers.Assets.at(path="/public", file)
+  - Cette solution présente quelques défauts
+    - L'ensemble des fichiers présents dans /exercises/ sont copiés dans /public/ lors du build
+      - Les images
+      - Mais aussi les entités
+    - Les solutions sont donc aussi rendues accessibles de cette manière
+    - De plus, les entités sont déjà présentes dans /unmanagedSources/, elles sont donc dupliquées inutilement
+  - On peut modifier la règle de routing pour n'exposer que les images pour empêcher d'accéder aux entités
+    - Exemple: GET     /exercises/$file<.+\.png$>          controllers.Assets.at(path="/public", file)
+  - En cherchant un moyen d'éviter de dupliquer les entités, je me suis aperçu que certains répertoires sont manquants de l'archive générée
+    - /exercises/
+      - C'est en parcourant ce répertoire qu'on génère dynamiquement la liste des exercices globale en fonction des classes présentes
+    - /lessons/
+      - C'est à partir des fichiers /main.json/ contenu dans ce repertoire qu'on génère les objets *Lesson* qui répertorie la liste des exercices composant chaque leçon
 *** Planned
 **** DONE Nettoyer docker
 - Par défaut, docker conserve l'ensemble des containers lancés et des images construites
@@ -3979,6 +4002,17 @@ case _ => MergeStrategy.first
 - Lorsque Jackson désérialise ce JSON, il choisit de générer un *ArrayList<Integer>[]* ce qui ne nous convient pas dans tous les cas
 - Dans *Buggle's Island*, on attend par exemple un *int[][]*
 - Voir comment lever l'ambigüité lors de la sérialisation/désérialisation des paramètres de *BatTest*
+**** TODO Gérer les images présentes dans les consignes d'exercices
+- Jusqu'à maintenant, on pouvait accéder à ces images via leur path dans le JAR de PLM
+- Dorénavant, ces images se trouvent dans le répertoire source /exercises/
+- Rendre accessible ces images via une URL
+- Modifier les leçons pour mettre à jour l'URL des images
+**** TODO Ajouter le répertoire /lessons/ à l'archive générée
+- Il s'avère que ce répertoire n'est pas inclus lors du build
+- Il est nécessaire pour générer les objets *Lesson*
+- L'archive (de la branche /refactor-exercises/) actuellement générée crash donc au lancement car incapable d'instancier les leçons
+- Modifier la configuration du build pour inclure ce répertoire
+- Réfléchir à une alternative pour gérer les leçons (modules?)
 **** TODO Vérifier le problème rencontré par Ariel
 - Ariel est un contributeur souhaitant traduire PLM en espagnol
 - Cependant il rencontre l'erreur suivante lorsqu'il compile PLM
