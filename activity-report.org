@@ -4002,17 +4002,64 @@ case _ => MergeStrategy.first
 - Lorsque Jackson désérialise ce JSON, il choisit de générer un *ArrayList<Integer>[]* ce qui ne nous convient pas dans tous les cas
 - Dans *Buggle's Island*, on attend par exemple un *int[][]*
 - Voir comment lever l'ambigüité lors de la sérialisation/désérialisation des paramètres de *BatTest*
-**** TODO Gérer les images présentes dans les consignes d'exercices
-- Jusqu'à maintenant, on pouvait accéder à ces images via leur path dans le JAR de PLM
-- Dorénavant, ces images se trouvent dans le répertoire source /exercises/
-- Rendre accessible ces images via une URL
-- Modifier les leçons pour mettre à jour l'URL des images
-**** TODO Ajouter le répertoire /lessons/ à l'archive générée
+** Semaine du <2016-04-19 mar.> au <2016-04-22 ven.>
+*** Done
+- Ajouter le répertoire /lessons/ à l'archive générée
+  - [ ] Ajouter /lessons/ au /unmanagedResourceDirectories/
+    - Ajout de unmanagedResourceDirectories in Compile += baseDirectory.value / "lessons" dans /build.sbt/
+    - Cela se traduit par l'ajout du contenu de /lessons/ dans le répertoire /conf/
+    - Ce résultat me convient moyennement
+      - Je ne considère pas les leçons comme des fichiers de config
+  - [ ] Ajouter /lessons/ au /assets/
+    - Ajout de unmanagedResourceDirectories in Assets += baseDirectory.value / "lessons" dans /build.sbt/
+    - Cela se traduit par l'ajout du contenu de /lessons/ dans le répertoire /public/
+    - Ce résultat me convient moyennement aussi
+      - Je ne considère pas que les fichiers correspondant aux leçons doivent être public
+      - Ils sont uniquement à utiliser côté serveur
+  - [X] Placer le répertoire /lessons/ dans le répertoire /dist/
+    - Les fichiers et dossiers présents sont automatiquement à l'archive
+    - Cela se traduit par l'ajout du répertoire /lessons/ à la racine de l'archive
+    - C'est la solution qui me paraît la moins pire
+    - Besoin d'ajuster le chemin vers les fichiers des leçons en fonction qu'on soit en mode production ou dev
+      - ~play.Play.isProd~ permet de récupérer cette information
+    - Mise à jour de *LessonsActor* pour gérer les chemins différents des fichiers en mode production ou dev
+- Ajouter le répertoire /exercises/ à l'archive générée
+  - Comme pour les leçons, j'ai ajouté le répertoire /exercises/ dans le répertoire /dist/
+  - Le répertoire est cependant toujours ajouté aux sources pour pouvoir avoir accès aux classes des exercices
+    - unmanagedSourceDirectories in Compile += baseDirectory.value / "dist" / "exercises"
+  - Mise à jour de *ExercisesActor* pour gérer les chemins différents des fichiers en mode production ou dev
+- Remplacer les classes des exercices par leur équivalent JSON
+  - Implémentation d'une moulinette pour générer le JSON
+    - Instancie chaque exercice via leur constructeur et *ExerciseFactory*
+    - Ecrit dans des fichiers leur représentation JSON
+      - ~JSONUtils.mapper.writeValue(new File(path + ".json"), JSONUtils.exerciseToJudgeJSON(exercise))~
+  - Ajout de la méthode /fileToExercise()/ à *JSONUtils*
+    - Génère une instance *BlankExercise* à partir du JSON d'un exercice
+  - Modification de *ExercisesActor* pour utiliser /fileToExercise/ pour instancier les exercices
+*** Planned
+**** DONE Ajouter le répertoire /lessons/ à l'archive générée
 - Il s'avère que ce répertoire n'est pas inclus lors du build
 - Il est nécessaire pour générer les objets *Lesson*
 - L'archive (de la branche /refactor-exercises/) actuellement générée crash donc au lancement car incapable d'instancier les leçons
 - Modifier la configuration du build pour inclure ce répertoire
 - Réfléchir à une alternative pour gérer les leçons (modules?)
+**** DONE Ajouter le répertoire /exercises/ à l'archive générée
+- De la même façon, /exercises/ n'est pas inclus dans le build
+- Les exercices ne sont donc pas présent dans l'archive finale
+**** DONE Remplacer les classes des exercices par leur équivalent JSON
+- Corriger le problème des exercices manquants dans l'archive a permis de se rendre compte d'un autre problème
+- Certains exercices génèrent leurs monde à partir de représentations contenus dans des fichiers .map
+- Les chemins vers ces fichiers sont donc incorrects selon qu'on soit en mode prod ou mode dev
+- Les exercices doivent à mon sens être découplés de l'architecture de webPLM, ils ne devraient pas la connaître et résoudre eux-même ce problème de chemin
+- Stocker au format JSON les exercices pour les instancier à partir de leur représentation JSON en utilisant Jackson permettrait de résoudre ce problème
+** Semaine du <2016-04-25 lun.> au <2016-04-29 ven.>
+*** Done
+*** Planned
+**** TODO Gérer les images présentes dans les consignes d'exercices
+- Jusqu'à maintenant, on pouvait accéder à ces images via leur path dans le JAR de PLM
+- Dorénavant, ces images se trouvent dans le répertoire source /exercises/
+- Rendre accessible ces images via une URL
+- Modifier les leçons pour mettre à jour l'URL des images
 **** TODO Vérifier le problème rencontré par Ariel
 - Ariel est un contributeur souhaitant traduire PLM en espagnol
 - Cependant il rencontre l'erreur suivante lorsqu'il compile PLM
