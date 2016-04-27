@@ -4054,7 +4054,86 @@ case _ => MergeStrategy.first
 - Stocker au format JSON les exercices pour les instancier à partir de leur représentation JSON en utilisant Jackson permettrait de résoudre ce problème
 ** Semaine du <2016-04-25 lun.> au <2016-04-29 ven.>
 *** Done
+- Implémenter *ToJSON*
+  - On est passé à Jackson depuis pour sérialiser/désérialiser les exercices
+  - L'interface *ToJSON* a été supprimée car devenu inutile et redondante
+- Implémenter un constructeur à partir d'un *JSONObject*
+  - De la même façon, nous utilisons Jackson pour instancier un objet à partir de son JSON dorénavant
+  - Nous ne manipulons donc plus de *JSONObject* et n'avons plus besoin d'ajouter un constructeur correspondant
+- Configurer Jackson pour générer différents JSON en fonction de l'utilisation et du destinataire
+  - [ ] Utiliser les /@JsonView/
+    - Permet de spécifier différents niveaux de visibilités des champs par le biais d'annotations
+    - En fonction du niveau de visibilité attaché à l'*ObjectMapper* lors de la sérialisation/désérialisation de l'objet, les champs sont pris en compte ou non
+    - Permet pas de spécifier des getters différents en fonction du niveau de visibilité
+  - [ ] Utiliser les /@JsonFilter/
+    - Permet de spécifier les champs à conserver/retirer directement en attachant des filtres à l'*ObjectMapper*
+  - [ ] Utiliser les *MixIn*
+    - Permet de définir des classes abstraites mappant les différents champs d'un objet que l'on souhaite sérialiser
+    - On peut alors ajouter ou surcharger les annotations de la classe cible
+    - Permet d'ajouter ou de retirer des champs
+  - [ ] Cloner l'exercice et modifier son contenu avant de le sérialiser
+    - Me paraît un peu lourd comme solution
+  - [X] Modifier directement le JSON généré
+    - On le fait déjà pour corriger le type des entités
+    - On peut se contenter d'ajouter des méthodes supplémentaires pour filtrer les autres champs
+- Corriger les tests unitaires
+  - Tests unitaires de PLM
+    - Le chemin vers les fichiers des missions était incorrect
+    - Correction de la construction du chemin
+  - Tests unitaires de webPLM
+    - Pendant un moment, le champ /cells/ du JSON d'un *BuggleWorld* correspondait à une liste des cellules
+      - Ceci permettait de réduire la taille du JSON
+      - Plutôt que d'envoyer un tableau à 2 dimensions de *BuggleWorldCell* au format JSON, dont certaines étaient équivalentes à la cellule par défaut
+      - On se contentait d'envoyer un tableau 1D contenant seulement les cellules étant différentes de la cellule par défaut
+    - Depuis le passage à Jackson, on envoie de nouveau un tableau 2D comportant l'ensemble des cellules
+    - Modification des tests pour correspondre à ce changement
 *** Planned
+**** CANCELLED Implémenter *ToJSON*
+- [ ] Univers des tests unitaires
+- [ ] Univers des tortues
+- [ ] Univers du drapeau hollandais
+- [ ] Univers des pancakes
+- [ ] Univers des tris
+- [ ] Univers du baseball
+- [ ] Univers des listes récursives
+- [ ] Univers de light bot
+- [ ] Univers du lander
+**** CANCELLED Implémenter un constructeur à partir d'un *JSONObject*
+- [ ] Univers des tests unitaires
+- [ ] Univers des tortues
+- [ ] Univers du drapeau hollandais
+- [ ] Univers des pancakes
+- [ ] Univers des tris
+- [ ] Univers du baseball
+- [ ] Univers des listes récursives
+- [ ] Univers de light bot
+- [ ] Univers du lander
+**** DONE Ajouter la configuration Jackson pour les différents univers
+- [X] Univers des tests unitaires
+**** DONE Corriger les tests unitaires
+- [X] Tests unitaires de PLM
+  - /ExerciseFactory.computeMissions()/ semble poser problème
+- [X] Tests unitaires de webPLM
+  - L'erreur semble venir de la gestion des /cells/ dans /buggleworld.factory.spec.js/
+**** DONE Configurer Jackson pour générer différents JSON en fonction de l'utilisation et du destinataire
+- On souhaite envoyer le JSON d'un exercice à l'utilisateur
+  - /defaultSourceFiles/ devrait être retiré
+  - On a juste besoin de l'instruction dans la langue courante
+- On souhaite envoyer le JSON d'un exercice au juge
+  - On a juste besoin du /defaultSourceFile/ du langage courant
+  - On a pas besoin des instructions
+  - On a pas besoin des /steps/ des mondes solutions
+- On souhaite stocker le JSON d'un exercice dans un fichier
+  - On souhaite tout conserver
+**** TODO Ajouter la configuration Jackson pour les différents univers
+- [ ] Univers des tortues
+- [ ] Univers du drapeau hollandais
+- [ ] Univers des pancakes
+- [ ] Univers des tris
+- [ ] Univers du baseball
+- [ ] Univers des listes récursives
+- [ ] Univers de light bot
+- [ ] Univers du lander
 **** TODO Gérer les images présentes dans les consignes d'exercices
 - Jusqu'à maintenant, on pouvait accéder à ces images via leur path dans le JAR de PLM
 - Dorénavant, ces images se trouvent dans le répertoire source /exercises/
@@ -4141,26 +4220,6 @@ case _ => MergeStrategy.first
 **** TODO Cloner les mondes, entités et opérations lors d'un clonage d'un exercice
 - Actuellement, on se contente de fournir au clone les mêmes références pour les mondes
 - Lorsque plusieurs utilisateurs exécutent en concurrence un programme sur un même exercice en mode local, leur programmes modifient le monde simultanément
-**** TODO Implémenter *ToJSON*
-- [ ] Univers des tests unitaires
-- [ ] Univers des tortues
-- [ ] Univers du drapeau hollandais
-- [ ] Univers des pancakes
-- [ ] Univers des tris
-- [ ] Univers du baseball
-- [ ] Univers des listes récursives
-- [ ] Univers de light bot
-- [ ] Univers du lander
-**** TODO Implémenter un constructeur à partir d'un *JSONObject*
-- [ ] Univers des tests unitaires
-- [ ] Univers des tortues
-- [ ] Univers du drapeau hollandais
-- [ ] Univers des pancakes
-- [ ] Univers des tris
-- [ ] Univers du baseball
-- [ ] Univers des listes récursives
-- [ ] Univers de light bot
-- [ ] Univers du lander
 **** TODO Re-implémenter les exercices manquants
 - Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
 - Tous les exos n'ont pas encore été extraits
