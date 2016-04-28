@@ -4087,6 +4087,8 @@ case _ => MergeStrategy.first
       - On se contentait d'envoyer un tableau 1D contenant seulement les cellules étant différentes de la cellule par défaut
     - Depuis le passage à Jackson, on envoie de nouveau un tableau 2D comportant l'ensemble des cellules
     - Modification des tests pour correspondre à ce changement
+- Trouver un moyen de récupérer la date de la dernière version du code de l'élève que l'on stocke
+  - Les élèves semblent avoir trouvé par eux-mêmes la solution
 *** Planned
 **** CANCELLED Implémenter *ToJSON*
 - [ ] Univers des tests unitaires
@@ -4125,6 +4127,9 @@ case _ => MergeStrategy.first
   - On a pas besoin des /steps/ des mondes solutions
 - On souhaite stocker le JSON d'un exercice dans un fichier
   - On souhaite tout conserver
+**** DONE Trouver un moyen de récupérer la date de la dernière version du code de l'élève que l'on stocke
+- Si on veut gérer correctement tous les cas avec le localStorage, il faut comparer à la réception du code de serveur les dates de la version du serveur et de la version du localStorage
+- Voir comment fournir la date de la version du serveur au client
 **** TODO Ajouter la configuration Jackson pour les différents univers
 - [ ] Univers des tortues
 - [ ] Univers du drapeau hollandais
@@ -4152,9 +4157,6 @@ case _ => MergeStrategy.first
   - https://github.com/d-oliveros/ngSmoothScroll
   - https://github.com/arnaudbreton/angular-smoothscroll
   - https://github.com/oblador/angular-scroll
-**** TODO Trouver un moyen de récupérer la date de la dernière version du code de l'élève que l'on stocke
-- Si on veut gérer correctement tous les cas avec le localStorage, il faut comparer à la réception du code de serveur les dates de la version du serveur et de la version du localStorage
-- Voir comment fournir la date de la version du serveur au client
 **** TODO Améliorer la configuration de logback
 - Auparavant, la configuration de logback était à la fois effectuée dans /conf/application.conf/ et via un fichier /conf/logback.xml/
 - Depuis *Play 2.4*, la configuration via /conf/application.conf/ est dépréciée
