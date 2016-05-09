@@ -4130,15 +4130,46 @@ case _ => MergeStrategy.first
 **** DONE Trouver un moyen de récupérer la date de la dernière version du code de l'élève que l'on stocke
 - Si on veut gérer correctement tous les cas avec le localStorage, il faut comparer à la réception du code de serveur les dates de la version du serveur et de la version du localStorage
 - Voir comment fournir la date de la version du serveur au client
+** Semaine du <2016-05-02 lun.> au <2016-05-04 mer.>
+*** Done
+- Ajout d'une variable /Exercise.directory/
+  - Permet de spécifier le répertoire contenant les exercices
+  - Utiliser par les exercices lorsqu'ils souhaitent accéder à un fichier (.map notamment)
+  - Initialiser à /exercises/ par défaut
+- Ajouter la configuration Jackson pour les différents univers
+  - Univers des tris
+    - Suppression au passage des *Actions*, objets auparavant utilisés pour la vue du client lourd Java
+*** Planned
+**** DONE Ajouter la configuration Jackson pour les différents univers
+- [X] Univers des tris
+**** DONE Re-implémenter les exercices manquants
+- [X] Maze
+- [X] Sort.basic
+** Semaine du <2016-05-09 lun.> au <2016-05-13 ven.>
+*** Done
+*** Planned
 **** TODO Ajouter la configuration Jackson pour les différents univers
 - [ ] Univers des tortues
 - [ ] Univers du drapeau hollandais
 - [ ] Univers des pancakes
-- [ ] Univers des tris
 - [ ] Univers du baseball
 - [ ] Univers des listes récursives
 - [ ] Univers de light bot
 - [ ] Univers du lander
+**** TODO Re-implémenter les exercices manquants
+- Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
+- Tous les exos n'ont pas encore été extraits
+- Il faut aussi modifier le constructeur appelé
+- [ ] Welcome
+- [ ] Turmites
+- [ ] TurtleArt
+- [ ] Sort.dutchflag
+- [ ] Sort.baseball
+- [ ] Sort.pancake
+- [ ] Recursion.cons
+- [ ] Recursion.logo
+- [ ] Recursion.hanoi
+- [ ] Bat.string1
 **** TODO Gérer les images présentes dans les consignes d'exercices
 - Jusqu'à maintenant, on pouvait accéder à ces images via leur path dans le JAR de PLM
 - Dorénavant, ces images se trouvent dans le répertoire source /exercises/
@@ -4222,22 +4253,6 @@ case _ => MergeStrategy.first
 **** TODO Cloner les mondes, entités et opérations lors d'un clonage d'un exercice
 - Actuellement, on se contente de fournir au clone les mêmes références pour les mondes
 - Lorsque plusieurs utilisateurs exécutent en concurrence un programme sur un même exercice en mode local, leur programmes modifient le monde simultanément
-**** TODO Re-implémenter les exercices manquants
-- Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
-- Tous les exos n'ont pas encore été extraits
-- Il faut aussi modifier le constructeur appelé
-- [ ] Welcome
-- [ ] Maze
-- [ ] Turmites
-- [ ] TurtleArt
-- [ ] Sort.basic
-- [ ] Sort.dutchflag
-- [ ] Sort.baseball
-- [ ] Sort.pancake
-- [ ] Recursion.cons
-- [ ] Recursion.logo
-- [ ] Recursion.hanoi
-- [ ] Bat.string1
 **** TODO Re-implémenter les évènements Git manquants
 - reverted
 - callForHelp
