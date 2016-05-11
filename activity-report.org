@@ -4147,12 +4147,34 @@ case _ => MergeStrategy.first
 - [X] Sort.basic
 ** Semaine du <2016-05-09 lun.> au <2016-05-13 ven.>
 *** Done
+- Re-implémenter les exercices manquants
+  - Sort.dutchflag
+    - Suppression du champ /entity/ dans *DutchFlagOperation*
+  - Sort.baseball
+    - Suppression du champ /entity/ dans *BaseballOperation*
+    - Suppression de *BaseballMove*, on a juste besoin d'un compteur /moveCount/ dans *BaseballWorld*
+  - Sort.pancakes
+    - Suppression du champ /entity/ dans *PancakeOperation*
+-Ajouter la configuration Jackson pour les différents univers
+ - Univers des pancakes
+   - Le JSON généré par Jackson permet bien de générer le modèle client
+   - Par contre, la représentation du monde ne correspond pas au résultat attendu
+     - Le monde solution est par exemple à l'envers
+     - Appliquer les opérations solutions au monde initiale ne permet pas d'obtenir la réprésentation du monde solution
+   - La liste des pancakes envoyée par le serveur est dans l'ordre inverse de l'ordre attendu par le côté client
+     - Ceci est dû à cette ligne: https://github.com/BuggleInc/webPLM/blob/master/app/json/world/pancake/PancakeToJson.scala#L12
+     - L'opération /+:/ ajoute en tête de liste le nouvel élément
+   - Le modèle client pour l'univers des pancakes est donc implémenter façon à fonctionner avec une liste inversée par rapport au modèle Java
 *** Planned
+**** DONE Ajouter la configuration Jackson pour les différents univers
+- [X] Univers du drapeau hollandais
+- [X] Univers du baseball
+**** DONE Re-implémenter les exercices manquants
+- [X] Sort.dutchflag
+- [X] Sort.baseball
 **** TODO Ajouter la configuration Jackson pour les différents univers
 - [ ] Univers des tortues
-- [ ] Univers du drapeau hollandais
 - [ ] Univers des pancakes
-- [ ] Univers du baseball
 - [ ] Univers des listes récursives
 - [ ] Univers de light bot
 - [ ] Univers du lander
@@ -4163,8 +4185,6 @@ case _ => MergeStrategy.first
 - [ ] Welcome
 - [ ] Turmites
 - [ ] TurtleArt
-- [ ] Sort.dutchflag
-- [ ] Sort.baseball
 - [ ] Sort.pancake
 - [ ] Recursion.cons
 - [ ] Recursion.logo
