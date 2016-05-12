@@ -4164,18 +4164,21 @@ case _ => MergeStrategy.first
    - La liste des pancakes envoyée par le serveur est dans l'ordre inverse de l'ordre attendu par le côté client
      - Ceci est dû à cette ligne: https://github.com/BuggleInc/webPLM/blob/master/app/json/world/pancake/PancakeToJson.scala#L12
      - L'opération /+:/ ajoute en tête de liste le nouvel élément
-   - Le modèle client pour l'univers des pancakes est donc implémenter façon à fonctionner avec une liste inversée par rapport au modèle Java
+   - Le modèle client pour l'univers des pancakes est donc implémenté de façon à fonctionner avec une liste inversée par rapport au modèle Java
+   - Inversion de la liste des pancakes lorsqu'on la reçoit côté client pour pallier à ce problème
 *** Planned
 **** DONE Ajouter la configuration Jackson pour les différents univers
 - [X] Univers du drapeau hollandais
 - [X] Univers du baseball
+- [X] Univers des pancakes
 **** DONE Re-implémenter les exercices manquants
 - [X] Sort.dutchflag
 - [X] Sort.baseball
+- [X] Sort.pancake
 **** TODO Ajouter la configuration Jackson pour les différents univers
 - [ ] Univers des tortues
-- [ ] Univers des pancakes
 - [ ] Univers des listes récursives
+- [ ] Univers des tours de hanoï
 - [ ] Univers de light bot
 - [ ] Univers du lander
 **** TODO Re-implémenter les exercices manquants
@@ -4185,7 +4188,6 @@ case _ => MergeStrategy.first
 - [ ] Welcome
 - [ ] Turmites
 - [ ] TurtleArt
-- [ ] Sort.pancake
 - [ ] Recursion.cons
 - [ ] Recursion.logo
 - [ ] Recursion.hanoi
