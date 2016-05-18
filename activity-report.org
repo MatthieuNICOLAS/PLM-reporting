@@ -4146,7 +4146,7 @@ case _ => MergeStrategy.first
 - [X] Maze
 - [X] Sort.basic
 ** Semaine du <2016-05-09 lun.> au <2016-05-13 ven.>
-*** Done
+** Done 
 - Re-implémenter les exercices manquants
   - Sort.dutchflag
     - Suppression du champ /entity/ dans *DutchFlagOperation*
@@ -4155,30 +4155,45 @@ case _ => MergeStrategy.first
     - Suppression de *BaseballMove*, on a juste besoin d'un compteur /moveCount/ dans *BaseballWorld*
   - Sort.pancakes
     - Suppression du champ /entity/ dans *PancakeOperation*
--Ajouter la configuration Jackson pour les différents univers
- - Univers des pancakes
-   - Le JSON généré par Jackson permet bien de générer le modèle client
-   - Par contre, la représentation du monde ne correspond pas au résultat attendu
-     - Le monde solution est par exemple à l'envers
-     - Appliquer les opérations solutions au monde initiale ne permet pas d'obtenir la réprésentation du monde solution
-   - La liste des pancakes envoyée par le serveur est dans l'ordre inverse de l'ordre attendu par le côté client
-     - Ceci est dû à cette ligne: https://github.com/BuggleInc/webPLM/blob/master/app/json/world/pancake/PancakeToJson.scala#L12
-     - L'opération /+:/ ajoute en tête de liste le nouvel élément
-   - Le modèle client pour l'univers des pancakes est donc implémenté de façon à fonctionner avec une liste inversée par rapport au modèle Java
-   - Inversion de la liste des pancakes lorsqu'on la reçoit côté client pour pallier à ce problème
+- Ajouter la configuration Jackson pour les différents univers
+  - Univers des pancakes
+    - Le JSON généré par Jackson permet bien de générer le modèle client
+    - Par contre, la représentation du monde ne correspond pas au résultat attendu
+      - Le monde solution est par exemple à l'envers
+      - Appliquer les opérations solutions au monde initiale ne permet pas d'obtenir la réprésentation du monde solution
+    - La liste des pancakes envoyée par le serveur est dans l'ordre inverse de l'ordre attendu par le côté client
+      - Ceci est dû à cette ligne: https://github.com/BuggleInc/webPLM/blob/master/app/json/world/pancake/PancakeToJson.scala#L12
+      - L'opération /+:/ ajoute en tête de liste le nouvel élément
+    - Le modèle client pour l'univers des pancakes est donc implémenté de façon à fonctionner avec une liste inversée par rapport au modèle Java
+    - Inversion de la liste des pancakes lorsqu'on la reçoit côté client pour pallier à ce problème
+  - Univers des turmites
+    - Le JSON généré est trop lourd (140Mo pour l'exercice *LangtonColors*, 100Mo si on désactive le /pretty print/)
+      - On ne peut pas pusher les fichiers de plus de 100Mo sur GitHub
+    - Modification de la config Jackson de *BuggleWorldCell*
+      - Certains champs, tels que /color/, /hasBaggle/, /leftWall/..., conservent souvent leur valeur par défaut
+      - On peut améliorer la sérialisation des *BuggleWorldCell* en ajoutant ces champs que si nécessaire (valeur modifiée)
+      - Ajout de *BuggleWorldCellFilter*
+    - A permis de réduire la taille du JSON (136Mo, 96Mo sans /pretty print/)
+    - J'ai préféré désactiver des mondes dans cet exercice pour atteindre une taille plus raisonnable (65Mo avec /pretty print/)
 *** Planned
 **** DONE Ajouter la configuration Jackson pour les différents univers
 - [X] Univers du drapeau hollandais
 - [X] Univers du baseball
 - [X] Univers des pancakes
+- [X] Univers des tours de hanoï
+- [X] Univers des turmites
 **** DONE Re-implémenter les exercices manquants
 - [X] Sort.dutchflag
 - [X] Sort.baseball
 - [X] Sort.pancake
+- [X] Recursion.hanoi
+- [X] Turmites
+** Semaine du <2016-05-17 mar.> au <2016-05-20 ven.>
+*** Done
+*** Planned
 **** TODO Ajouter la configuration Jackson pour les différents univers
 - [ ] Univers des tortues
 - [ ] Univers des listes récursives
-- [ ] Univers des tours de hanoï
 - [ ] Univers de light bot
 - [ ] Univers du lander
 **** TODO Re-implémenter les exercices manquants
@@ -4186,11 +4201,9 @@ case _ => MergeStrategy.first
 - Tous les exos n'ont pas encore été extraits
 - Il faut aussi modifier le constructeur appelé
 - [ ] Welcome
-- [ ] Turmites
 - [ ] TurtleArt
 - [ ] Recursion.cons
 - [ ] Recursion.logo
-- [ ] Recursion.hanoi
 - [ ] Bat.string1
 **** TODO Gérer les images présentes dans les consignes d'exercices
 - Jusqu'à maintenant, on pouvait accéder à ces images via leur path dans le JAR de PLM
