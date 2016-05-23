@@ -4146,7 +4146,7 @@ case _ => MergeStrategy.first
 - [X] Maze
 - [X] Sort.basic
 ** Semaine du <2016-05-09 lun.> au <2016-05-13 ven.>
-** Done 
+*** Done 
 - Re-implémenter les exercices manquants
   - Sort.dutchflag
     - Suppression du champ /entity/ dans *DutchFlagOperation*
@@ -4190,9 +4190,39 @@ case _ => MergeStrategy.first
 - [X] Turmites
 ** Semaine du <2016-05-17 mar.> au <2016-05-20 ven.>
 *** Done
+- Ajout de la configuration Jackson pour les différents univers
+  - Univers des listes récursives
+    - Cet univers hérite de l'univers des tests unitaires
+    - Sa configuration est donc déja en partie écrite
+    - Seul l'affichage de la liste côté client rencontre un problème
+      - Le JSON reçu présente la liste sous la forme suivante
+        - { head : 1, tail : { ... } }
+    - Il faut convertir ce JSON en liste d'entiers
+    - La conversion peut s'effectuer
+      - [X] Lors de la sérialisation, côté serveur, en utilisant un *CustomSerializer*
+      - [ ] Lors de la désérialisation, côté client
+    - Effectuer la conversion lors de la sérialisation me paraît une solution plus adaptée
+      - Permet d'obtenir un JSON plus concis
+      - Permet de ne pas avoir à faire de distinction entre *BatWorld* et *ConsWorld* côté client
+    - Problème avec *CustomRecListSerializer*
+      - Dès que *CustomReclistSerializer* est utilisé, une erreur silencieuse doit se déclencher car l'application ne répond pas
+      - Même en remplaçant le code de *CustomReclistSerializer* (pourtant pas compliqué) par un simple ~gen.writeNumber(5);~, le serveur n'arrive pas à sérialiser des *RecList*
+    - Bug lié au fait que les paramètres des *BatTest* soient typés en tant qu'*Object*?
+*** Planned
+**** DONE Ajouter la configuration Jackson pour les différents univers
+- [X] Univers des tortues
+**** DONE Re-implémenter les exercices manquants
+- [X] Recursion.logo
+** Semaine du <2016-05-23 lun.> au <2016-05-27 ven.>
+*** Done
+- Ajout de la configuration Jackson pour les différents univers
+  - Univers des listes récursives
+    - Puisque je n'arrive pas à faire fonctionner le *CustomSerializer* dans ce cas, changement d'approche
+    - Lors de la sérialisation, ajout d'un champ /list/ correspondant à /RecList.toList()/
+    - Ajout de /@JsonIgnore/ sur les champs /head/ et /tail/
+    - Côté client, on se contente de vérifier lors de la construction d'un BatTest si le paramètre possède un champ /list/
 *** Planned
 **** TODO Ajouter la configuration Jackson pour les différents univers
-- [ ] Univers des tortues
 - [ ] Univers des listes récursives
 - [ ] Univers de light bot
 - [ ] Univers du lander
@@ -4203,7 +4233,6 @@ case _ => MergeStrategy.first
 - [ ] Welcome
 - [ ] TurtleArt
 - [ ] Recursion.cons
-- [ ] Recursion.logo
 - [ ] Bat.string1
 **** TODO Gérer les images présentes dans les consignes d'exercices
 - Jusqu'à maintenant, on pouvait accéder à ces images via leur path dans le JAR de PLM
