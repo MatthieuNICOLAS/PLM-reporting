@@ -4221,6 +4221,16 @@ case _ => MergeStrategy.first
     - Lors de la sérialisation, ajout d'un champ /list/ correspondant à /RecList.toList()/
     - Ajout de /@JsonIgnore/ sur les champs /head/ et /tail/
     - Côté client, on se contente de vérifier lors de la construction d'un BatTest si le paramètre possède un champ /list/
+    - Problème avec les entités en Scala
+      - *scala.collection.immutable.List* possède aussi des méthodes /head()/ et /tail()/ pour parcourir la structure de donnée
+      - Il a donc été décidé d'écrire les entités Scala en considérant que le code de l'élève reçoit en paramètre une *List* au lieu d'une *RecList*
+      - La conversion *RecList* -> *List* s'effectuait automatiquement grâce à ce code https://github.com/BuggleInc/PLM/blob/javaUI/src/plm/core/model/lesson/ExerciseTemplatingEntity.java#L120-L133
+      - Ce morceau de code a été supprimé au cours de refactoring
+      - [ ] Re-implémenter ce code
+	- Sous quelle forme?
+	- [ ] Ajouter /toScalaList()/ à *RecList* ?
+	- Pas d'autres idées pour le moment
+      - [ ] Refactorer les entités Scala pour utiliser *RecList* dorénavant
 *** Planned
 **** TODO Ajouter la configuration Jackson pour les différents univers
 - [ ] Univers des listes récursives
