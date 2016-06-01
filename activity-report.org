@@ -4231,7 +4231,48 @@ case _ => MergeStrategy.first
 	- [ ] Ajouter /toScalaList()/ à *RecList* ?
 	- Pas d'autres idées pour le moment
       - [ ] Refactorer les entités Scala pour utiliser *RecList* dorénavant
+    - Ajout de /toScalaList()/
+      - Faire la conversion directement dans le code Java s'annonce difficile
+      - Je préfère intéragir avec un objet Scala se chargeant de la conversion
+      - Suivi du tuto: http://alvinalexander.com/scala/how-to-wrap-scala-traits-used-accessed-java-classes-methods
+** Semaine du <2016-05-30 lun.> au <2016-06-03 ven.>
+*** Done
+- Etudier *Open Roberta Lab*
+  - Ils ont créé leur propre langage de programmation: *NEPO*
+    - https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/Programmieren+mit+NEPO
+  - Besoin d'installer un OS custom pour que le robot puisse fonctionner avec *Open Roberta Lab*
+    - https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/EV3+vorbereiten
+    - Pour générer l'image de l'OS, la documentation se trouve ici: https://github.com/OpenRoberta/robertalab/wiki/Creating-the-OR-leJOS-image
+  - Architecture du projet
+    - /EV3Menu/
+      - J'ai encore du mal à voir de quoi il s'agit
+      - Serait-ce le code de la surcouche de l'OS pour le robot?
+    - /JavaForLejos/
+      - Contient juste ce qui a l'air d'être un test pour vérifier la bonne configuration du robot
+    - /OpenRobertaParent/
+      - A juste l'air de servir pour l'installation
+    - /OpenRobertaRobot/
+      - Convertit le code généré à l'aide de Blockly en code pour le robot
+      - Contient aussi les objets permettant au serveur de communiquer avec le robot
+    - /OpenRobertaRuntime/
+      - On y retrouve de nouveau des objets permettant au serveur de communiquer avec le robot
+      - Contient aussi l'objet *Hal* qui représente le robot
+    - /OpenRobertaServer/
+      - Enfin de la doc \o/ : https://github.com/OpenRoberta/robertalab/tree/master/OpenRobertaServer
+    - /OpenRobertaShared/
+      - Contient les objets représentant les différents *Sensors* du robot et les *Actions* possibles
+      - Ce sont ces objets qui sont utilisés par *Hal* pour manipuler le robot
+    - /OpenRobertaUSB/
+      - Contient les objets permettant d'établir une connection USB entre le robot et le serveur
+      - Des infos sur le workflow ici: https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/EV3+Roboter+und+USB+Verbindung
 *** Planned
+**** TODO Etudier *Open Roberta Lab*
+- *Open Roberta Lab* est un site offrant une interface pour développer à l'aide d'outils visuels pour des robots *EV3*
+  - https://lab.open-roberta.org/
+- Comprendre le projet et ses différents composants
+  - Définition des blocs de programmation
+  - Génération et compilation du code pour le robot
+  - Mise en place de la connexion entre l'interface de programmation et le robot
 **** TODO Ajouter la configuration Jackson pour les différents univers
 - [ ] Univers des listes récursives
 - [ ] Univers de light bot
