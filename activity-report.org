@@ -4226,15 +4226,21 @@ case _ => MergeStrategy.first
       - Il a donc été décidé d'écrire les entités Scala en considérant que le code de l'élève reçoit en paramètre une *List* au lieu d'une *RecList*
       - La conversion *RecList* -> *List* s'effectuait automatiquement grâce à ce code https://github.com/BuggleInc/PLM/blob/javaUI/src/plm/core/model/lesson/ExerciseTemplatingEntity.java#L120-L133
       - Ce morceau de code a été supprimé au cours de refactoring
-      - [ ] Re-implémenter ce code
+      - [X] Re-implémenter ce code
 	- Sous quelle forme?
-	- [ ] Ajouter /toScalaList()/ à *RecList* ?
+	- [X] Ajouter /toScalaList()/ à *RecList* ?
 	- Pas d'autres idées pour le moment
       - [ ] Refactorer les entités Scala pour utiliser *RecList* dorénavant
     - Ajout de /toScalaList()/
       - Faire la conversion directement dans le code Java s'annonce difficile
       - Je préfère intéragir avec un objet Scala se chargeant de la conversion
       - Suivi du tuto: http://alvinalexander.com/scala/how-to-wrap-scala-traits-used-accessed-java-classes-methods
+      - Pour faciliter la conversion en *List*, on ne stocke plus en paramètre une *RecList* mais un *int[]*
+    - Permet de corriger le problème des entités Scala
+    - Nouveau problème: les entités en Python
+      - Vu que dorénavant on stocke des *int[]*, il faut générer une *RecList* à partir de ce tableau dans les entités Java et Python
+      - En Java, on le fait naturellement dans l'entité
+      - Ajout d'une entité *ConsEntity* qui ajoute automatiquement au script le code correspondant dans le cas du Python
 ** Semaine du <2016-05-30 lun.> au <2016-06-03 ven.>
 *** Done
 - Etudier *Open Roberta Lab*
@@ -4247,6 +4253,7 @@ case _ => MergeStrategy.first
     - /EV3Menu/
       - J'ai encore du mal à voir de quoi il s'agit
       - Serait-ce le code de la surcouche de l'OS pour le robot?
+      - Ou l'application permettant d'initer la connection au serveur depuis le robot
     - /JavaForLejos/
       - Contient juste ce qui a l'air d'être un test pour vérifier la bonne configuration du robot
     - /OpenRobertaParent/
@@ -4257,6 +4264,8 @@ case _ => MergeStrategy.first
     - /OpenRobertaRuntime/
       - On y retrouve de nouveau des objets permettant au serveur de communiquer avec le robot
       - Contient aussi l'objet *Hal* qui représente le robot
+      - Tourne sur le robot?
+	- Compilé pour ev3: https://github.com/OpenRoberta/robertalab/blob/master/OpenRobertaRuntime/crosscompiler-ev3-build.xml
     - /OpenRobertaServer/
       - Enfin de la doc \o/ : https://github.com/OpenRoberta/robertalab/tree/master/OpenRobertaServer
     - /OpenRobertaShared/
@@ -4265,14 +4274,28 @@ case _ => MergeStrategy.first
     - /OpenRobertaUSB/
       - Contient les objets permettant d'établir une connection USB entre le robot et le serveur
       - Des infos sur le workflow ici: https://mp-devel.iais.fraunhofer.de/wiki/display/ORInfo/EV3+Roboter+und+USB+Verbindung
+- Ajout de la configuration Jackson pour les différents univers
+  - Univers des listes récursives
+    - Découverte d'un autre problème: les *RecList* en résultat de la méthode de l'utilisateur en Scala
+    - Il semblerait que le test d'égalité entre le résultat du monde solution et du monde utilisateur échoue si la liste est vide
+      - La valeur *Nil* semble poser des problèmes à comparer
+- Uniformiser TurtleArt
+  - Auparavant, on avait qu'un exercice *TurtleArt* qu'on initialisait plusieurs fois avec des paramètres différents
+  - Création d'exercices distincts pour chacun d'entre eux
 *** Planned
-**** TODO Etudier *Open Roberta Lab*
+**** DONE Etudier *Open Roberta Lab*
 - *Open Roberta Lab* est un site offrant une interface pour développer à l'aide d'outils visuels pour des robots *EV3*
   - https://lab.open-roberta.org/
 - Comprendre le projet et ses différents composants
   - Définition des blocs de programmation
   - Génération et compilation du code pour le robot
   - Mise en place de la connexion entre l'interface de programmation et le robot
+**** DONE Uniformiser TurtleArt
+- La leçon TurtleArt et ses exercices semblent être gérée de façon différente des autres leçons
+- Voir pour uniformiser tout ça
+- Ecrire des consignes pour ses exercices au passage?
+**** DONE Re-implémenter les exercices manquants
+- [X] TurtleArt
 **** TODO Ajouter la configuration Jackson pour les différents univers
 - [ ] Univers des listes récursives
 - [ ] Univers de light bot
@@ -4282,7 +4305,6 @@ case _ => MergeStrategy.first
 - Tous les exos n'ont pas encore été extraits
 - Il faut aussi modifier le constructeur appelé
 - [ ] Welcome
-- [ ] TurtleArt
 - [ ] Recursion.cons
 - [ ] Bat.string1
 **** TODO Gérer les images présentes dans les consignes d'exercices
@@ -4432,10 +4454,6 @@ case _ => MergeStrategy.first
     - Websocket posant problème pour détecter quand l'interaction avec le serveur est finie
   - Distribuer les tests pour simuler le comportement de plusieurs utilisateurs
 - Voir si besoin [[http://zombie.js.org/][Zombie.js]]
-**** TODO Uniformiser TurtleArt
-- La leçon TurtleArt et ses exercices semblent être gérée de façon différente des autres leçons
-- Voir pour uniformiser tout ça
-- Ecrire des consignes pour ses exercices au passage?
 **** TODO Désactiver la démo pour TurtleArt
 - [[https://github.com/BuggleInc/webPLM/issues/2][Cette issue]] est d'autant plus vraie pour la leçon *TurtleArt*
 - Voir pour désactiver la démo pour cette leçon
