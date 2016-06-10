@@ -4296,6 +4296,24 @@ case _ => MergeStrategy.first
 - Ecrire des consignes pour ses exercices au passage?
 **** DONE Re-implémenter les exercices manquants
 - [X] TurtleArt
+** Semaine du <2016-06-06 lun.> au <2016-06-10 ven.>
+*** Done
+- Ajout de la configuration Jackson pour les différents univers
+  - Univers des listes récursives
+    - Ajout de *ScalaHelper*, objet Scala mettant à disposition des méthodes pour comparer /Nil/ et /null/ ou convertir un objet de type *int[]* en *List[Int]*
+    - Ajout de *RecListWrapper*, objet Scala permettant de comparer une *RecList* à une *List[Int]*
+    - Grâce à ces helpers, j'ai pu corriger les méthodes de comparaison la fonction /winning()/ dans le cadre des *ConsExercise*
+    - Dernière ombre au tableau: la sérialisation de *List[Int]* en JSON
+      - Trouvé un projet mettant à disposition un module se chargeant de sérialiser ces objets: https://github.com/FasterXML/jackson-module-scala
+    - Débuggage de l'interface graphique
+      - Les tableaux n'étaient pas affichés correctement, les crochets étaient manquants
+      - Modification de la vue pour gérer correctement les tableaux
+- Re-implémenter les exercices manquants
+  - Recursion.cons
+    - Maintenant que l'univers est débuggé, je commence à ajouter les différents exercices de cette leçon
+*** Planned
+**** DONE Ajouter la configuration Jackson pour les différents univers
+- [X] Univers des listes récursives
 **** TODO Ajouter la configuration Jackson pour les différents univers
 - [ ] Univers des listes récursives
 - [ ] Univers de light bot
