@@ -4314,16 +4314,31 @@ case _ => MergeStrategy.first
 *** Planned
 **** DONE Ajouter la configuration Jackson pour les différents univers
 - [X] Univers des listes récursives
-**** TODO Ajouter la configuration Jackson pour les différents univers
-- [ ] Univers des listes récursives
-- [ ] Univers de light bot
-- [ ] Univers du lander
+** Semaine du <2016-06-13 lun.> au <2016-06-17 ven.>
+*** Done
+*** Planned
+**** DONE Ajouter la configuration Jackson pour les différents univers
+- [X] Univers des listes récursives
+**** DONE Re-implémenter les exercices manquants
+- [X] Recursion.cons
+**** DONE Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
+- J'ai commencé à implémenter des méthodes d'import/export au format JSON des différents objets formant les univers à l'aide de /JSON.Simple/
+- Mais on rencontre des difficultés avec certains cas particuliers
+  - Dans /Exercise.toJSON()/, il faut spécifier le type des mondes composant cet exercice
+  - Dans /World.toJSON()/, il faut spécifier le type des entités peuplant ce monde
+    - Dans le cas des mondes solutions, puisqu'on a executé la démo, le type obtenu est de la forme /plm.runtime1.nomEntité/ car l'entité a été généré dynamiquement
+    - Il faut donc remplacer ce type par le type des entités du monde initial
+  - Dans /BatTest.toJSON()/, il faut spécifier le type des paramètres de ce test
+- Les solutions apportées ne sont pas très élégantes et consistent plus en des hacks qu'autre chose
+- Est-ce que remplacer /JSON.Simple/ par une librairie telle que [[https://github.com/FasterXML/jackson][Jackson]] ou [[https://github.com/google/gson][Gson]] permettrait d'accéder à des fonctionnalités apportant une meilleure solution à ces problèmes?
+- Vu que nous utilisons les mêmes méthodes pour générer le JSON envoyé au client et aux juges, il faudrait aussi pouvoir modifier facilement le JSON généré pour filtrer des champs
+  - On a besoin d'envoyer le *SourceFile* aux juges pour qu'ils puissent correctement générer l'entité de l'élève et l'executé
+  - Mais on ne veut pas le transmettre au client puisqu'il contient le code de la correction
 **** TODO Re-implémenter les exercices manquants
 - Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
 - Tous les exos n'ont pas encore été extraits
 - Il faut aussi modifier le constructeur appelé
 - [ ] Welcome
-- [ ] Recursion.cons
 - [ ] Bat.string1
 **** TODO Gérer les images présentes dans les consignes d'exercices
 - Jusqu'à maintenant, on pouvait accéder à ces images via leur path dans le JAR de PLM
@@ -4348,19 +4363,6 @@ case _ => MergeStrategy.first
 - Depuis *Play 2.4*, la configuration via /conf/application.conf/ est dépréciée
 - Retirer les lignes correspondantes
 - Revoir la stratégie de log
-**** TODO Passer à une librairie prévue pour la sérialisation/désérialisation au format JSON
-- J'ai commencé à implémenter des méthodes d'import/export au format JSON des différents objets formant les univers à l'aide de /JSON.Simple/
-- Mais on rencontre des difficultés avec certains cas particuliers
-  - Dans /Exercise.toJSON()/, il faut spécifier le type des mondes composant cet exercice
-  - Dans /World.toJSON()/, il faut spécifier le type des entités peuplant ce monde
-    - Dans le cas des mondes solutions, puisqu'on a executé la démo, le type obtenu est de la forme /plm.runtime1.nomEntité/ car l'entité a été généré dynamiquement
-    - Il faut donc remplacer ce type par le type des entités du monde initial
-  - Dans /BatTest.toJSON()/, il faut spécifier le type des paramètres de ce test
-- Les solutions apportées ne sont pas très élégantes et consistent plus en des hacks qu'autre chose
-- Est-ce que remplacer /JSON.Simple/ par une librairie telle que [[https://github.com/FasterXML/jackson][Jackson]] ou [[https://github.com/google/gson][Gson]] permettrait d'accéder à des fonctionnalités apportant une meilleure solution à ces problèmes?
-- Vu que nous utilisons les mêmes méthodes pour générer le JSON envoyé au client et aux juges, il faudrait aussi pouvoir modifier facilement le JSON généré pour filtrer des champs
-  - On a besoin d'envoyer le *SourceFile* aux juges pour qu'ils puissent correctement générer l'entité de l'élève et l'executé
-  - Mais on ne veut pas le transmettre au client puisqu'il contient le code de la correction
 **** TODO Retravailler l'UI de PLM
 - Durant le barcamp avec LINAGORA, j'ai eu l'occasion de rencontrer et de discuter avec Jérémie Kornobis
 - Il s'occupe de prototyper leurs interfaces graphiques
@@ -4423,6 +4425,9 @@ case _ => MergeStrategy.first
 - L'offset est incorrect actuellement:
   - +1 pour Java et Scala
   - +13 pour Python
+**** TODO Ajouter la configuration Jackson pour les différents univers
+- [ ] Univers de light bot
+- [ ] Univers du lander
 **** TODO Utiliser l'injection de dépendance
 - Voir si ça permettrait de nettoyer et clarifier le code avec
   - Un injecteur global permettant de récupérer la configuration du serveur, les objets de Silhouette
