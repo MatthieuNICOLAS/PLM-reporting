@@ -4316,6 +4316,19 @@ case _ => MergeStrategy.first
 - [X] Univers des listes récursives
 ** Semaine du <2016-06-13 lun.> au <2016-06-17 ven.>
 *** Done
+- Résoudre le problème de synchronisation entre le repo local et le repo GitHub lors du 1er démarrage de webPLM
+  - Le problème provient plus précisement de cette ligne : https://github.com/BuggleInc/PLM/blob/refactor-lessons-exercises/src/plm/core/model/tracking/GitUtils.java#L127
+  - En supprimant ma copie locale du repo, j'ai retrouvé un temps de lancement correct
+  - Ce qui est perturbant est que je ne pushais pas ma copie locale sur GitHub
+  - Le repo distant était donc en retard d'un grand nombre de commits par rapport au repo local
+  - Je n'avais aucune raison d'effectuer un merge des repos dans ce cas
+  - Reste à voir comment éviter d'effectuer cette ligne lorsqu'aucun nouveau commit n'a été récupéré depuis GitHub
+  - L'objet *FetchResult* retourné par la commande fetch possède une fonction /getTrackingRefUpdates()/
+  - Cette fonction semble permettre de récupérer les références locales qui ont été mises à jour depuis le repo distant : http://download.eclipse.org/jgit/docs/jgit-2.0.0.201206130900-r/apidocs/org/eclipse/jgit/transport/OperationResult.html
+  - S'assurer que *TrackingRefUpdate* correspond bien à ce que l'on souhaite
+    - [ ] Voir le résultat de /getTrackingRefUpdates()/ si la branche n'existe pas sur le repo distant
+    - [ ] Voir le résultat de /getTrackingRefUpdates()/ si la branche existe sur le repo distant et est en avance sur le repo local
+    - [ ] Voir le résultat de /getTrackingRefUpdates()/ si le branche existe sur le repo distant mais est en retard sur le repo local
 *** Planned
 **** DONE Ajouter la configuration Jackson pour les différents univers
 - [X] Univers des listes récursives
@@ -4334,6 +4347,14 @@ case _ => MergeStrategy.first
 - Vu que nous utilisons les mêmes méthodes pour générer le JSON envoyé au client et aux juges, il faudrait aussi pouvoir modifier facilement le JSON généré pour filtrer des champs
   - On a besoin d'envoyer le *SourceFile* aux juges pour qu'ils puissent correctement générer l'entité de l'élève et l'executé
   - Mais on ne veut pas le transmettre au client puisqu'il contient le code de la correction
+**** TODO Résoudre le problème de synchronisation entre le repo local et le repo GitHub lors du 1er démarrage de webPLM
+- Lorsqu'on démarre le serveur, celui-ci tente de synchroniser le repo local correspondant à la session de l'utilisateur par rapport à celui sur GitHub
+- J'ai remarqué que la synchronisation prend un temps considérable lors du 1er démarrage du serveur de la journée
+- Ceci s'avère être bloquant pour l'utilisateur puisqu'on essaie d'accéder à sa session lorsqu'il tente d'accéder à un exercice
+  - pour enregistrer cet évènement
+  - pour récupèrer sa dernière version du code
+- L'acteur gérant la session de l'utilisateur ne répond pas tant qu'il a pas fini de synchroniser les repos
+- Trouver l'origine de ce ralentissement/blocage
 **** TODO Re-implémenter les exercices manquants
 - Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
 - Tous les exos n'ont pas encore été extraits
