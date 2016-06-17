@@ -4326,9 +4326,20 @@ case _ => MergeStrategy.first
   - L'objet *FetchResult* retourné par la commande fetch possède une fonction /getTrackingRefUpdates()/
   - Cette fonction semble permettre de récupérer les références locales qui ont été mises à jour depuis le repo distant : http://download.eclipse.org/jgit/docs/jgit-2.0.0.201206130900-r/apidocs/org/eclipse/jgit/transport/OperationResult.html
   - S'assurer que *TrackingRefUpdate* correspond bien à ce que l'on souhaite
-    - [ ] Voir le résultat de /getTrackingRefUpdates()/ si la branche n'existe pas sur le repo distant
-    - [ ] Voir le résultat de /getTrackingRefUpdates()/ si la branche existe sur le repo distant et est en avance sur le repo local
+    - [X] Voir le résultat de /getTrackingRefUpdates()/ si la branche n'existe pas sur le repo distant
+      - Une *GitException* est levée dans ce cas, on ne récupère donc pas de *FetchResult*
+    - [X] Voir le résultat de /getTrackingRefUpdates()/ si la branche existe sur le repo distant et est en avance sur le repo local
+      - La branche est listée dans la collection retournée par /getTrackingRefUpdates()/
     - [ ] Voir le résultat de /getTrackingRefUpdates()/ si le branche existe sur le repo distant mais est en retard sur le repo local
+- Re-implémenter l'aide des exercices
+  - Récupération de l'aide et de ses traductions
+    - Se fait de la même façon que les consignes de l'exercice
+    - *ExerciseFactory* récupère le type de monde présent dans l'exercice et accède à la fiche d'aide associée
+    - Stocke les différentes traductions dans *Exercise*
+    - Met à disposition pour récupérer une fiche de traduction en fonction de sa langue et du langage de programmation choisi
+  - Renommage du champ correspondant côté client
+    - /api/ -> /help/
+    - Permet de correspondre au bouton affichant l'aide 
 *** Planned
 **** DONE Ajouter la configuration Jackson pour les différents univers
 - [X] Univers des listes récursives
@@ -4347,6 +4358,10 @@ case _ => MergeStrategy.first
 - Vu que nous utilisons les mêmes méthodes pour générer le JSON envoyé au client et aux juges, il faudrait aussi pouvoir modifier facilement le JSON généré pour filtrer des champs
   - On a besoin d'envoyer le *SourceFile* aux juges pour qu'ils puissent correctement générer l'entité de l'élève et l'executé
   - Mais on ne veut pas le transmettre au client puisqu'il contient le code de la correction
+**** DONE Re-implémenter l'aide des exercices
+- Pour chaque type de monde, une fiche d'aide avec les commandes utilisable est disponible.
+- Il n'y a plus de moyen d'afficher cette fiche depuis le refactoring
+- Re-implémenter cette fonctionnalité
 **** TODO Résoudre le problème de synchronisation entre le repo local et le repo GitHub lors du 1er démarrage de webPLM
 - Lorsqu'on démarre le serveur, celui-ci tente de synchroniser le repo local correspondant à la session de l'utilisateur par rapport à celui sur GitHub
 - J'ai remarqué que la synchronisation prend un temps considérable lors du 1er démarrage du serveur de la journée
