@@ -4424,6 +4424,12 @@ case _ => MergeStrategy.first
   - Modification du code de *ExerciseActor* pour utiliser le système de ressources plutôt que les fichiers directement
   - Ajout de la route pour accéder aux images des exercices
     - Accès limité aux images au format PNG et JPEG
+- Gérer les exercices manquants
+  - Modification de /ExercisesActor.getExercise()/ pour renvoyer une *Option[Exercise]*
+  - Permet de gérer le cas où l'exercice n'a pas été trouvé
+  - Envoi du message /exerciseNotFound/ le cas échéant
+  - Correction du JS pour rediriger correctement l'utilisateur
+    - Le service /$state/ n'était pas injecté dans *ExerciseController*
 *** Planned
 **** DONE Gérer les images des leçons
 - Les images des leçons ne s'affichent pas correctement
@@ -4434,6 +4440,15 @@ case _ => MergeStrategy.first
 - Dorénavant, ces images se trouvent dans le répertoire source /exercises/
 - Rendre accessible ces images via une URL
 - Modifier les leçons pour mettre à jour l'URL des images
+**** DONE Gérer les exercices manquants
+- Lorsque l'utilisateur essaie d'accéder à un exercice manquant, une *NullPointerException* est déclenchée
+- Vérifier que l'exercice existe avant d'essayer de le cloner
+- Prévenir le client que l'exercice est manquant
+- Rediriger l'utilisateur vers un autre exercice
+**** TODO Re-implémenter le passage à l'exercice suivant
+- Lorsqu'on réussit un exercice, un message nous informe de notre succès et nous propose de passer à l'exo suivant
+- Ceci ne fonctionne plus
+- Corriger ce problème
 **** TODO Re-implémenter les exercices manquants
 - Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
 - Tous les exos n'ont pas encore été extraits
