@@ -4430,6 +4430,31 @@ case _ => MergeStrategy.first
   - Envoi du message /exerciseNotFound/ le cas échéant
   - Correction du JS pour rediriger correctement l'utilisateur
     - Le service /$state/ n'était pas injecté dans *ExerciseController*
+- Re-implémenter le passage à l'exercice suivant
+  - L'ID de l'exercice diffère entre la classe *Lesson* et la classe *Exercise*
+    - Dans *Lesson*, on utilise des IDs de la forme /environment.Environment/
+    - Tandis que dans *Exercise*, on utilise l'ID /Environment/
+  - Le client n'arrive donc pas à comparer l'ID de l'exercice courant aux IDs de la leçon
+  - Correction du constructeur de *ExerciseTemplated* pour utiliser la classe en tant qu'ID
+  - Modification de *ExerciseRunner* pour récupérer le bon nom de l'entité
+    - Auparavant on utilisait l'ID de l'exercice directement
+  - Modification du code client pour mettre à jour l'ID de l'exercice courant lorsqu'on reçoit le JSON de ce dernier
+  - Mise à jour du JSON des exercices
+- Désactivation de la leçon /bat.string1/
+  - Les exercices de cette leçon n'étant pas encore implémentés, je préfère la désactiver
+- Re-implémenter l'évènement Git /reverted/
+  - Ajout du message /RevertExercise/ dans *GitActor*
+    - Supprime les fichiers de l'exercice pour le langage de programmation courant
+    - Génère le message de commit correspondant
+      - De la forme : /{"kind": "reverted", "exo":"traversal.snake.Snake","lang":"Scala"}/
+    - Commit la suppression
+  - Ajout du message /reset/ du serveur au client pour réinitialiser le contenu de l'IDE
+- Amélioration de l'UI
+  - Mes collègues ont pu faire un nouveau retour sur l'UI lors des tests effectués sur la nouvelle version
+  - Modification du CSS
+    - de la consigne pour éviter que la barre de scroll ne déborde sur le texte
+    - de la page d'exercice pour réduire la taille des marges
+    - de la page d'exercice pour réduire la taille de la séparation entre les blocs de gauche et de droite
 *** Planned
 **** DONE Gérer les images des leçons
 - Les images des leçons ne s'affichent pas correctement
@@ -4445,10 +4470,11 @@ case _ => MergeStrategy.first
 - Vérifier que l'exercice existe avant d'essayer de le cloner
 - Prévenir le client que l'exercice est manquant
 - Rediriger l'utilisateur vers un autre exercice
-**** TODO Re-implémenter le passage à l'exercice suivant
+**** DONE Re-implémenter le passage à l'exercice suivant
 - Lorsqu'on réussit un exercice, un message nous informe de notre succès et nous propose de passer à l'exo suivant
 - Ceci ne fonctionne plus
 - Corriger ce problème
+**** DONE Re-implémenter l'évènement Git /reverted/
 **** TODO Re-implémenter les exercices manquants
 - Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
 - Tous les exos n'ont pas encore été extraits
@@ -4521,7 +4547,6 @@ case _ => MergeStrategy.first
 - Actuellement, on se contente de fournir au clone les mêmes références pour les mondes
 - Lorsque plusieurs utilisateurs exécutent en concurrence un programme sur un même exercice en mode local, leur programmes modifient le monde simultanément
 **** TODO Re-implémenter les évènements Git manquants
-- reverted
 - callForHelp
 - cancelCallForHelp
 - readTip
