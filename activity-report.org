@@ -4401,21 +4401,45 @@ case _ => MergeStrategy.first
   - Suppression de ; en trop
   - Suppression de /import/ inutiles
 *** Planned
-**** TODO Gérer les images des leçons
+** Semaine du <2016-07-11 lun.> au <2016-07-15 ven.>
+*** Done
+- Gérer les images des leçons
+  - Plutôt que d'utiliser le répertoire /dist/lessons/ pour conserver les leçons, utilise le répertoire /lessons/
+  - Ajout du répertoire /lessons/ dans le build
+    - En tant que ressources : unmanagedResourceDirectories in Compile += baseDirectory.value / "lessons"
+    - Et en tant qu'assets : unmanagedResourceDirectories in Assets += baseDirectory.value / "lessons"
+  - Les fichiers sont dupliqués lors du build, mais cela permet d'avoir un comportement plus simple
+    - Pour accéder aux fichiers dans le code
+    - Pour fournir les fichiers aux clients
+  - Ajout des images manquantes
+  - Ajout de la route pour accéder aux fichiers des leçons
+    - Accès limité aux images au format PNG
+- Gérer les images présentes dans les consignes d'exercices
+  - Même raisonnement que pour les images des leçons
+  - Ajout du répertoire /exercises/ dans le build
+    - En tant que sources : unmanagedSourceDirectories in Compile += baseDirectory.value / "exercises"
+    - En tant que ressources : unmanagedResourceDirectories in Compile += baseDirectory.value / "exercises"
+      - Permet d'accéder aux fichiers .py, .blocky, .json
+    - En tant qu'assets : unmanagedSourceDirectories in Assets += baseDirectory.value / "exercises"
+  - Modification du code de *ExerciseActor* pour utiliser le système de ressources plutôt que les fichiers directement
+  - Ajout de la route pour accéder aux images des exercices
+    - Accès limité aux images au format PNG et JPEG
+*** Planned
+**** DONE Gérer les images des leçons
 - Les images des leçons ne s'affichent pas correctement
 - La route qui permet de servir ces images n'a pas l'air de fonctionner
 - Corriger cela
+**** DONE Gérer les images présentes dans les consignes d'exercices
+- Jusqu'à maintenant, on pouvait accéder à ces images via leur path dans le JAR de PLM
+- Dorénavant, ces images se trouvent dans le répertoire source /exercises/
+- Rendre accessible ces images via une URL
+- Modifier les leçons pour mettre à jour l'URL des images
 **** TODO Re-implémenter les exercices manquants
 - Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
 - Tous les exos n'ont pas encore été extraits
 - Il faut aussi modifier le constructeur appelé
 - [ ] Welcome
 - [ ] Bat.string1
-**** TODO Gérer les images présentes dans les consignes d'exercices
-- Jusqu'à maintenant, on pouvait accéder à ces images via leur path dans le JAR de PLM
-- Dorénavant, ces images se trouvent dans le répertoire source /exercises/
-- Rendre accessible ces images via une URL
-- Modifier les leçons pour mettre à jour l'URL des images
 **** TODO Vérifier le problème rencontré par Ariel
 - Ariel est un contributeur souhaitant traduire PLM en espagnol
 - Cependant il rencontre l'erreur suivante lorsqu'il compile PLM
