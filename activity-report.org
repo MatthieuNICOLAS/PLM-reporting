@@ -4475,6 +4475,72 @@ case _ => MergeStrategy.first
 - Ceci ne fonctionne plus
 - Corriger ce problème
 **** DONE Re-implémenter l'évènement Git /reverted/
+** Semaine du <2016-07-18 lun.> au <2016-07-22 ven.>
+*** Done
+- Afficher un badge pour indiquer les exercices réussis
+  - Avant d'envoyer la liste des exercices d'une leçon à un utilisateur, vérifie quels exercices ont été réussis et avec quel langage de programmation
+    - Ajout de méthodes dans *SessionActor* et *GitActor* pour vérifier si un exercice a été réussi dans un langage de programmation donné
+    - Dans /Lecture.toJSON()/, aggrège les résultats et l'ajoute au JSON généré
+  - Côté client, ajout d'une nouvelle directive dans la liste des exercices
+  - Nouvelle ligne composée des logos des différents langages de programmation supportés par l'exercice
+    - Si l'exercice n'a pas encore été réussi dans un langage de programmation donné, le logo apparaît en noir et blanc
+    - Sinon, le logo apparaît normalement
+- Mettre à jour les fichiers Dockerfile
+  - Pour *webPLM* et *PLM-judge*, on retrouve les mêmes problèmatiques qu'auparavant
+  - Pour avoir un build d'image Docker simple et reproductible, il faudrait que celui-ci:
+    - Installe les dépendances tels que Java, Scala, git, activator/sbt
+    - Clone le projet
+    - Build le projet
+    - Et se prépare à exécuter le binaire de l'application
+  - Sauf que activator/sbt nécessite beaucoup de dépendances pour fonctionner
+    - Ces dépendances se trouvent sur des repos Maven
+    - Les télécharger prend du temps (5 à 10min lors de mon dernier test)
+    - Et il semblerait que si on construit consécutivement plusieurs images, les repos Maven commencent à rejeter nos requêtes pour télécharger les dépendances
+    - Bien entendu, la construction de l'image échoue si une dépendance est manquante
+  - Ceci nuit au caractère reproductible du build et s'avère plutôt lent
+  - Les dépendances de SBT téléchargées sont mises en cache dans le répertoire ~/.ivy2
+    - Actuellement, ce répertoire est éphémère et est regenéré à chaque build
+  - Utiliser un volume partagé pour ce répertoire permettrait de limiter les interactions avec les repos Maven
+    - Ceci améliorerait la rapidité et la reproductibilité du build
+  - Mais Docker ne supporte pas le partage de volume durant le build
+  - [ ] Décomposer le build en 2 images Docker ?
+    - La 1ère permettrait de compiler l'application
+      - Mettrait en place l'environnement pour la compilation
+      - CMD: compiler l'application
+      - Utiliserait plusieurs volumes partagés
+        - Les sources du projet
+        - Le répertoire ~/ivy2 pour conserver le cache des dépendances d'un build à l'autre
+        - Le répertoire cible qui contiendrait le binaire généré
+    - La 2nde permettrait d'exécuter l'application
+      - Mettrait en place l'environnement pour l'exécution
+      - Récupérerait le binaire de l'application
+      - CMD: exécuter l'application
+- Mettre à jour les fichiers docker-compose.yml
+  - Problème avec les links entre containers
+    - Dans l'ancienne version de docker-compose, on pouvait utiliser la commande /links/ pour permettre aux containers de communiquer entre eux
+    - Cette commande générait des variables d'environnement de la forme NOM_SERVICE_ADDR et NOM_SERVICE_PORT
+    - *webPLM* et *PLM-judge* sont configurés pour utiliser ces variables d'environnement lorsqu'ils souhaitent interagir avec un autre composant
+    - Pour pouvoir fonctionner en dehors de /docker-compose/, des valeurs par défaut sont utilisées si ces variables d'environnement sont indéfinies
+    - Dans la nouvelle version, la commande /links/ n'utilise plus de variables d'environnement mais directement des hostnames
+    - Par exemple /links : - db/ permet de communiquer avec le service /db/ via l'URL http://db
+    - Par contre, le code reposant sur les variables d'environnement est donc obsolète
+    - Mais comment faire un fallback vers une URL par défaut de façon élégante avec ce nouveau système de links?
+*** Planned
+**** DONE Afficher un badge pour indiquer les exercices réussis
+- Actuellement, rien n'indique à l'utilisateur quels exercices il a déjà réussi
+- Ajouter des badges sur les exercices réussis en fonction des langages de programmation choisis
+**** TODO Mettre à jour les fichiers Dockerfile
+- Docker a évolué depuis qu'on a rédigé les fichiers Dockerfile
+- Certaines commandes sont apparues et sont à privilégiées par rapport aux anciennes
+  - COPY au lieu de ADD
+- De même, le build de certains composants de l'application a évolué
+  - On utilise maintenant /sbt assembly/ pour générer un JAR de PLM-judge
+**** TODO Mettre à jour les fichiers docker-compose.yml
+- De même que pour Docker, docker-compose a évolué depuis l'an dernier
+- La syntaxe des fichiers docker-composes.yml actuels est dépréciée
+  - Pour le moment, l'ancienne syntaxe est toujours supportée pour une raison de rétro-compatibilité
+- On est pas à l'abri d'une dépréciation totale de l'ancienne syntaxe
+**** TODO Ajouter les options de Docker pour limiter les ressources alloués aux containers
 **** TODO Re-implémenter les exercices manquants
 - Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
 - Tous les exos n'ont pas encore été extraits
