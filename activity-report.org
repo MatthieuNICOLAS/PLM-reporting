@@ -4515,6 +4515,12 @@ case _ => MergeStrategy.first
       - Mettrait en place l'environnement pour l'exécution
       - Récupérerait le binaire de l'application
       - CMD: exécuter l'application
+  - L'image pour compiler un projet sbt existe déjà
+    - https://hub.docker.com/r/1science/sbt/
+    - On peut donc compiler facilement et de façon reproductible *webPLM* et *PLM-judge* à partir des sources
+      - docker run -ti --rm -v /path/to/webPLM:/app -v "$HOME/.ivy2":/root/.ivy2 1science/sbt sbt clean stage
+      - docker run -ti --rm -v /path/to/PLM-judge:/app -v "$HOME/.ivy2":/root/.ivy2 1science/sbt sbt assembly
+    - Mais je préfère avoir directement les sources dans l'image, de façon à pouvoir rebuilder exactement le même binaire aisément
 - Mettre à jour les fichiers docker-compose.yml
   - Problème avec les links entre containers
     - Dans l'ancienne version de docker-compose, on pouvait utiliser la commande /links/ pour permettre aux containers de communiquer entre eux
@@ -4525,10 +4531,22 @@ case _ => MergeStrategy.first
     - Par exemple /links : - db/ permet de communiquer avec le service /db/ via l'URL http://db
     - Par contre, le code reposant sur les variables d'environnement est donc obsolète
     - Mais comment faire un fallback vers une URL par défaut de façon élégante avec ce nouveau système de links?
+    - [ ] Générer une variable d'environnement dans /docker-compose/ et vérifier son existence dans le code?
 *** Planned
 **** DONE Afficher un badge pour indiquer les exercices réussis
 - Actuellement, rien n'indique à l'utilisateur quels exercices il a déjà réussi
 - Ajouter des badges sur les exercices réussis en fonction des langages de programmation choisis
+** Semaine du <2016-07-25 lun.> au <2016-07-27 mer.>
+*** Done
+- Mettre à jour les fichiers Dockerfile
+  - Ajout d'un Dockerfile permettant de générer une image servant à builder une application Play
+    - Cette image peut être utilisée dans le workflow de build pour webPLM ou PLM-judge
+  - Mise à jour du Dockerfile pour webPLM
+    - Maintenant on se contente de copier les binaires de l'environnement de l'utilisateur dans l'image docker
+    - Ajout d'un script pour simplifier le workflow de génération de l'image
+    - Ce script build webPLM à l'aide de l'image docker Play puis génére l'image docker de webPLM
+    - Mise à jour du README pour refléter ces changements
+*** Planned
 **** TODO Mettre à jour les fichiers Dockerfile
 - Docker a évolué depuis qu'on a rédigé les fichiers Dockerfile
 - Certaines commandes sont apparues et sont à privilégiées par rapport aux anciennes
@@ -4540,7 +4558,7 @@ case _ => MergeStrategy.first
 - La syntaxe des fichiers docker-composes.yml actuels est dépréciée
   - Pour le moment, l'ancienne syntaxe est toujours supportée pour une raison de rétro-compatibilité
 - On est pas à l'abri d'une dépréciation totale de l'ancienne syntaxe
-**** TODO Ajouter les options de Docker pour limiter les ressources alloués aux containers
+**** TODO Ajouter les options de Docker pour limiter les ressources allouées aux containers
 **** TODO Re-implémenter les exercices manquants
 - Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
 - Tous les exos n'ont pas encore été extraits
