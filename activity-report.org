@@ -4550,6 +4550,27 @@ case _ => MergeStrategy.first
     - Modification du Dockerfile pour utiliser le JAR de PLM-judge
     - Adapatation du script utilisé pour build webPLM pour PLM-judge
     - Ajout d'un README pour expliquer le nouveau fonctionnement
+- Mettre à jour les fichiers docker-compose.yml
+  - Définition de plusieurs docker-compose.yml correspondant à plusieurs cas d'utilisation
+  - [ ] main-server
+    - Permet de déployer les composants principaux sur le serveur principal
+      - webPLM
+      - plm-accounts
+      - plm-profiles
+      - rabbitmq
+      - mongodb
+      - nginx
+  - [ ] judge
+    - Permet de déployer des juges sur les machines secondaires
+    - Déploie
+      - PLM-judge
+  - [ ] dev
+    - Permet de déployer l'ensemble des composants nécessaires pour l'exécution
+    - Permet de tester ces composants avant de déployer en prod
+    - Déploie
+      - webPLM
+      - PLM-judge
+      - rabbitmq
 *** Planned
 **** DONE Mettre à jour les fichiers Dockerfile
 - Docker a évolué depuis qu'on a rédigé les fichiers Dockerfile
