@@ -4544,10 +4544,14 @@ case _ => MergeStrategy.first
   - Mise à jour du Dockerfile pour webPLM
     - Maintenant on se contente de copier les binaires de l'environnement de l'utilisateur dans l'image docker
     - Ajout d'un script pour simplifier le workflow de génération de l'image
-    - Ce script build webPLM à l'aide de l'image docker Play puis génére l'image docker de webPLM
+    - Ce script build webPLM à l'aide de l'image docker Play puis génère l'image docker de webPLM
     - Mise à jour du README pour refléter ces changements
+  - Mise à jour du Dockerfile pour PLM-judge
+    - Modification du Dockerfile pour utiliser le JAR de PLM-judge
+    - Adapatation du script utilisé pour build webPLM pour PLM-judge
+    - Ajout d'un README pour expliquer le nouveau fonctionnement
 *** Planned
-**** TODO Mettre à jour les fichiers Dockerfile
+**** DONE Mettre à jour les fichiers Dockerfile
 - Docker a évolué depuis qu'on a rédigé les fichiers Dockerfile
 - Certaines commandes sont apparues et sont à privilégiées par rapport aux anciennes
   - COPY au lieu de ADD
