@@ -4550,6 +4550,14 @@ case _ => MergeStrategy.first
     - Modification du Dockerfile pour utiliser le JAR de PLM-judge
     - Adapatation du script utilisé pour build webPLM pour PLM-judge
     - Ajout d'un README pour expliquer le nouveau fonctionnement
+  - Modification des scripts pour pouvoir build le projet à partir de binaires
+    - Au cours du développement, on souhaite parfois tester le nouveau comportement de l'application au sein de l'environnement Docker
+    - Mais on souhaite éviter de commit/pusher alors qu'on est incertain du résultat
+    - Ajout d'une option --bin
+      - Indique aux scripts où récupérer les binaires du projet
+      - Copie les binaires dans le répertoire target/
+      - Passe directement à la construction de l'image finale
+      - Exemple : ~./make.sh --bin ~/ADT-PLM/PLM-judge/target/ -v 2.0-rc1~
 - Mettre à jour les fichiers docker-compose.yml
   - Définition de plusieurs docker-compose.yml correspondant à plusieurs cas d'utilisation
   - [ ] main-server
@@ -4564,7 +4572,7 @@ case _ => MergeStrategy.first
     - Permet de déployer des juges sur les machines secondaires
     - Déploie
       - PLM-judge
-  - [ ] dev
+  - [X] dev
     - Permet de déployer l'ensemble des composants nécessaires pour l'exécution
     - Permet de tester ces composants avant de déployer en prod
     - Déploie
@@ -4578,6 +4586,17 @@ case _ => MergeStrategy.first
   - COPY au lieu de ADD
 - De même, le build de certains composants de l'application a évolué
   - On utilise maintenant /sbt assembly/ pour générer un JAR de PLM-judge
+**** TODO Corriger la configuration de RabbitMQ
+- En déployant les nouvelles images docker pour tester, j'ai pu remarqué un comportement étrange au niveau de la communication via RabbitMQ
+- Au démarrage, le conteneur contenant le juge se connecte à la queue de message et attend une requête d'exécution
+- Une fois que le juge a traité une requête, il s'auto-détruit
+- Le conteneur redémarre alors
+- Sauf que lorsque le nouveau judge se connecte à la queue de message, il reçoit les messages précédents
+- Pour chaque message, il le traite et s'auto-détruit
+- 2 points particulièrement étranges :
+  - Le conteneur Docker n'a pas l'air de rédémarrer lorsque le juge traite les messages précédents, alors que le juge semble bien s'auto-détruire à chaque message
+  - Comment le juge arrive à rejouer l'ensemble des messages précédents s'il s'auto-détruit après chaque exécution ?
+    - Ca me semblerait plus logique qu'il tombe dans une boucle infinie et rejoue le 1er message à chaque fois
 **** TODO Mettre à jour les fichiers docker-compose.yml
 - De même que pour Docker, docker-compose a évolué depuis l'an dernier
 - La syntaxe des fichiers docker-composes.yml actuels est dépréciée
