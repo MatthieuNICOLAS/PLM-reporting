@@ -4579,6 +4579,15 @@ case _ => MergeStrategy.first
       - webPLM
       - PLM-judge
       - rabbitmq
+- Corriger la configuration de RabbitMQ
+  - Modification du code pour ACK explicitement les différents messages
+    - Le bug a été reproduit
+  - J'ai re-essayé en démarrant les différents composants en dehors de Docker
+    - Je n'ai pas réussi à reproduire ce bug
+  - J'ai re-essayé en retirant l'option /restart/ du docker-compose sur les juges
+    - Le bug a été reproduit
+  - Il s'agit en fait uniquement d'un "bug" d'affichage
+    - Lorsque un conteneur est redémarré, ses logs précédents sont de nouveaux ajoutés aux logs affichés par /docker-compose logs/
 *** Planned
 **** DONE Mettre à jour les fichiers Dockerfile
 - Docker a évolué depuis qu'on a rédigé les fichiers Dockerfile
@@ -4586,7 +4595,7 @@ case _ => MergeStrategy.first
   - COPY au lieu de ADD
 - De même, le build de certains composants de l'application a évolué
   - On utilise maintenant /sbt assembly/ pour générer un JAR de PLM-judge
-**** TODO Corriger la configuration de RabbitMQ
+**** DONE Corriger la configuration de RabbitMQ
 - En déployant les nouvelles images docker pour tester, j'ai pu remarqué un comportement étrange au niveau de la communication via RabbitMQ
 - Au démarrage, le conteneur contenant le juge se connecte à la queue de message et attend une requête d'exécution
 - Une fois que le juge a traité une requête, il s'auto-détruit
