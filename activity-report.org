@@ -4606,11 +4606,55 @@ case _ => MergeStrategy.first
   - Le conteneur Docker n'a pas l'air de rédémarrer lorsque le juge traite les messages précédents, alors que le juge semble bien s'auto-détruire à chaque message
   - Comment le juge arrive à rejouer l'ensemble des messages précédents s'il s'auto-détruit après chaque exécution ?
     - Ca me semblerait plus logique qu'il tombe dans une boucle infinie et rejoue le 1er message à chaque fois
-**** TODO Mettre à jour les fichiers docker-compose.yml
+** Semaine du <2016-08-01 lun.> au <2016-08-05 ven.>
+*** Done
+- Mettre à jour les fichiers docker-compose.yml
+  - Ajout du docker-compose pour déployer les juges
+  - Ajout du docker-compose pour déployer les services sur la machine principale
+- Déployer la nouvelle version
+  - Mise à jour de docker engine et de docker-compose de la machine de TN
+  - Génération des nouvelles images sur le serveur de TN
+    - plm-nginx
+    - webplm:2.0-rc2
+    - judge:2.0-rc1
+  - Les scripts fonctionnent correctement
+  - Problème avec PLM-accounts et PLM-profiles
+    - L'URL de connexion à la base de données n'est plus valide
+      - On utilisait la variable d'environnement DB_PORT_27017_TCP_ADDR générée automatiquement par docker-compose
+      - Maintenant c'est la variable d'environnement DB_ADDR
+    - Modification du code source pour corriger l'URL
+    - La re-génération des images échoue
+      - Des dépendances sont dépréciées
+  - Modification des images existantes de PLM-accounts et PLM-profiles
+    - Comme la modification à effectuer ne concerne dans les 2 cas qu'une seule ligne, il était plus simple pour le moment de modifier les images existantes
+    - Workflow de mise à jour
+      - Démarrer un conteneur en mode interactif basé sur l'image à mettre à jour
+	- /docker run -it plm-accounts /bin/bash/
+      - Modifier la ligne concernée
+      - Commit la modification
+	- /docker commit <id du container> plm-accounts:temp/
+    - Rencontre d'un problème concernant la CMD de la nouvelle image
+      - Démarrer en mode interactif le conteneur et commit ses modifications à changer la CMD lancée au démarrage du conteneur
+	- /grunt/ -> /bin/bash/
+      - J'ai dû refaire l'étape précédente en modifiant la commande utilisée pour démarrer le conteneur et commit la modification
+	- /docker run -it plm-accounts-temp grunt/
+	- /docker commit <id du container> plm-accounts:1.1/
+*** Planned
+**** DONE Mettre à jour les fichiers docker-compose.yml
 - De même que pour Docker, docker-compose a évolué depuis l'an dernier
 - La syntaxe des fichiers docker-composes.yml actuels est dépréciée
   - Pour le moment, l'ancienne syntaxe est toujours supportée pour une raison de rétro-compatibilité
 - On est pas à l'abri d'une dépréciation totale de l'ancienne syntaxe
+**** DONE Déployer la nouvelle version
+- Maintenant que les fichiers Dockerfile et docker-compose.yml sont prêts, il est temps de mettre à jour la version de prod
+**** TODO Corriger le build des images Docker de PLM-accounts et PLM-profiles
+- Comme dit précédemment, le build des images Docker de PLM-accounts et PLM-profiles échoue
+- Des dépendances sont dépréciées
+- Mettre à jour le processus de build
+**** TODO Publier les images Docker utilisées
+- Cela permettra de déployer les juges aisément sur une nouvelle machine
+- Cela permettra aussi à un nouvel utilisateur de déployer chez lui l'environnement aisément
+- Mettre à jour les fichiers docker-compose.yml en concordance
 **** TODO Ajouter les options de Docker pour limiter les ressources allouées aux containers
 **** TODO Re-implémenter les exercices manquants
 - Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
