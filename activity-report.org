@@ -4639,6 +4639,42 @@ case _ => MergeStrategy.first
       - J'ai dû refaire l'étape précédente en modifiant la commande utilisée pour démarrer le conteneur et commit la modification
 	- /docker run -it plm-accounts-temp grunt/
 	- /docker commit <id du container> plm-accounts:1.1/
+- Configurer *New Relic*
+  - [X] Ajouter un agent pour obtenir des informations plus détaillés sur les applications
+    - Un agent est disponible pour les applications Java
+      - Doc dispo ici : https://docs.newrelic.com/docs/agents/java-agent/frameworks/play-installation-java
+    - Il faudrait donc modifier les images *Docker* pour l'utiliser
+      - Quelles sont les bonnes pratiques dans ce cas de figure?
+	- Générer plusieurs images *Docker* : des images standards et d'autres avec *New Relic* ?
+    - Création de nouvelles images *Docker* pour webPLM et PLM-judge pour utiliser l'agent de *New Relic*
+  - [X] Remonter les ressources utilisées par la machine
+    - Permet de remonter
+      - CPU
+      - RAM
+      - Disk I/O
+      - Network I/O
+    - Installation d'un service de *New Relic* pour remonter ces données pour la machine de TN
+      - Doc dispo ici : https://docs.newrelic.com/docs/servers/new-relic-servers-linux/getting-started/new-relic-servers-linux
+      - Permet de voir ces stats par process
+    - Configuration de ce service pour fonctionner avec *Docker*
+      - Doc dispo ici : https://docs.newrelic.com/docs/servers/new-relic-servers-linux/getting-started/new-relic-servers-docker
+      - Permet d'avoir maintenant les stats par images *Docker*
+  - [X] Ajouter une alerte en cas de stress de la machine
+    - Installer le service de *New Relic* pour monitorer une machine Linux configure automatiquement une alerte par e-mail
+    - Celle-ci est envoyé si une condition suivante est remplie
+      - CPU > 80%
+      - RAM > 90%
+      - Disk IO > 90%
+      - Espace de stockage rempli > 90%
+    - Envoie aussi une alerte si le serveur arrête de report des données pendant plus de 5min
+- Ajouter un texte alternatif aux images
+  - Ajout du texte alternatif
+  - Modification au passage du style pour espacer les boutons
+- Ajouter les options de Docker pour limiter les ressources allouées aux containers
+  - Ajout de l'option /cpu_share/ sur les différents services du serveur principal
+    - Permet de donner un poids aux différents services pour l'accès aux ressources de la machine
+  - Ajout de l'option /mem_limit/ et /memswap_limit/ sur les juges
+    - Permet de limiter la quantité de RAM et la quantité de RAM + swap utilisable par un juge
 *** Planned
 **** DONE Mettre à jour les fichiers docker-compose.yml
 - De même que pour Docker, docker-compose a évolué depuis l'an dernier
@@ -4647,6 +4683,19 @@ case _ => MergeStrategy.first
 - On est pas à l'abri d'une dépréciation totale de l'ancienne syntaxe
 **** DONE Déployer la nouvelle version
 - Maintenant que les fichiers Dockerfile et docker-compose.yml sont prêts, il est temps de mettre à jour la version de prod
+**** DONE Ajouter un texte alternatif aux images
+- Semblerait que les logos utilisés pour l'interface de login rencontrent des difficultés à s'afficher
+- Ajouter un texte alternatif à ces images
+**** DONE Ajouter les options de Docker pour limiter les ressources allouées aux containers
+**** DONE Configurer *New Relic*
+- *New Relic* est un service de supervision/monitoring
+- Met à disposition des agents pour analyser le comportement des applications lancées
+- Met aussi à disposition des services permettant de remonter les ressources utilisées par la machine
+- Il est possible de configurer des alertes pour être informé d'un éventuel plantage du serveur
+**** TODO Tester les plugins de *New Relic* pour *RabbitMQ*
+- Des plugins sont disponibles pour monitorer *RabbitMQ*
+  - Par exemple : https://rpm.newrelic.com/accounts/1393737/plugins/directory/95
+- Voir si ceux-ci sont compatibles avec notre application
 **** TODO Corriger le build des images Docker de PLM-accounts et PLM-profiles
 - Comme dit précédemment, le build des images Docker de PLM-accounts et PLM-profiles échoue
 - Des dépendances sont dépréciées
@@ -4655,7 +4704,6 @@ case _ => MergeStrategy.first
 - Cela permettra de déployer les juges aisément sur une nouvelle machine
 - Cela permettra aussi à un nouvel utilisateur de déployer chez lui l'environnement aisément
 - Mettre à jour les fichiers docker-compose.yml en concordance
-**** TODO Ajouter les options de Docker pour limiter les ressources allouées aux containers
 **** TODO Re-implémenter les exercices manquants
 - Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
 - Tous les exos n'ont pas encore été extraits
