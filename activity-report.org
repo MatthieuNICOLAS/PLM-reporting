@@ -4667,7 +4667,7 @@ case _ => MergeStrategy.first
       - Disk IO > 90%
       - Espace de stockage rempli > 90%
     - Envoie aussi une alerte si le serveur arrête de report des données pendant plus de 5min
-- Ajouter un texte alternatif aux images
+- Ajouter un texte alternatif aux images utilisés dans webPLM
   - Ajout du texte alternatif
   - Modification au passage du style pour espacer les boutons
 - Ajouter les options de Docker pour limiter les ressources allouées aux containers
@@ -4675,6 +4675,18 @@ case _ => MergeStrategy.first
     - Permet de donner un poids aux différents services pour l'accès aux ressources de la machine
   - Ajout de l'option /mem_limit/ et /memswap_limit/ sur les juges
     - Permet de limiter la quantité de RAM et la quantité de RAM + swap utilisable par un juge
+- Débugger la leçon sur les turmites
+  - L'erreur provient de la sérialisation puis désérialisation des exercices
+  - L'attribut *World.parameters* n'est pas sérialisé correctement
+  - Dans le cas des turmites, le paramètre /rule/ qui est de type *char[]* est sérialisé en tant que *String*
+  - Ajout du type du paramètre dans la sérialisation
+  - Regénération des sérialisations JSON
+  - Erreur maintenant à cause du type *Color*
+    - Dans certains exercices, notamment /methods.slug.SlugSnail/, une instance de *Color* est utilisé en tant que paramètre
+    - Je n'arrive pas à configurer /Jackson/ pour utiliser mes sérialiseurs customs s'il rencontre une instance de leur type
+    - Il utilise alors son sérialiseur par défaut
+    - La désérialisation échoue ensuite car, le type étant correctement renseigné dans la sérialisation, on utilise mon désérialiseur custom
+  - Modification de *CustomColorDeserializer* pour supporter les champs sérialiser avec le comportement par défaut de /Jackson/
 *** Planned
 **** DONE Mettre à jour les fichiers docker-compose.yml
 - De même que pour Docker, docker-compose a évolué depuis l'an dernier
@@ -4683,7 +4695,7 @@ case _ => MergeStrategy.first
 - On est pas à l'abri d'une dépréciation totale de l'ancienne syntaxe
 **** DONE Déployer la nouvelle version
 - Maintenant que les fichiers Dockerfile et docker-compose.yml sont prêts, il est temps de mettre à jour la version de prod
-**** DONE Ajouter un texte alternatif aux images
+**** DONE Ajouter un texte alternatif aux images utilisés dans webPLM
 - Semblerait que les logos utilisés pour l'interface de login rencontrent des difficultés à s'afficher
 - Ajouter un texte alternatif à ces images
 **** DONE Ajouter les options de Docker pour limiter les ressources allouées aux containers
@@ -4692,6 +4704,22 @@ case _ => MergeStrategy.first
 - Met à disposition des agents pour analyser le comportement des applications lancées
 - Met aussi à disposition des services permettant de remonter les ressources utilisées par la machine
 - Il est possible de configurer des alertes pour être informé d'un éventuel plantage du serveur
+**** DONE Débugger la leçon sur les turmites
+- Une erreur se produit à l'exécution du code de l'élève
+  - java.lang.ClassCastException : java.lang.String cannot be cast to [C 
+    Merci de corriger votre code.
+    at plm.runtime1.LangtonColors.run (plm.runtime1.LangtonColors:17)
+    at plm.core.lang.JVMCompiledLang.runEntity (null:-1)
+    at plm.core.model.lesson.ExerciseRunner$3.run (null:-1) at java.lang.Thread.run (Thread.java:745)
+- Corriger ce bug
+**** TODO Réaliser un script pour démarrer les juges sur les machines des étudiants
+- Plutôt que de télécharger et démarrer une instance de webPLM sur les machines des étudiants en cas de surcharge serveur, il peut être utile de juste démarrer un juge sur leur machine
+- Réaliser un script
+  - Récupérant le JAR de l'appli
+  - Lançant le juge
+    - En limitant les ressources?
+  - Rédémarrant le juge une fois que celui-ci a traité une requête
+  - S'interrompant si le juge quitte avec une erreur trop de fois
 **** TODO Tester les plugins de *New Relic* pour *RabbitMQ*
 - Des plugins sont disponibles pour monitorer *RabbitMQ*
   - Par exemple : https://rpm.newrelic.com/accounts/1393737/plugins/directory/95
