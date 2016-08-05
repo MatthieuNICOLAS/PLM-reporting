@@ -4687,6 +4687,22 @@ case _ => MergeStrategy.first
     - Il utilise alors son sérialiseur par défaut
     - La désérialisation échoue ensuite car, le type étant correctement renseigné dans la sérialisation, on utilise mon désérialiseur custom
   - Modification de *CustomColorDeserializer* pour supporter les champs sérialiser avec le comportement par défaut de /Jackson/
+- Ajouter la configuration Jackson pour les différents univers
+  - Ces univers n'étant pas encore supportés par *webPLM*, il faudrait plutôt porter ces univers
+- Résoudre le problème d'incrémentation du compteur avec Kamon
+  - N'ayant reçu aucune réponse à ma question, je ne pense pas que *Kamon* soit adapté à notre cas d'utiliation
+  - Il faudrait plutôt voir pour utiliser *New Relic* pour monitorer le workflow d'exécution
+- Retravailler le workflow de déploiement des dockers
+  - La nouvelle organisation du repo [[https://github.com/buggleinc/plm-dockers/tree/update][plm-dockers]] corrige ce problème
+- Profiler l'application
+  - *New Relic* nous permet d'observer la consommation en ressources des différents composants de l'application
+- Corriger les tests d'intégration & Découper les tests d'intégration des leçons
+  - Les leçons et exercices ayant été retirés de *PLM*, les tests d'intégration associés l'ont été aussi
+  - Fusion de ces tâches avec la tâche /Re-implémenter les tests d'intégrations/
+- Utiliser l'injection de dépendance
+  - Le refactoring de *webPLM* et *PLM* a permis
+    - De revoir l'architecture de l'application pour limiter le nombre de dépendances des composants
+    - D'utiliser l'injection de dépendance là où c'était possible
 *** Planned
 **** DONE Mettre à jour les fichiers docker-compose.yml
 - De même que pour Docker, docker-compose a évolué depuis l'an dernier
@@ -4712,6 +4728,36 @@ case _ => MergeStrategy.first
     at plm.core.lang.JVMCompiledLang.runEntity (null:-1)
     at plm.core.model.lesson.ExerciseRunner$3.run (null:-1) at java.lang.Thread.run (Thread.java:745)
 - Corriger ce bug
+**** DONE Publier les images Docker utilisées
+- Cela permettra de déployer les juges aisément sur une nouvelle machine
+- Cela permettra aussi à un nouvel utilisateur de déployer chez lui l'environnement aisément
+- Mettre à jour les fichiers docker-compose.yml en concordance
+**** DONE Retravailler le workflow de déploiement des dockers
+- Que faire des *docker-compose.yml*?
+  - Les machines de productions n'ont besoin seulement que des *docker-compose.yml* des applications à déployer
+  - Les mettre dans un repo différent? ([[https://github.com/BuggleInc/plm-dockers][PLM-dockers?]])
+  - Garder cependant les *docker-compose.yml* dans repo du projet pour faciliter le test de l'application en mode développement?
+**** DONE Profiler l'application
+- Voir les performances en RAM de l'application
+- Voir les performances en CPU de l'application
+**** DONE Utiliser l'injection de dépendance
+- Voir si ça permettrait de nettoyer et clarifier le code avec
+  - Un injecteur global permettant de récupérer la configuration du serveur, les objets de Silhouette
+  - Un injecteur par utilisateur permettant de récupérer son profil et ses instances
+- Certains articles de blog ([[http://www.michaelpollmeier.com/2014/06/29/simple-dependency-injection-scala/][ici]] et [[http://loicdescotte.github.io/posts/scala-di/][là]]) expliquent cependant qu'on peut se passer de l'injection de dépendances en Scala
+  - Voir aussi [[http://aloiscochard.blogspot.fr/2014/12/the-cake-is-lie.html][cet article]] et [[http://di-in-scala.github.io/][cette page]] pour plus d'informations
+**** CANCELLED Ajouter la configuration Jackson pour les différents univers
+- [ ] Univers de light bot
+- [ ] Univers du lander
+**** CANCELLED Résoudre le problème d'incrémentation du compteur avec Kamon
+**** CANCELLED Corriger les tests d'intégration
+- Les tests d'intégration de PLM échouent depuis l'ajout de la leçon Logo
+- Ils échouent aussi dans la branche webPLM-split
+- Voir d'où proviennent les erreurs
+**** CANCELLED Découper les tests d'intégration des leçons
+- Actuellement, il existe une série de tests visant à vérifier la validité des solutions pour chaque exercice de chaque leçon
+- Cette série de tests échoue de temps en temps car elle met trop de temps à s'exécuter
+- Découper leçon par leçon cette série de test permettrait d'éviter ce faux-positif et de localiser plus finement où les erreurs se produisent
 **** TODO Réaliser un script pour démarrer les juges sur les machines des étudiants
 - Plutôt que de télécharger et démarrer une instance de webPLM sur les machines des étudiants en cas de surcharge serveur, il peut être utile de juste démarrer un juge sur leur machine
 - Réaliser un script
@@ -4728,10 +4774,6 @@ case _ => MergeStrategy.first
 - Comme dit précédemment, le build des images Docker de PLM-accounts et PLM-profiles échoue
 - Des dépendances sont dépréciées
 - Mettre à jour le processus de build
-**** TODO Publier les images Docker utilisées
-- Cela permettra de déployer les juges aisément sur une nouvelle machine
-- Cela permettra aussi à un nouvel utilisateur de déployer chez lui l'environnement aisément
-- Mettre à jour les fichiers docker-compose.yml en concordance
 **** TODO Re-implémenter les exercices manquants
 - Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
 - Tous les exos n'ont pas encore été extraits
@@ -4795,11 +4837,11 @@ case _ => MergeStrategy.first
 **** TODO Re-implémenter les tests d'intégrations
 - Les leçons et les exercises ayant été retirés du repo /PLM/, les tests d'intégrations concernant ces objets ne fonctionnent plus
 - Les re-implémenter dans /webPLM/
+- Garder en tête qu'il faut pouvoir décomposer les tests d'intégration afin que leur exécution sur *Travis* ne timeout pas
 **** TODO Résoudre le problème d'erreur de compilation de webPLM sur les disques durs chiffrés
 - Potentiellement lié à [[https://github.com/playframework/playframework/issues/1379][cette issue]]
 - J'avais modifié le fichier de build pour ajouter [[https://github.com/BuggleInc/webPLM/blob/master/build.sbt#L38][cette option]] censée résoudre le problème
 - Malheureusement le problème semble toujours présent
-**** TODO Résoudre le problème d'incrémentation du compteur avec Kamon
 **** TODO Cloner les mondes, entités et opérations lors d'un clonage d'un exercice
 - Actuellement, on se contente de fournir au clone les mêmes références pour les mondes
 - Lorsque plusieurs utilisateurs exécutent en concurrence un programme sur un même exercice en mode local, leur programmes modifient le monde simultanément
@@ -4817,15 +4859,6 @@ case _ => MergeStrategy.first
 - L'offset est incorrect actuellement:
   - +1 pour Java et Scala
   - +13 pour Python
-**** TODO Ajouter la configuration Jackson pour les différents univers
-- [ ] Univers de light bot
-- [ ] Univers du lander
-**** TODO Utiliser l'injection de dépendance
-- Voir si ça permettrait de nettoyer et clarifier le code avec
-  - Un injecteur global permettant de récupérer la configuration du serveur, les objets de Silhouette
-  - Un injecteur par utilisateur permettant de récupérer son profil et ses instances
-- Certains articles de blog ([[http://www.michaelpollmeier.com/2014/06/29/simple-dependency-injection-scala/][ici]] et [[http://loicdescotte.github.io/posts/scala-di/][là]]) expliquent cependant qu'on peut se passer de l'injection de dépendances en Scala
-  - Voir aussi [[http://aloiscochard.blogspot.fr/2014/12/the-cake-is-lie.html][cet article]] et [[http://di-in-scala.github.io/][cette page]] pour plus d'informations
 **** TODO Refactorer la partie authentification
 - Mettre à jour la version de Silhouette
 - Voir pour mieux gérer les *Future* dans *UserDAORestImpl*
@@ -4835,19 +4868,6 @@ case _ => MergeStrategy.first
 - Si l'utilisateur recharge la page, il doit de nouveau répondre à la question.
 - C'est seulement s'il sélectionne "Décider plus tard" que la pop-up disparaît pendant plusieurs jours.
 - Voir pour n'afficher la pop-up qu'après un certain nombre d'exécution
-**** TODO Corriger les tests d'intégration
-- Les tests d'intégration de PLM échouent depuis l'ajout de la leçon Logo
-- Ils échouent aussi dans la branche webPLM-split
-- Voir d'où proviennent les erreurs
-**** TODO Découper les tests d'intégration des leçons
-- Actuellement, il existe une série de tests visant à vérifier la validité des solutions pour chaque exercice de chaque leçon
-- Cette série de tests échoue de temps en temps car elle met trop de temps à s'exécuter
-- Découper leçon par leçon cette série de test permettrait d'éviter ce faux-positif et de localiser plus finement où les erreurs se produisent
-**** TODO Retravailler le workflow de déploiement des dockers
-- Que faire des *docker-compose.yml*?
-  - Les machines de productions n'ont besoin seulement que des *docker-compose.yml* des applications à déployer
-  - Les mettre dans un repo différent? ([[https://github.com/BuggleInc/plm-dockers][PLM-dockers?]])
-  - Garder cependant les *docker-compose.yml* dans repo du projet pour faciliter le test de l'application en mode développement?
 **** TODO Mettre en place des outils de monitoring
 - Voir http://kamon.io/, http://graphite.wikidot.com/, http://munin-monitoring.org/ pour voir lequel est le plus adapté à notre besoin
 - Stats intéressantes à posséder:
@@ -4892,9 +4912,6 @@ case _ => MergeStrategy.first
 - Voir pour adapter ça
 **** TODO Ajouter d'autres providers
 - Twitter?
-**** TODO Profiler l'application
-- Voir les performances en RAM de l'application
-- Voir les performances en CPU de l'application
 **** TODO Revoir Blockly
 - Les toolboxs pour chaque exercice ne semble pas avoir été récupérées lors du merge
 - Voir pour les ajouter
