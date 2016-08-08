@@ -4758,6 +4758,22 @@ case _ => MergeStrategy.first
 - Actuellement, il existe une série de tests visant à vérifier la validité des solutions pour chaque exercice de chaque leçon
 - Cette série de tests échoue de temps en temps car elle met trop de temps à s'exécuter
 - Découper leçon par leçon cette série de test permettrait d'éviter ce faux-positif et de localiser plus finement où les erreurs se produisent
+** Semaine du <2016-08-08 lun.> au <2016-08-12 ven.>
+*** Done
+- Problème avec l'agent Java de *New Relic* dans les juges
+  - L'agent pose des problèmes de performances
+  - Les juges mettent trop de temps à répondre
+  - L'exécution est donc abandonnée
+  - Utilisation de l'image /buggleinc/plm-judge:2.O-rc2/ à la place
+- Ecrire les README pour les docker-compose.yml
+  - [X] Ecriture du README pour l'environnement de dev
+  - [X] Ecriture du README pour déployer les juges
+  - [X] Ecriture du README pour déployer les composants du serveur principal
+*** Planned
+**** DONE Ecrire les README pour les docker-compose.yml
+- On possède maintenant plusieurs /docker-compose.yml/ permettant de déployer l'application ou une sous-partie
+- Certains nécessitent de déclarer des variables d'environnement ou de monter des fichiers de configuration
+- Rédiger des README pour expliquer le but de chacun de ces /docker-compose.yml/ et comment les utiliser 
 **** TODO Réaliser un script pour démarrer les juges sur les machines des étudiants
 - Plutôt que de télécharger et démarrer une instance de webPLM sur les machines des étudiants en cas de surcharge serveur, il peut être utile de juste démarrer un juge sur leur machine
 - Réaliser un script
