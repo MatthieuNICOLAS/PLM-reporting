@@ -4769,12 +4769,22 @@ case _ => MergeStrategy.first
   - [X] Ecriture du README pour l'environnement de dev
   - [X] Ecriture du README pour déployer les juges
   - [X] Ecriture du README pour déployer les composants du serveur principal
+- Réaliser un script pour démarrer les juges sur les machines des étudiants
+  - Ajout d'un script Bash dans *PLM-judge*
+    - Si le JAR de *PLM-judge* n'est pas déjà présent, le télécharge
+    - Set les variables d'environnement nécessaires pour se connecter à la queue de message
+    - Démarre le juge puis le rédémarre tant qu'il n'a pas observé 5 erreurs
+      - On parle d'erreurs propre au juge, et non pas d'erreurs liés au code de l'élève
+      - L'erreur principalement attendue est l'échec de la connexion à la queue de message
+  - Release d'archives /zip/ et /tar.gz/ contenant ce script
+    - Ces archives permettent de conserver les permissions sur le script
+    - Les élèves peuvent donc lancer le script sans utiliser de /chmod u+x launcher.sh/ au préalable
 *** Planned
 **** DONE Ecrire les README pour les docker-compose.yml
 - On possède maintenant plusieurs /docker-compose.yml/ permettant de déployer l'application ou une sous-partie
 - Certains nécessitent de déclarer des variables d'environnement ou de monter des fichiers de configuration
 - Rédiger des README pour expliquer le but de chacun de ces /docker-compose.yml/ et comment les utiliser 
-**** TODO Réaliser un script pour démarrer les juges sur les machines des étudiants
+**** DONE Réaliser un script pour démarrer les juges sur les machines des étudiants
 - Plutôt que de télécharger et démarrer une instance de webPLM sur les machines des étudiants en cas de surcharge serveur, il peut être utile de juste démarrer un juge sur leur machine
 - Réaliser un script
   - Récupérant le JAR de l'appli
