@@ -4779,6 +4779,44 @@ case _ => MergeStrategy.first
   - Release d'archives /zip/ et /tar.gz/ contenant ce script
     - Ces archives permettent de conserver les permissions sur le script
     - Les élèves peuvent donc lancer le script sans utiliser de /chmod u+x launcher.sh/ au préalable
+- Corriger le build des images Docker de PLM-accounts et PLM-profiles
+  - Besoin de mettre à jour MEAN.JS
+  - Pour ça, il faut fusionner l'historique du repo MEAN.JS
+    - /git remote add mean git@github.com:meanjs/mean.git/
+    - /git pull -X theirs --allow-unrelated-histories mean 0.4.x/
+  - Problème avec l'authentification
+    - MEAN.JS propose d'emblée un module pour gérer les utilisateurs
+    - C'est celui qui est utilisé dans la version actuelle de PLM-accounts
+    - Cependant, la fonction utilisée pour hasher a été modifiée
+      - Auparavant : /crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');/
+      - Maintenant : /crypto.pbkdf2Sync(password, new Buffer(this.salt, 'base64'), 10000, 64).toString('base64');/
+    - Mais celle-ci ne renvoie pas le même résultat pour un même couple (mot de passe, salt)
+    - Ce changement est justifié ici: https://github.com/meanjs/mean/commit/08f1750d9450df834a0cf19d303e3c2f9e5da565#diff-240057bbb9109acf3b1745506df4b781
+    - Voir ce que l'on peut faire pour les comptes existants?
+      - [-] Se contenter de supporter les 2 méthodes de hash
+	- [-] Déjà checker avec l'ancienne méthode, et avec la seconde si la 1ère échoue
+	- [-] Ou ajouter un champ permettant de différencier les anciens utilisateurs des nouveaux et ainsi déterminer quelle méthode de hash utiliser
+      - [-] Supporter les 2 méthodes de hash et regénérer le mot de passe d'un utilisateur lorsque celui-ci se connecte avec l'ancienne
+      - [-] Faire une composition des 2 méthodes de hash
+        - Au lieu de hash uniquement avec la nouvelle méthode les mots de passe, on peut hasher les mots de passes avec les 2 méthodes successivement
+        - Il faudrait lancer un script au préalable pour hasher les mots de passe existants avec la nouvelle méthode
+        - Mais comme le problème provient de comment le /salt/ est stocké, je n'ai pas l'impression que ça résoudrait le problème
+    - Je rencontre un autre problème lié semblerait à la version de Node
+      - La fonction /crypto.pbkdf2Sync(password, this.salt, 10000, 64).toString('base64');/ ne renvoie pas le même résultat en v0.12.14 qu'en v6.3.1
+      - Je me mets en v0.12.14 de Node -> je créé un compte -> je peux me connecter -> je passe en v4.x -> je peux me connecter -> je passe en v6.x -> je peux plus me connecter
+      - Je me mets en v6.x de Node -> je créé un compte -> je peux me connecter -> je passe en v4.x -> je peux plus me connecter
+      - Par contre, si je démarre la console Node dans le terminal, peu importe la version de Node, le même appel à /crypto.pbkdf2Sync("password", "salt", 10000, 64).toString('base64');/ génère toujours le même résultat
+    - En fait, les 2 problèmes sont liés
+      - Avant le commit linké précédemment, le /salt/ stocké était brouillé
+        - Du genre : �\u000b���<�\n\u001f\u00056\u00122yF�
+      - Pour le même appel /crypto.pbkdf2Sync("password", "�\u000b���<�\n\u001f\u00056\u00122yF�", 10000, 64).toString('base64');/
+        - Node v0.12.x | v4.x renvoie /ngxGurwC5e1Skko4D9w8b82Z6A/MpH5imCDIQiyyfhFkjYzkPSgepiFtxVHPAJ++7OsZf1PjhTxxrz1f2mnbiQ==/
+        - Node v6.x renvoie /jbEXjC6BcWkHuYC9nrNwdnC2vUq3uY7MRagwekldb3qqB9V1eEWSCsFHLzqX8i1Q0ajQIbhwQH/kGZR1OdHGxA==/
+      - Par contre, pour un /salt/ bien construit, l'appel à /crypto.pbkd2Sync()/ renvoie le même résultat peu importe la version
+    - Du coup, il faudra voir ce que l'on fait des comptes existants
+      - [ ] Réinitialisation du /password/ et du /salt/ de chaque utilisateur après avoir migré à la nouvelle version de MEAN.JS
+        - Faire un script pour générer un nouveau /password/ et /salt/ pour chaque utilisateur et mise à jour de la BDD
+        - Envoi de mails pour avertir les utilisateurs et les inviter à changer leur mot de passe
 *** Planned
 **** DONE Ecrire les README pour les docker-compose.yml
 - On possède maintenant plusieurs /docker-compose.yml/ permettant de déployer l'application ou une sous-partie
