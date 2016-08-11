@@ -4812,11 +4812,24 @@ case _ => MergeStrategy.first
       - Pour le même appel /crypto.pbkdf2Sync("password", "�\u000b���<�\n\u001f\u00056\u00122yF�", 10000, 64).toString('base64');/
         - Node v0.12.x | v4.x renvoie /ngxGurwC5e1Skko4D9w8b82Z6A/MpH5imCDIQiyyfhFkjYzkPSgepiFtxVHPAJ++7OsZf1PjhTxxrz1f2mnbiQ==/
         - Node v6.x renvoie /jbEXjC6BcWkHuYC9nrNwdnC2vUq3uY7MRagwekldb3qqB9V1eEWSCsFHLzqX8i1Q0ajQIbhwQH/kGZR1OdHGxA==/
-      - Par contre, pour un /salt/ bien construit, l'appel à /crypto.pbkd2Sync()/ renvoie le même résultat peu importe la version
+      - Par contre, pour un /salt/ bien construit, l'appel à /crypto.pbkd2Sync("password", "salt", 10000, 64)/ renvoie le même résultat peu importe la version
+      - On retrouve le problème précédent si on ajoute un accent au mot de passe
+        - Utiliser d'autres caractères spéciaux tels que /?/ ou /#/ n'a pas l'air de reproduire le problème
+      - Pour le même appel /crypto.pbkdf2Sync("pàssword", "salt", 10000, 64).toString('base64');/
+        - Node v0.12.x | v4.x renvoie /G7bGPWNZPC0bEDoraY9nxzV/RlwBWV7JKE0hu+b86piEy2ZHqT+n0k409RAp5yy4CtktYce3lC9Y9UCuO8XQxA==/
+        - Node v6.x renvoie /3KFr2KaeZVhpKcJF262k6+5VxpHfaVCWYXl69TBapIL+RsWCyyrbfXvKxc2AQLnC2yC7AtMFO8PXzBnH83fVVw==/
+      - Ce problème est dû à l'encodage par défaut des *Buffer* dans Node
+        - Node v0.12.x | v4.x, /crypto.pbkdf2Sync("pàssword", "salt", 10000, 64).toString('base64') === crypto.pbkdf2Sync(new Buffer("pàssword", "ascii"), "salt", 10000, 64).toString('base64')/
+        - Node v6.x, /crypto.pbkdf2Sync("pàssword", "salt", 10000, 64).toString('base64') === crypto.pbkdf2Sync(new Buffer("pàssword", "utf8"), "salt", 10000, 64).toString('base64')/
     - Du coup, il faudra voir ce que l'on fait des comptes existants
       - [ ] Réinitialisation du /password/ et du /salt/ de chaque utilisateur après avoir migré à la nouvelle version de MEAN.JS
         - Faire un script pour générer un nouveau /password/ et /salt/ pour chaque utilisateur et mise à jour de la BDD
         - Envoi de mails pour avertir les utilisateurs et les inviter à changer leur mot de passe
+      - [X] Supporter les 2 méthodes de hash et regénérer le mot de passe d'un utilisateur lorsque celui-ci se connecte avec l'ancienne
+    - Modification du module /users/ pour
+      - [X] Vérifier si l'utilisateur courant fait partie des anciens comptes ou des nouveaux
+      - [X] L'authentifier avec la méthode de hash correspondante
+      - [X] Générer un nouveau sel et mettre à jour le hash de son mot de passe s'il s'agit d'un ancien compte
 *** Planned
 **** DONE Ecrire les README pour les docker-compose.yml
 - On possède maintenant plusieurs /docker-compose.yml/ permettant de déployer l'application ou une sous-partie
