@@ -4843,6 +4843,50 @@ case _ => MergeStrategy.first
     - En limitant les ressources?
   - Rédémarrant le juge une fois que celui-ci a traité une requête
   - S'interrompant si le juge quitte avec une erreur trop de fois
+** Semaine du <2016-08-16 mar.> au <2016-08-19 ven.>
+*** Done
+- Corriger le build des images Docker de PLM-accounts et PLM-profiles
+  - Refactoring de l'implémentation de [[https://github.com/jaredhanson/oauth2orize][OAuth2orize]] pour la nouvelle version de MEAN.JS
+    - Auparavant, l'architecture de MEAN.JS proposée
+      - Un répertoire /app/ pour le code côté serveur
+      - Un répertoire /public/ pour le code côté client
+    - L'implémentation actuelle se trouve donc dans ces 2 dossiers
+    - Maintenant, l'architecture de MEAN.JS se base sur des modules
+    - Dans chaque module se trouve
+      - Un répertoire /server/ pour le code côté serveur
+      - Un répertoire /client/ pour le code côté client
+    - Déplacement des fichiers existants dans ces répertoires
+    - Nettoyage du code
+      - Côté serveur
+        - Lors de la 1ère implémentation, j'avais rencontré beaucoup de difficultés à comprendre le fonctionnement de *OAuth2orize*
+        - Notamment dans ce type de code
+          - exports.token = [
+              passport.authenticate(['basic', 'oauth2-client-password'], {
+                session: false
+              }),
+              server.token(),
+              server.errorHandler()
+            ];
+        - Normalement, on est censé exporter une ou plusieurs méthodes ayant pour signature /function (req, res, next)/
+	  - /req/ étant la requête du client
+	  - /res/ l'objet servant à répondre à la requête
+	  - /next/ la prochaine méthode à appeler si on a exporté plusieurs méthodes
+        - Ici, les signatures des méthodes ne correspondent pas, par exemple /server.token()/
+        - En fait, /server.token()/ est exécutée au lancement du serveur et renvoie en résultat une méthode ayant pour signature /function (req, res, next)/
+        - C'est cette méthode générée par /server.token()/ qui sera ensuite appelée lorsqu'un utilisateur accédera à l'URL correspondante
+      - Côté client
+        - Redirection de l'utilisateur
+	  - Lorsque l'utilisateur accède au formulaire d'autorisation pour l'accès aux données du compte par une application tierce, on vérifie s'il est connecté
+	  - Si ce n'est pas le cas, on le redirige vers la page de sign-in
+	  - Lorsqu'il s'est correctement authentifié, on le redirige sur la page précédente, le formulaire d'autorisation donc
+	  - Cependant, si l'utilisateur ne possède pas de compte, il doit déjà s'en créer un via le formulaire de la page de sign-up
+	  - Une fois son compte créé, on le redirige sur la page précédente, la page de sign-in donc, ce qui a finalement pour effet de le rediriger sur la page d'accueil
+	  - *OAuth2orize* propose bien [[https://github.com/jaredhanson/connect-ensure-login][une librairie]] pour gérer les redirections mais celle-ci n'est pas compatible avec un système d'authentification utilisant des requêtes AJAX tel que celui de MEAN.JS
+	  - Lors de la 1ère implémentation, j'avais alors géré les redirections manuellement à l'aide du /localStorage/ mais cette implémentation rencontrait quelques difficultés
+	  - MEAN.js implémente un système pour conserver la page précédente en mémoire de façon à pouvoir rediriger l'utilisateur après que celui-ci se soit authentifié ou qu'il ait créé un compte
+	  - Cependant, la transition de /sign-in/ à /sign-up/ écrase la redirection vers /oauth2/dialog/
+	  - Modification de leur système pour ne pas écraser la redirection lorsqu'on navigue entre /sign-in/ et /sign-up/
+*** Planned
 **** TODO Tester les plugins de *New Relic* pour *RabbitMQ*
 - Des plugins sont disponibles pour monitorer *RabbitMQ*
   - Par exemple : https://rpm.newrelic.com/accounts/1393737/plugins/directory/95
