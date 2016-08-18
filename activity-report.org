@@ -4886,7 +4886,60 @@ case _ => MergeStrategy.first
 	  - MEAN.js implémente un système pour conserver la page précédente en mémoire de façon à pouvoir rediriger l'utilisateur après que celui-ci se soit authentifié ou qu'il ait créé un compte
 	  - Cependant, la transition de /sign-in/ à /sign-up/ écrase la redirection vers /oauth2/dialog/
 	  - Modification de leur système pour ne pas écraser la redirection lorsqu'on navigue entre /sign-in/ et /sign-up/
+  - Build de l'image Docker de PLM-accounts
+    - Le build s'est déroulé correctement et l'image est fonctionnelle
+- Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-accounts
+  - Mise à jour des routes
+    - Côté client
+      - Route de la fenêtre de dialogue pour autoriser l'application à accéder à nos informations
+    - Côté serveur
+      - Route pour échanger le code d'autorisation fourni par le client contre un token
+      - Route pour obtenir les informations de l'utilisateur à partir d'un token
+  - Modification de la requête pour obtenir les informations de l'utilisateur
+    - Ajout du header /AUTHORIZATION/ ayant pour valeur /Bearer <token>/ 
+  - Problème pour tester avec différentes configurations de PLM-accounts
+    - Par défaut, webPLM utilise PLM-accounts hébergé sur la machine de TN
+    - La configuration par défaut est surchargeable à l'aide du fichier de config /silhouette.conf/
+    - Sauf
+      - côté serveur, /apiURL/ qui n'est pas un paramètre pris en compte dans la version 3 de *Silhouette*
+      - côté client, plusieurs paramètres sont codés en dur dans le fichier de config /app.auth.js/ pour chaque provider
+	- /authorizationEndpoint/
+	- /clientID/
+    - Il faut donc modifier le code selon la configuration de l'environnement de dev/test/prod
+  - Surcharger /apiURL/
+    - Comme dit précédemment, ce paramètre de configuration n'est pas pris en compte dans la version 3 de *Silhouette*
+    - Mais il l'est dans la version 4
+    - Cependant, malgré un [[http://silhouette.mohiva.com/v4.0/docs/migration-guide][guide de migration plutôt léger]], j'ai préféré ne pas mettre *Silhouette*
+      - La mise à jour de *Silhouette* semble modifier plus de contenu qu'indiquer dans le guide de migration
+      - *SilhouetteModule*, *ApplicationController* et *SocialAuthController* doivent être modifiés
+    - Le temps manquant et les changements ne me paraissant pas clair, j'ai préféré conserver version actuelle
+    - Modification de *PLMAccountsProvider*
+      - C'est cet objet qui se charge d'interroger PLM-accounts et de récupérer les données de l'utilisateur
+      - Il dispose d'un objet *Settings* fourni par *Silhouette*
+	- C'est ici qu'on retrouve la configuration OAuth pour ce provider
+	  - /authorizationEndpoint/
+	  - /accessTokenURL/
+	  - /clientID/
+	  - /clientSecret/
+        - Cet objet *Settings* dispose aussi d'un champ /customProperties/ de type *Map(String -> String)*
+	- Ajout du couple /("apiURL", configuration.getString("plmaccounts.apiURL"))/ dans les /customProperties/
+	- Modification de *PLMAccountsProvider* pour utiliser cette propriété pour récupérer l'/apiURL/
+  - Surcharger les configurations des providers côté client
+    - Jusqu'à maintenant, j'avais contourné le problème de façon dégueulasse
+      - Au moment d'afficher la page HTML, le serveur injectait les valeurs de configuration des providers sous la forme de variables globales JS
+      - Ces variables étaient ensuite utilisées dans /app.auth.js/ pour établir la configuration initiale des providers
+    - Création d'un service côté serveur délivrant au client le JSON de configuration des providers
+      - JSON obtenu à partir des valeurs renseignées dans /silhouette.conf/ et les variables d'environnement
+    - Création d'un service côté client /oauthConfig/
+      - Interroge le service fourni par le serveur pour récupérer la configuration des providers
+      - Surcharge la configuration initiale définie dans /app.auth.js/ avec ces nouvelles valeurs
 *** Planned
+**** DONE Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-accounts
+- Au cours du refactoring de PLM-accounts, j'ai modifié certaines routes pour qu'elles soient plus logiques et pertinentes
+- J'ai aussi modifié la façon dont on s'authentifie auprès de PLM-accounts pour récupérer les données d'un utilisateur
+  - Auparavant, le token était passé en paramètre de la requête
+  - Dorénavant le token est envoyé sous la forme d'un header
+- Corriger le fonctionnement de webPLM
 **** TODO Tester les plugins de *New Relic* pour *RabbitMQ*
 - Des plugins sont disponibles pour monitorer *RabbitMQ*
   - Par exemple : https://rpm.newrelic.com/accounts/1393737/plugins/directory/95
