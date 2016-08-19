@@ -4896,6 +4896,17 @@ case _ => MergeStrategy.first
     - Installe ses dépendances
     - Paramètre l'application pour fonctionner en mode production
     - Démarre l'application
+  - Refactoring de PLM-profiles pour la nouvelle version de MEAN.JS
+    - Portage de l'ancien travail réalisé en un module MEAN.JS
+    - Nettoyage du code
+      - Modification de la fonction /findUniqueGitID()/ qui permet de générer un /gitID/ n'existant pas déjà dans la BDD
+        - Auparavant, cette méthode était appelée manuellement lors de la création d'un profil
+	- Si le /gitID/ généré aléatoirement existait déjà, cette méthode déclenchait une erreur et stoppait la création du profil
+	- Dorénavant, cette méthode est appelée automatiquement lors de la création du profil via un hook de *Mongoose*
+	- Boucle jusqu'à la génération d'un /gitID/ inédit
+  - Build de l'image Docker de PLM-profiles
+    - Le build s'est déroulé correctement et l'image est fonctionnelle
+    - Pareil que pour PLM-accounts, le Dockerfile proposé par MEAN.JS est pour déployer l'application en mode développement
 - Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-accounts
   - Mise à jour des routes
     - Côté client
@@ -4948,6 +4959,14 @@ case _ => MergeStrategy.first
   - Auparavant, le token était passé en paramètre de la requête
   - Dorénavant le token est envoyé sous la forme d'un header
 - Corriger le fonctionnement de webPLM
+**** DONE Corriger le build des images Docker de PLM-accounts et PLM-profiles
+- Comme dit précédemment, le build des images Docker de PLM-accounts et PLM-profiles échoue
+- Des dépendances sont dépréciées
+- Mettre à jour le processus de build
+**** TODO Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-profiles
+- Au cours du refactoring de PLM-accounts, j'ai modifié certaines routes pour qu'elles soient plus logiques et pertinentes
+- Il faut aussi changer la page qui permet de modifier son profil depuis webPLM
+  - Il ne faut plus utiliser les champs /firstName/ et /lastName/ mais un champ unique /fullName/
 **** TODO Mettre en place ou utiliser un mail provider
 - L'application PLM-accounts doit pouvoir envoyer des emails aux utilisateurs
   - Notamment en cas d'oubli du mot de passe
@@ -4975,19 +4994,39 @@ case _ => MergeStrategy.first
       - Changer nom et/ou URL de redirection
       - Regénérer le clientID et le clientSecret
     - Supprimer une application
+- Retirer les fichiers inutiles
+  - Code lié à l'ancienne version de MEAN.JS
+    - /app/
+    - /public/
+  - Modules non-utilisés
+    - /articles/
+    - /chat/
 **** TODO Améliorer PLM-profiles
 - Ajouter une clé d'API
   - Actuellement, PLM-profiles n'est accessible qu'en étant connecté sur la machine l'hébergeant
   - Mais aucune sécurité n'est mise en place sur son API
   - Voir pour ajouter des vérifications
+- Corriger le bug du nom/prénom
+  - Les utilisateurs s'authentifiant via GitHub ne possède pas les champs /firstName/ et /lastName/, uniquement /fullName/
+    - Voir l'API de GitHub concernant les profils utilisateurs :https://developer.github.com/v3/users/#response
+    - Voir le code de Silhouette parsant le résultat l'API GitHub : https://github.com/mohiva/play-silhouette/blob/3.0.x/silhouette/app/com/mohiva/play/silhouette/impl/providers/oauth2/GitHubProvider.scala#L97
+  - Parser le champ /fullName/ pour extraire /firstName/ et /lastName/ me semble improbable
+  - Utiliser uniquement le champ /fullName/
+- Modifier le README
+  - Décrire le but de PLM-profiles
+  - Décrire l'API proposée par PLM-profiles
+- Retirer les fichiers inutiles
+  - Code lié à l'ancienne version de MEAN.JS
+    - /app/
+    - /public/
+  - Modules non-utilisés
+    - /articles/
+    - /chat/
+    - /users/ ?
 **** TODO Tester les plugins de *New Relic* pour *RabbitMQ*
 - Des plugins sont disponibles pour monitorer *RabbitMQ*
   - Par exemple : https://rpm.newrelic.com/accounts/1393737/plugins/directory/95
 - Voir si ceux-ci sont compatibles avec notre application
-**** TODO Corriger le build des images Docker de PLM-accounts et PLM-profiles
-- Comme dit précédemment, le build des images Docker de PLM-accounts et PLM-profiles échoue
-- Des dépendances sont dépréciées
-- Mettre à jour le processus de build
 **** TODO Re-implémenter les exercices manquants
 - Le refactoring des exercices a conduit à extraire les exercices de PLM et à les déplacer dans webPLM
 - Tous les exos n'ont pas encore été extraits
