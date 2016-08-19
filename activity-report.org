@@ -4888,6 +4888,14 @@ case _ => MergeStrategy.first
 	  - Modification de leur système pour ne pas écraser la redirection lorsqu'on navigue entre /sign-in/ et /sign-up/
   - Build de l'image Docker de PLM-accounts
     - Le build s'est déroulé correctement et l'image est fonctionnelle
+    - Par contre le Dockerfile proposé par MEAN.JS est pour déployer l'application en mode développement
+  - Ecriture d'un nouveau Dockerfile pour PLM-accounts
+    - Image basée sur node:6
+    - Installe les autres dépendances de MEAN.JS
+    - Clone PLM-accounts
+    - Installe ses dépendances
+    - Paramètre l'application pour fonctionner en mode production
+    - Démarre l'application
 - Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-accounts
   - Mise à jour des routes
     - Côté client
@@ -4940,6 +4948,38 @@ case _ => MergeStrategy.first
   - Auparavant, le token était passé en paramètre de la requête
   - Dorénavant le token est envoyé sous la forme d'un header
 - Corriger le fonctionnement de webPLM
+**** TODO Mettre en place ou utiliser un mail provider
+- L'application PLM-accounts doit pouvoir envoyer des emails aux utilisateurs
+  - Notamment en cas d'oubli du mot de passe
+- [[https://github.com/nodemailer/nodemailer#using-gmail][Nodemailer]], la librairie utilisée par MEAN.JS pour envoyer des emails, déconseille aux développeurs d'utiliser Gmail comme mail provider
+- Ils recommandent d'utiliser un service dédié tels que
+  - http://www.mailgun.com
+  - https://sendgrid.com
+- Voir pour utiliser un de ces services ou équivalents
+**** TODO Améliorer PLM-accounts
+- Retravailler la fenêtre de dialogue
+  - Personnaliser la fenêtre avec le nom de l'utilisateur
+  - Afficher plus d'informations sur l'application cliente
+    - Image?
+- Retravailler la page d'accueil
+  - Utilise la page d'accueil de MEAN.JS actuellement
+  - Faire une page d'accueil propre à PLM-accounts
+- Permettre de gérer les applications clientes
+  - Actuellement, pour ajouter une application cliente telle que PLM, il faut insérer directement les informations en BDD
+  - Ajouter un module /clients/
+    - Lister les applications clientes de l'utilisateur
+    - Créer une nouvelle application
+      - Nécessite un nom d'application et une URL de redirection
+      - Génère le clientID et le clientSecret
+    - Editer une application
+      - Changer nom et/ou URL de redirection
+      - Regénérer le clientID et le clientSecret
+    - Supprimer une application
+**** TODO Améliorer PLM-profiles
+- Ajouter une clé d'API
+  - Actuellement, PLM-profiles n'est accessible qu'en étant connecté sur la machine l'hébergeant
+  - Mais aucune sécurité n'est mise en place sur son API
+  - Voir pour ajouter des vérifications
 **** TODO Tester les plugins de *New Relic* pour *RabbitMQ*
 - Des plugins sont disponibles pour monitorer *RabbitMQ*
   - Par exemple : https://rpm.newrelic.com/accounts/1393737/plugins/directory/95
