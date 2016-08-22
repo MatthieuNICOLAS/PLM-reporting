@@ -4963,6 +4963,21 @@ case _ => MergeStrategy.first
 - Comme dit précédemment, le build des images Docker de PLM-accounts et PLM-profiles échoue
 - Des dépendances sont dépréciées
 - Mettre à jour le processus de build
+** Semaine du <2016-08-22 lun.> au <2016-08-26 ven.>
+*** Done
+- Améliorer PLM-accounts
+  - Ajout du module /clients/
+    - [X] Lister les applications clientes de l'utilisateur
+    - [X] Créer une nouvelle application
+      - [X] Nécessite un nom d'application et une URL de redirection
+      - [X] Génère le clientID et le clientSecret
+	- Génère un UUID pour chacun de ces champs
+    - [ ] Editer une application
+      - [X] Changer nom et/ou URL de redirection
+      - [ ] Regénérer le clientID et le clientSecret
+    - [X] Supprimer une application
+  - Suppression du code lié à l'ancienne version de MEAN.JS 
+*** Planned
 **** TODO Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-profiles
 - Au cours du refactoring de PLM-accounts, j'ai modifié certaines routes pour qu'elles soient plus logiques et pertinentes
 - Il faut aussi changer la page qui permet de modifier son profil depuis webPLM
