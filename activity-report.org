@@ -4972,25 +4972,26 @@ case _ => MergeStrategy.first
       - [X] Nécessite un nom d'application et une URL de redirection
       - [X] Génère le clientID et le clientSecret
 	- Génère un UUID pour chacun de ces champs
-    - [ ] Editer une application
+    - [X] Editer une application
       - [X] Changer nom et/ou URL de redirection
-      - [ ] Regénérer le clientID et le clientSecret
+      - [X] Regénérer le clientID et le clientSecret
     - [X] Supprimer une application
-  - Suppression du code lié à l'ancienne version de MEAN.JS 
+  - Suppression du code lié à l'ancienne version de MEAN.JS
+  - Suppression des modules /articles/ et /chat/
+  - Page d'accueil retravaillée
+  - Amélioration de la fenêtre de dialogue
+    - Ajout du nom de l'utilisateur
+    - Ajout du nom de l'application une fois la vérification effectuée
+    - Ajout de messages d'erreurs
+      - Si il manque des paramètres
+	- /client_id/
+	- /redirect_uri/
+	- /response_type/
+      - Si les paramètres sont incorrects
+	- Aucune application cliente enregistrée ne correspond aux paramètres reçus
+    - Récupère les paramètres depuis l'URL
 *** Planned
-**** TODO Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-profiles
-- Au cours du refactoring de PLM-accounts, j'ai modifié certaines routes pour qu'elles soient plus logiques et pertinentes
-- Il faut aussi changer la page qui permet de modifier son profil depuis webPLM
-  - Il ne faut plus utiliser les champs /firstName/ et /lastName/ mais un champ unique /fullName/
-**** TODO Mettre en place ou utiliser un mail provider
-- L'application PLM-accounts doit pouvoir envoyer des emails aux utilisateurs
-  - Notamment en cas d'oubli du mot de passe
-- [[https://github.com/nodemailer/nodemailer#using-gmail][Nodemailer]], la librairie utilisée par MEAN.JS pour envoyer des emails, déconseille aux développeurs d'utiliser Gmail comme mail provider
-- Ils recommandent d'utiliser un service dédié tels que
-  - http://www.mailgun.com
-  - https://sendgrid.com
-- Voir pour utiliser un de ces services ou équivalents
-**** TODO Améliorer PLM-accounts
+**** DONE Améliorer PLM-accounts
 - Retravailler la fenêtre de dialogue
   - Personnaliser la fenêtre avec le nom de l'utilisateur
   - Afficher plus d'informations sur l'application cliente
@@ -5016,6 +5017,18 @@ case _ => MergeStrategy.first
   - Modules non-utilisés
     - /articles/
     - /chat/
+**** TODO Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-profiles
+- Au cours du refactoring de PLM-accounts, j'ai modifié certaines routes pour qu'elles soient plus logiques et pertinentes
+- Il faut aussi changer la page qui permet de modifier son profil depuis webPLM
+  - Il ne faut plus utiliser les champs /firstName/ et /lastName/ mais un champ unique /fullName/
+**** TODO Mettre en place ou utiliser un mail provider
+- L'application PLM-accounts doit pouvoir envoyer des emails aux utilisateurs
+  - Notamment en cas d'oubli du mot de passe
+- [[https://github.com/nodemailer/nodemailer#using-gmail][Nodemailer]], la librairie utilisée par MEAN.JS pour envoyer des emails, déconseille aux développeurs d'utiliser Gmail comme mail provider
+- Ils recommandent d'utiliser un service dédié tels que
+  - http://www.mailgun.com
+  - https://sendgrid.com
+- Voir pour utiliser un de ces services ou équivalents
 **** TODO Améliorer PLM-profiles
 - Ajouter une clé d'API
   - Actuellement, PLM-profiles n'est accessible qu'en étant connecté sur la machine l'hébergeant
