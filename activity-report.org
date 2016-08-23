@@ -4990,6 +4990,9 @@ case _ => MergeStrategy.first
       - Si les paramètres sont incorrects
 	- Aucune application cliente enregistrée ne correspond aux paramètres reçus
     - Récupère les paramètres depuis l'URL
+  - Sauvegarde de la décision de l'utilisateur
+    - L'utilisateur autorise l'application cliente à accéder aux informations de son compte par le biais du formulaire d'autorisation
+    - Lors de sa prochaine connexion, on saute cette étape pour passer directement à la génération du code
 *** Planned
 **** DONE Améliorer PLM-accounts
 - Retravailler la fenêtre de dialogue
