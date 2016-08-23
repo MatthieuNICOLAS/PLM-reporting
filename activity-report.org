@@ -4993,6 +4993,21 @@ case _ => MergeStrategy.first
   - Sauvegarde de la décision de l'utilisateur
     - L'utilisateur autorise l'application cliente à accéder aux informations de son compte par le biais du formulaire d'autorisation
     - Lors de sa prochaine connexion, on saute cette étape pour passer directement à la génération du code
+- Mettre en place ou utiliser un mail provider
+  - Création d'un compte chez *mailgun*
+    - Il est nécessaire de modifier la configuration des DNS pour envoyer des e-mails via *mailgun*
+      - On doit ajouter les /DNS Records/, aussi appelé /TXT Records/ ou /SPF/ et /DKIM/
+    - N'ayant pas accès au DNS provider utilisé par TN, j'ai préféré essayé *SendGrid* avant de contacter le service info de TN
+  - Création d'un compte chez *SendGrid*
+    - Une documentation est disponible pour envoyer des mails en utilisant la librairie *nodemailer* et *SendGrid*
+      - https://sendgrid.com/blog/sending-email-nodemailer-sendgrid/
+    - Définition des variables d'environnement utilisées par MEAN.JS
+      - /export MAILER_FROM="PLM-accounts <do-not-reply@plm-accounts.telecomnancy.univ-lorraine.fr>"/
+      - /export MAILER_SERVICE_PROVIDER=SendGrid/
+      - /export MAILER_EMAIL_ID=<nom de compte>/
+      - /export MAILER_PASSWORD=<mot de passe>/
+    - Test de la fonctionnalité de récupération de mot de passe
+    - Les mails m'ont correctement été transmis
 *** Planned
 **** DONE Améliorer PLM-accounts
 - Retravailler la fenêtre de dialogue
@@ -5020,11 +5035,7 @@ case _ => MergeStrategy.first
   - Modules non-utilisés
     - /articles/
     - /chat/
-**** TODO Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-profiles
-- Au cours du refactoring de PLM-accounts, j'ai modifié certaines routes pour qu'elles soient plus logiques et pertinentes
-- Il faut aussi changer la page qui permet de modifier son profil depuis webPLM
-  - Il ne faut plus utiliser les champs /firstName/ et /lastName/ mais un champ unique /fullName/
-**** TODO Mettre en place ou utiliser un mail provider
+**** DONE Mettre en place ou utiliser un mail provider
 - L'application PLM-accounts doit pouvoir envoyer des emails aux utilisateurs
   - Notamment en cas d'oubli du mot de passe
 - [[https://github.com/nodemailer/nodemailer#using-gmail][Nodemailer]], la librairie utilisée par MEAN.JS pour envoyer des emails, déconseille aux développeurs d'utiliser Gmail comme mail provider
@@ -5032,6 +5043,10 @@ case _ => MergeStrategy.first
   - http://www.mailgun.com
   - https://sendgrid.com
 - Voir pour utiliser un de ces services ou équivalents
+**** TODO Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-profiles
+- Au cours du refactoring de PLM-accounts, j'ai modifié certaines routes pour qu'elles soient plus logiques et pertinentes
+- Il faut aussi changer la page qui permet de modifier son profil depuis webPLM
+  - Il ne faut plus utiliser les champs /firstName/ et /lastName/ mais un champ unique /fullName/
 **** TODO Améliorer PLM-profiles
 - Ajouter une clé d'API
   - Actuellement, PLM-profiles n'est accessible qu'en étant connecté sur la machine l'hébergeant
