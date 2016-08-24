@@ -5008,6 +5008,53 @@ case _ => MergeStrategy.first
       - /export MAILER_PASSWORD=<mot de passe>/
     - Test de la fonctionnalité de récupération de mot de passe
     - Les mails m'ont correctement été transmis
+- Déployer les nouvelles versions de PLM-accounts et PLM-profiles
+  - [X] Corriger la configuration de PLM-profiles
+  - [X] Ecrire la documentation et pusher les fichiers /Dockerfile/ utilisés pour PLM-accounts et PLM-profiles
+    - [X] PLM-accounts
+    - [X] PLM-profiles
+  - [X] Pusher les images Docker
+    - [X] PLM-accounts
+    - [X] PLM-profiles
+  - [X] Transférer les données des anciennes bases de données aux nouvelles
+    - [X] /plmaccounts/ -> /plm-accounts/
+    - [X] /plmprofiles/ -> /plm-profiles/
+  - [X] Ajouter les nouvelles variables d'environnement sur la machine de TN
+    - [X] MAILER_FROM
+    - [X] MAILER_SERVICE_PROVIDER
+    - [X] MAILER_EMAIL_ID
+    - [X] MAILER_PASSWORD
+    - [X] SESSION_SECRET
+  - [ ] Générer les applications clientes auprès de PLM-accounts
+    - [ ] PLM
+    - [ ] PLM-Local
+  - [ ] Mettre à jour la configuration de webPLM
+  - [ ] Re-déployer les applications
+- Faire un outil de suivi de progression des élèves
+  - Test pour vérifier comment récupérer le contenu d'un repo via l'API de *GitHub*
+    - /curl https://api.github.com/repos/buggleinc/plm-data/contents/:filepath?ref=branch/ permet de vérifier l'existence d'un fichier
+    - /curl https://api.github.com/repos/buggleinc/plm-data/contents/welcome.lessons.welcome.conditions.Conditions.scala.DONE?ref=PLM135133026701cb4c442ee940a8cd465c3997e148/
+      - Le fichier existe
+      - Réponse de GitHub:
+	- {"name":"welcome.lessons.welcome.conditions.Conditions.scala.DONE","path":"welcome.lessons.welcome.conditions.Conditions.scala.DONE","sha":"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","size":0,"url":"https://api.github.com/repos/BuggleInc/PLM-data/contents/welcome.lessons.welcome.conditions.Conditions.scala.DONE?ref=PLM135133026701cb4c442ee940a8cd465c3997e148","html_url":"https://github.com/BuggleInc/PLM-data/blob/PLM135133026701cb4c442ee940a8cd465c3997e148/welcome.lessons.welcome.conditions.Conditions.scala.DONE","git_url":"https://api.github.com/repos/BuggleInc/PLM-data/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","download_url":"https://raw.githubusercontent.com/BuggleInc/PLM-data/PLM135133026701cb4c442ee940a8cd465c3997e148/welcome.lessons.welcome.conditions.Conditions.scala.DONE","type":"file","content":"","encoding":"base64","_links":{"self":"https://api.github.com/repos/BuggleInc/PLM-data/contents/welcome.lessons.welcome.conditions.Conditions.scala.DONE?ref=PLM135133026701cb4c442ee940a8cd465c3997e148","git":"https://api.github.com/repos/BuggleInc/PLM-data/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","html":"https://github.com/BuggleInc/PLM-data/blob/PLM135133026701cb4c442ee940a8cd465c3997e148/welcome.lessons.welcome.conditions.Conditions.scala.DONE"}}
+    - /curl https://api.github.com/repos/buggleinc/plm-data/contents/conditions.Conditions.scala.DNE?ref=PLM135133026701cb4c442ee940a8cd465c3997e148/
+      - Le fichier n'existe pas
+      - Renvoie une erreur 404
+      - Réponse de GitHub:
+	- {"message":"Not Found","documentation_url":"https://developer.github.com/v3"}
+  - Test pour récupérer la liste des commits effectués durant une période de temps
+    - /curl https://api.github.com/repos/buggleinc/plm-data/commits?sha=branch/ permet de récupérer les commits d'un repo
+    - La réponse de l'API est paginée
+      - Au plus 30 commits par requête
+      - Un header indique à quelle URL récupérer les commits suivants/précédents
+        - Header obtenu après la requête initiale:
+	  - response.headers().link:  <https://api.github.com/repositories/22066165/commits?sha=PLM135133026701cb4c442ee940a8cd465c3997e148&page=2>; rel="next", <https://api.github.com/repositories/22066165/commits?sha=PLM135133026701cb4c442ee940a8cd465c3997e148&page=4>; rel="last"
+	- Header obtenu après avoir contacté /next/:
+	  - response.headers().link:  <https://api.github.com/repositories/22066165/commits?sha=PLM135133026701cb4c442ee940a8cd465c3997e148&page=3>; rel="next", <https://api.github.com/repositories/22066165/commits?sha=PLM135133026701cb4c442ee940a8cd465c3997e148&page=4>; rel="last", <https://api.github.com/repositories/22066165/commits?sha=PLM135133026701cb4c442ee940a8cd465c3997e148&page=1>; rel="first", <https://api.github.com/repositories/22066165/commits?sha=PLM135133026701cb4c442ee940a8cd465c3997e148&page=1>; rel="prev"
+	- Header obtenu après avoir contacté /last/:
+	  - response.headers().link:  <https://api.github.com/repositories/22066165/commits?sha=PLM135133026701cb4c442ee940a8cd465c3997e148&page=1>; rel="first", <https://api.github.com/repositories/22066165/commits?sha=PLM135133026701cb4c442ee940a8cd465c3997e148&page=3>; rel="prev"
+    - Les paramètres /since/ et /until/ permettent de définir les commits de quelle période nous souhaitons récupérer
+      - Exemple: /curl https://api.github.com/repos/buggleinc/plm-data/commits?sha=PLMed35da9ea83a21a98a606bb5f90a44c0ad0256be&since=2016-03-15T23:00:00.000Z&until=2016-03-16T23:00:00.000Z/
 *** Planned
 **** DONE Améliorer PLM-accounts
 - Retravailler la fenêtre de dialogue
@@ -5043,6 +5090,15 @@ case _ => MergeStrategy.first
   - http://www.mailgun.com
   - https://sendgrid.com
 - Voir pour utiliser un de ces services ou équivalents
+**** TODO Déployer les nouvelles versions de PLM-accounts et PLM-profiles
+- Corriger la configuration de PLM-profiles
+- Ecrire la documentation et pusher les fichiers /Dockerfile/ utilisés pour PLM-accounts et PLM-profiles
+- Pusher les images Docker
+- Transférer les données des anciennes bases de données aux nouvelles
+- Générer les applications clientes auprès de PLM-accounts
+  - PLM
+  - PLM-Local
+- Mettre à jour la configuration de webPLM
 **** TODO Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-profiles
 - Au cours du refactoring de PLM-accounts, j'ai modifié certaines routes pour qu'elles soient plus logiques et pertinentes
 - Il faut aussi changer la page qui permet de modifier son profil depuis webPLM
@@ -5069,6 +5125,23 @@ case _ => MergeStrategy.first
     - /articles/
     - /chat/
     - /users/ ?
+**** TODO Faire un outil de suivi de progression des élèves
+- L'idée est d'avoir un outil sommaire pour suivre la progression des élèves
+- Répertorier la liste des séances du module Prépa Info de la rentrée 2016 à TN
+- Définir des exercices clés pour chaque séance
+- Récupérer la liste des élèves
+  - Le champ /created/ du profil permet de filtrer les utilisateurs grâce à la date de leur enregistrement
+- Faire le lien entre les élèves et les branches de [[https://github.com/BuggleInc/PLM-data][PLM-data]]
+  - Soit webPLM doit exposer sa méthode de conversion /gitID/ -> /branche distante/
+  - Soit un service doit tourner sur la machine de TN et doit pouvoir récupérer la branche distante via git
+- Pour chacun d'entre eux
+  - Vérifier leur présence aux séances
+    - L'API de GitHub sur les commits permet de récupérer les commits effectués durant une période
+      - https://developer.github.com/v3/repos/commits/
+  - Vérifier si les exercices clés ont été réussis
+    - Checker si le fichier /exercise.DONE/ existe
+    - Voir l'API de GitHub sur le contenu d'un repo
+      - https://developer.github.com/v3/repos/contents/
 **** TODO Tester les plugins de *New Relic* pour *RabbitMQ*
 - Des plugins sont disponibles pour monitorer *RabbitMQ*
   - Par exemple : https://rpm.newrelic.com/accounts/1393737/plugins/directory/95
