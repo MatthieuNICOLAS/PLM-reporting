@@ -4993,6 +4993,9 @@ case _ => MergeStrategy.first
   - Sauvegarde de la décision de l'utilisateur
     - L'utilisateur autorise l'application cliente à accéder aux informations de son compte par le biais du formulaire d'autorisation
     - Lors de sa prochaine connexion, on saute cette étape pour passer directement à la génération du code
+  - Suppression du code lié à l'authentification via OAuth
+    - La gestion des comptes utilisateurs de *MEAN.JS* propose par défaut de s'authentifier via OAuth ou de lier des comptes tiers à son compte
+    - Suppression de ces fonctionnalités
 - Mettre en place ou utiliser un mail provider
   - Création d'un compte chez *mailgun*
     - Il est nécessaire de modifier la configuration des DNS pour envoyer des e-mails via *mailgun*
@@ -5025,11 +5028,11 @@ case _ => MergeStrategy.first
     - [X] MAILER_EMAIL_ID
     - [X] MAILER_PASSWORD
     - [X] SESSION_SECRET
-  - [ ] Générer les applications clientes auprès de PLM-accounts
-    - [ ] PLM
-    - [ ] PLM-Local
-  - [ ] Mettre à jour la configuration de webPLM
-  - [ ] Re-déployer les applications
+  - [X] Générer les applications clientes auprès de PLM-accounts
+    - [X] PLM
+    - [X] PLM-Local
+  - [X] Mettre à jour la configuration de webPLM
+  - [X] Re-déployer les applications
 - Faire un outil de suivi de progression des élèves
   - Test pour vérifier comment récupérer le contenu d'un repo via l'API de *GitHub*
     - /curl https://api.github.com/repos/buggleinc/plm-data/contents/:filepath?ref=branch/ permet de vérifier l'existence d'un fichier
@@ -5055,6 +5058,46 @@ case _ => MergeStrategy.first
 	  - response.headers().link:  <https://api.github.com/repositories/22066165/commits?sha=PLM135133026701cb4c442ee940a8cd465c3997e148&page=1>; rel="first", <https://api.github.com/repositories/22066165/commits?sha=PLM135133026701cb4c442ee940a8cd465c3997e148&page=3>; rel="prev"
     - Les paramètres /since/ et /until/ permettent de définir les commits de quelle période nous souhaitons récupérer
       - Exemple: /curl https://api.github.com/repos/buggleinc/plm-data/commits?sha=PLMed35da9ea83a21a98a606bb5f90a44c0ad0256be&since=2016-03-15T23:00:00.000Z&until=2016-03-16T23:00:00.000Z/
+  - Test pour vérifier qu'une branche existe
+    - /curl https://api.github.com/repos/buggleinc/plm-data/git/refs/heads/branch/ permet de vérifier l'existence d'une branche
+    - /curl https://api.github.com/repos/buggleinc/plm-data/git/refs/heads/PLM135133026701cb4c442ee940a8cd465c3997e148/
+      - La branche existe
+      - Réponse de GitHub:
+	- {"name":"welcome.lessons.welcome.conditions.Conditions.scala.DONE","path":"welcome.lessons.welcome.conditions.Conditions.scala.DONE","sha":"e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","size":0,"url":"https://api.github.com/repos/BuggleInc/PLM-data/contents/welcome.lessons.welcome.conditions.Conditions.scala.DONE?ref=PLM135133026701cb4c442ee940a8cd465c3997e148","html_url":"https://github.com/BuggleInc/PLM-data/blob/PLM135133026701cb4c442ee940a8cd465c3997e148/welcome.lessons.welcome.conditions.Conditions.scala.DONE","git_url":"https://api.github.com/repos/BuggleInc/PLM-data/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","download_url":"https://raw.githubusercontent.com/BuggleInc/PLM-data/PLM135133026701cb4c442ee940a8cd465c3997e148/welcome.lessons.welcome.conditions.Conditions.scala.DONE","type":"file","content":"","encoding":"base64","_links":{"self":"https://api.github.com/repos/BuggleInc/PLM-data/contents/welcome.lessons.welcome.conditions.Conditions.scala.DONE?ref=PLM135133026701cb4c442ee940a8cd465c3997e148","git":"https://api.github.com/repos/BuggleInc/PLM-data/git/blobs/e69de29bb2d1d6434b8b29ae775ad8c2e48c5391","html":"https://github.com/BuggleInc/PLM-data/blob/PLM135133026701cb4c442ee940a8cd465c3997e148/welcome.lessons.welcome.conditions.Conditions.scala.DONE"}}
+    - /curl https://api.github.com/repos/buggleinc/plm-data/git/refs/heads/PLMd3dba3f52643a62934f0f42ff66d8f24493cc6d7/
+      - La branche n'existe pas
+      - Renvoie une erreur 404
+      - Réponse de GitHub:
+	- {"message":"Not Found","documentation_url":"https://developer.github.com/v3"}
+  - Faire le lien entre les élèves et les branches de [[https://github.com/BuggleInc/PLM-data][PLM-data]]
+    - En fait, le nom de la branche est généré de la manière suivante
+      - /branch = 'PLM' + sha1(gitID)/
+    - À partir du /gitID/ retourné par PLM-profiles, il nous suffit donc d'appliquer /sha1/ pour obtenir le nom de la branche
+    - Différentes implémentations sont proposées en JS
+      - https://developer.mozilla.org/en-US/docs/Web/API/SubtleCrypto/digest
+	- Utilise seulement les méthodes disponibles nativement dans le navigateur
+	- Mais nécessite de coder la méthode de conversion en hexadécimal
+      - https://nodejs.org/api/crypto.html#crypto_crypto_createhash_algorithm
+	- Utilise la librairie /crypto/ disponible dans *Node.js*
+	- Mais nécessite de rendre disponible cette librairie côté client
+- Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-profiles
+  - Modification du code serveur concernant le message /updateUser/
+    - N'attend plus comme paramètre /firstName/ et /lastName/ mais seulement /fullName/
+    - Vérifie que le champ /fullName/ n'est pas vide
+  - Modification de l'interface utilisateur
+    - Remplace les champs /firstName/ et /lastName/ par le champ /fullName/
+    - Empêche de soumettre le formulaire si le champ /fullName/ est vide
+- Améliorer PLM-profiles
+  - Corriger le bug du nom/prénom
+    - Suppression des champs /firstName/ et /lastName/
+  - Retirer les fichiers inutiles
+    - Suppression du code lié à l'ancienne version de MEAN.JS
+    - Suppression des modules /articles/ et /chat/
+    - Le module /users/ est plus délicat à supprimer puisqu'il fournit certains objets utilisés au sein du module /core/
+      - Suppression de l'ensemble du module /users/ à l'exception des services qu'il fournit
+  - Écriture du README
+    - Description de l'application
+    - Présentation de l'API
 *** Planned
 **** DONE Améliorer PLM-accounts
 - Retravailler la fenêtre de dialogue
@@ -5090,7 +5133,11 @@ case _ => MergeStrategy.first
   - http://www.mailgun.com
   - https://sendgrid.com
 - Voir pour utiliser un de ces services ou équivalents
-**** TODO Déployer les nouvelles versions de PLM-accounts et PLM-profiles
+**** DONE Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-profiles
+- Au cours du refactoring de PLM-accounts, j'ai modifié certaines routes pour qu'elles soient plus logiques et pertinentes
+- Il faut aussi changer la page qui permet de modifier son profil depuis webPLM
+  - Il ne faut plus utiliser les champs /firstName/ et /lastName/ mais un champ unique /fullName/
+**** DONE Déployer les nouvelles versions de PLM-accounts et PLM-profiles
 - Corriger la configuration de PLM-profiles
 - Ecrire la documentation et pusher les fichiers /Dockerfile/ utilisés pour PLM-accounts et PLM-profiles
 - Pusher les images Docker
@@ -5099,10 +5146,6 @@ case _ => MergeStrategy.first
   - PLM
   - PLM-Local
 - Mettre à jour la configuration de webPLM
-**** TODO Mettre à jour webPLM pour correspondre à la nouvelle version de PLM-profiles
-- Au cours du refactoring de PLM-accounts, j'ai modifié certaines routes pour qu'elles soient plus logiques et pertinentes
-- Il faut aussi changer la page qui permet de modifier son profil depuis webPLM
-  - Il ne faut plus utiliser les champs /firstName/ et /lastName/ mais un champ unique /fullName/
 **** TODO Améliorer PLM-profiles
 - Ajouter une clé d'API
   - Actuellement, PLM-profiles n'est accessible qu'en étant connecté sur la machine l'hébergeant
@@ -5306,7 +5349,7 @@ case _ => MergeStrategy.first
 - Passer à webGL pourrait permettre de résoudre ces problèmes de performances
 - Voir pour utiliser [[http://www.pixijs.com/][pixi.js]] qui se vante d'être le moteur de rendering le plus rapide
 **** TODO Améliorer le service d'authentification
-- [ ] Changer la page d'accueil
+- [X] Changer la page d'accueil
 - [X] Empêcher l'utilisateur d'accèder à la page de demande d'autorisation d'accès au compte sans être connecté
 - [X] Permettre à l'utilisateur de s'inscrire et d'être ensuite redirigé vers la page d'autorisation d'accès au compte
 - [X] Stocker que l'utilisateur a déjà accepté d'autoriser l'accès à son compte pour un client et ne plus lui redemander son avis
@@ -5314,7 +5357,7 @@ case _ => MergeStrategy.first
   - Lorsque l'utilisateur accède à la page d'autorisation, vérifier si on peut trouver un token déjà existant pour cet utilisateur
   - Si une entrée existe, fournir un code d'accès directement
 - [ ] Permettre à l'utilisateur de supprimer l'autorisation d'accès d'un client à son compte à partir son profil
-- [ ] Permettre à un utilisateur d'enregistrer un nouveau client
+- [X] Permettre à un utilisateur d'enregistrer un nouveau client
 **** TODO Ajouter un formulaire de récupération d'un UUID
 - L'utilisateur peut demander à se faire envoyer par mail son UUID Git
 - A sa prochaine connexion, si le cookie a expiré, il peut le regénérer par le biais d'un formulaire
