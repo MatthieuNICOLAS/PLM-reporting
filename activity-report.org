@@ -5146,11 +5146,7 @@ case _ => MergeStrategy.first
   - PLM
   - PLM-Local
 - Mettre à jour la configuration de webPLM
-**** TODO Améliorer PLM-profiles
-- Ajouter une clé d'API
-  - Actuellement, PLM-profiles n'est accessible qu'en étant connecté sur la machine l'hébergeant
-  - Mais aucune sécurité n'est mise en place sur son API
-  - Voir pour ajouter des vérifications
+**** DONE Améliorer PLM-profiles
 - Corriger le bug du nom/prénom
   - Les utilisateurs s'authentifiant via GitHub ne possède pas les champs /firstName/ et /lastName/, uniquement /fullName/
     - Voir l'API de GitHub concernant les profils utilisateurs :https://developer.github.com/v3/users/#response
@@ -5168,7 +5164,74 @@ case _ => MergeStrategy.first
     - /articles/
     - /chat/
     - /users/ ?
-**** TODO Faire un outil de suivi de progression des élèves
+** Semaine du <2016-08-29 lun.> au <2016-09-02 ven.>
+*** Done
+- Faire le tri dans les PR
+  - [[https://github.com/BuggleInc/webPLM/pull/20][Add exercise editor]] : pas possible à merger cette semaine
+  - [[https://github.com/BuggleInc/webPLM/pull/49][Started removing PLM]] : fermée
+  - [[https://github.com/BuggleInc/webPLM/pull/80][Add localStorage]] : à vérifier si elle est fonctionnelle
+- Désactiver les exercices manquants
+  - Suppression des exercices concernées dans le fichier décrivant la leçon /welcome/
+*** Planned
+**** DONE Désactiver les exercices manquants
+- Certains exercices, notamment des exercices *Bat* de la leçon /welcome/ sont pas encore portés
+- Mais ils apparaissent tout de même dans la liste des exercices
+- Les retirer de la liste
+** Du <2016-09-05 lun.> au <2016-09-16 ven.>
+*** Done
+- Faire un outil de suivi de progression des élèves
+  - Disponible ici : https://github.com/BuggleInc/PLM-teacher
+  - Réalisé en Angular 2
+  - Interroge PLM-profiles pour récupérer la liste des utilisateurs dont le compte a été créé pendant le module de prépa info
+    - https://github.com/BuggleInc/PLM-teacher/blob/master/app/services/profile.service.ts#L100-L106
+    - Les paramètres /since/ et /until/ sont définis ici : https://github.com/BuggleInc/PLM-teacher/blob/master/app/services/profile.service.ts#L19-L20
+  - Définit une liste de sessions de cours
+    - https://github.com/BuggleInc/PLM-teacher/blob/master/app/mocks/mock-sessions.ts
+  - Pour chaque profil
+    - Si l'utilisateur a autorisé la publication de ses données
+      - Vérifie la présence de l'utilisateur aux cours : https://github.com/BuggleInc/PLM-teacher/blob/master/app/services/profile.service.ts#L53-L59
+      - Liste les exercices que l'utilisateur a réussi : https://github.com/BuggleInc/PLM-teacher/blob/master/app/services/profile.service.ts#L61-L75
+  - La liste des profils est ensuite mise en forme dans une /data-grid/
+    - https://github.com/BuggleInc/PLM-teacher/blob/master/app/rich-grid/rich-grid.component.ts
+- Correction des bugs majeurs rencontrés à la rentrée
+  - La version du compiler Scala embarqué par webPLM semble lever une exception de façon aléatoire
+    - Certains étudiants pouvaient travailler sans problème
+    - Alors que d'autres voyaient leur serveur crash à chaque compilation
+    - Mettre à jour la version de Scala utilisée semble avoir résolu ce problème
+  - Si l'utilisateur écrivait du code en dehors de /run()/, une exception *EntityNotFound* était générée et faisait planter le serveur
+    - Catch de cette exception et ajout d'un message d'erreur spécifique
+  - Les acteurs enfants, générés pour réaliser les actions, des utilisateurs n'étaient pas détruits
+    - Ceux-ci ne sont pas détruit automatiquement à l'arrêt de l'acteur parent *PLMActor*
+    - Envoi de messages /PoisonPill/ pour stopper les acteurs enfants à l'arrêt de *PLMActor*
+- Principales autres améliorations
+  - Les instructions et aides étaient incluses dans la sérialisation JSON d'un exercice
+    - Il était donc nécessaire de supprimer/regénérer la sérialisation JSON d'un exercice lorsqu'on modifiait les consignes pour pouvoir vérifier le résultat
+    - Suppression des instructions et aides du JSON
+    - Récupération des instructions et aides de l'exercice via les ressources
+  - La sérialisation de l'exercice n'était pas mise à jour automatiquement suite à la modification de l'exercice
+    - Ajout d'un mécanisme à l'initialisation du serveur en mode développement pour vérifier si la sérialisation est /outdated/
+    - Instancie l'exercice depuis les sources dans ce cas et actualise la sérialisation
+  - Ajout du système de traduction pour les consignes des exercices
+    - Transfert de /po4a/ de *PLM* à *webPLM*
+    - Modification de sa configuration pour correspondre à la nouvelle arborescence
+  - Ajout de la langue brésilienne
+    - Activation de langue portugaise dans la configuration de *webPLM*
+      - On a un problème avec la langue brésilienne directement
+      - *Play* gère les langues avec ses propres objets de type *Lang*
+      - Ces objets peuvent ensuite être convertis en *Locale*
+      - Dans *PLM*, nous travaillons principalement avec des *Locale*
+      - Lorsque l'objet *Lang("pt_br")* est converti en *Locale*, la *Locale* obtenue est *Locale("pt")* au lieu de *Locale("pt_BR")*
+    - Import des traductions des missions
+  - Affichage d'un message pour indiquer à l'utilisateur qu'un juge est en train de traiter sa requête
+    - Auparavant, on ne pouvait pas faire la distinction entre un problème de surcharge de nos juges et une boucle infinie
+      - Dans le cas d'une surcharge, aucun juge n'est disponible dans les temps impartis pour traiter notre requête, celle-ci est donc annulée
+      - Dans le cas d'une boucle infinie, un juge commence à traiter la requête mais ses ressources sont monopolisées par la boucle infinie
+        - Dans certains cas, il ne parvient pas à envoyer des opérations avant que le /timeout/ soit déclaré
+	- Une fois le /timeout/ déclaré, on n'envoit plus les opérations au serveur pour éviter de le surcharger
+    - Ajout d'un message de ACK à la réception de la requête d'exécution par le juge
+    - Ajout d'un message à l'attention de l'utilisateur lors de la réception du message de ACK par le client
+*** Planned
+**** DONE Faire un outil de suivi de progression des élèves
 - L'idée est d'avoir un outil sommaire pour suivre la progression des élèves
 - Répertorier la liste des séances du module Prépa Info de la rentrée 2016 à TN
 - Définir des exercices clés pour chaque séance
@@ -5185,6 +5248,14 @@ case _ => MergeStrategy.first
     - Checker si le fichier /exercise.DONE/ existe
     - Voir l'API de GitHub sur le contenu d'un repo
       - https://developer.github.com/v3/repos/contents/
+**** TODO Faire le tri dans les PR
+- On a des PRs qui trainent dans webPLM
+- Merger si possible
+**** TODO Améliorer PLM-profiles
+- Ajouter une clé d'API
+  - Actuellement, PLM-profiles n'est accessible qu'en étant connecté sur la machine l'hébergeant
+  - Mais aucune sécurité n'est mise en place sur son API
+  - Voir pour ajouter des vérifications
 **** TODO Tester les plugins de *New Relic* pour *RabbitMQ*
 - Des plugins sont disponibles pour monitorer *RabbitMQ*
   - Par exemple : https://rpm.newrelic.com/accounts/1393737/plugins/directory/95
